@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { IonAlert, IonPage } from "@ionic/react";
+// @ts-ignore
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 const RefreshSw = () => {
