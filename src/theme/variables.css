@@ -1,9 +1,9 @@
 
 :root, :root.ios, :root.md {
-    --ion-background-color: #242424;
+    --ion-background-color: #121212;
     --ion-background-color-rgb: 36,36,36;
 
-    --ion-toolbar-background: #242424;
+    --ion-toolbar-background: #121212;
     --ion-toolbar-border-color: transparent;
 
     --ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
@@ -64,12 +64,12 @@
     --ion-color-medium-shade: #373a38;
     --ion-color-medium-tint: #515553;
 
-    --ion-color-dark: #242424;
-    --ion-color-dark-rgb: 36,36,36;
+    --ion-color-dark: #121212;
+    --ion-color-dark-rgb: 18,18,18;
     --ion-color-dark-contrast: #ffffff;
     --ion-color-dark-contrast-rgb: 255,255,255;
-    --ion-color-dark-shade: #202020;
-    --ion-color-dark-tint: #3a3a3a;
+    --ion-color-dark-shade: #101010;
+    --ion-color-dark-tint: #2a2a2a;
 
 
     --ion-text-color: #FCFCFC;

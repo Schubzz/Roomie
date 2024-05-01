@@ -1,11 +1,11 @@
 import {
     IonButton,
-    IonButtons,
-    IonContent,
+    IonButtons, IonCol,
+    IonContent, IonGrid,
     IonHeader, IonIcon,
     IonImg,
     IonItem,
-    IonPage,
+    IonPage, IonRow,
     IonText,
     IonTitle,
     IonToolbar
@@ -23,11 +23,27 @@ const Welcome: React.FC = () => {
                     </IonToolbar>
                 </IonHeader>
 
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <div className='ion-text-center'>
+                                <h3>Hallo</h3>
+                            </div>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <div>
+                                <IonImg
+                                    style={{width: '100px', height: '100px',}}
+                                    src='/icons/roomie-icon-trans.png'
+                                    alt='Roomie Logo'
+                                />
+                            </div>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
 
-                <IonImg
-                    src='/icons/roomie-icon-512x512.png'
-                    alt='Roomie Logo'
-                />
 
                 <IonText className='ion-padding ion-text-lg-capitalize'>
                     Hier beginnt das Onboarding
