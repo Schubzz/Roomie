@@ -49,7 +49,7 @@ const Welcome: React.FC = () => {
                     Hier beginnt das Onboarding
                 </IonText>
 
-                <IonButton expand='block' color='secondary' routerLink='/app'>
+                <IonButton expand='block' color='secondary' routerLink='/app/tab1'>
                     <IonText className='ion-text-uppercase'>zur App</IonText>
                     <IonIcon color='primary' icon={arrowForward}/>
                 </IonButton>

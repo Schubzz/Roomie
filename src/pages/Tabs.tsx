@@ -5,21 +5,21 @@ import {
     calendar,
     calendarOutline, cart,
     cartOutline, document,
-    documentOutline,
-    ellipse,
-    triangle, wallet,
+    documentOutline, wallet,
     walletOutline
 } from "ionicons/icons";
 import Tab1 from "./Tab1";
 import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
 import Tab4 from "./Tab4";
+import React, {useEffect} from "react";
 
 
 const Tabs: React.FC = () => {
 
     const router = useIonRouter();
     const currentPath = router.routeInfo.pathname;
+
 
     return (
         <IonTabs>
