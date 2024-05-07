@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import {closeOutline} from "ionicons/icons";
 
-function Tab2() {
+function Shopping() {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -56,4 +56,4 @@ function Tab2() {
     );
 }
 
-export default Tab2;
+export default Shopping;

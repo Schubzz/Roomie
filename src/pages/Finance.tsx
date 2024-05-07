@@ -12,22 +12,22 @@ import {
 } from '@ionic/react';
 import {closeOutline} from "ionicons/icons";
 
-function Tab2() {
+function Finance() {
 
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color=''>
-                    <IonTitle>Verträge</IonTitle>
+                <IonToolbar>
+                    <IonTitle>Finanzen</IonTitle>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent className="ion-padding" color='dark'>
 
                 <IonCard>
-                    <IonCardTitle className='ion-padding'>Verträge</IonCardTitle>
+                    <IonCardTitle className='ion-padding'>Finanzen</IonCardTitle>
                 </IonCard>
 
                 <IonButton expand="block" onClick={() => setIsOpen(true)}>
@@ -37,10 +37,10 @@ function Tab2() {
                 <IonModal isOpen={isOpen}>
                     <IonHeader>
                         <IonToolbar>
-                            <IonTitle>Vertrag hinzufügen</IonTitle>
+                            <IonTitle>Neuer Eintrag</IonTitle>
                             <IonButtons slot="end">
                                 <IonButton onClick={() => setIsOpen(false)}>
-                                    <IonIcon color='primary' icon={closeOutline} size=''/>
+                                    <IonIcon color='primary' icon={closeOutline}/>
                                 </IonButton>
                             </IonButtons>
                         </IonToolbar>
@@ -55,4 +55,4 @@ function Tab2() {
     );
 }
 
-export default Tab2;
+export default Finance;

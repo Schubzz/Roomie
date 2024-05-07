@@ -8,11 +8,11 @@ import {
     documentOutline, wallet,
     walletOutline
 } from "ionicons/icons";
-import Tab1 from "./Tab1";
-import Tab2 from "./Tab2";
-import Tab3 from "./Tab3";
-import Tab4 from "./Tab4";
-import React, {useEffect} from "react";
+import Finance from "./Finance";
+import React from "react";
+import Cleaning from "./Cleaning";
+import Contracts from "./Contracts";
+import Shopping from "./Shopping";
 
 
 const Tabs: React.FC = () => {
@@ -25,33 +25,33 @@ const Tabs: React.FC = () => {
         <IonTabs>
             <IonRouterOutlet>
                 <Route exact path='/app'>
-                    <Redirect to='/app/tab1'/>
+                    <Redirect to='/app/cleaning'/>
                 </Route>
 
-                <Route exact path='/app/tab1' component={Tab1}/>
+                <Route exact path='/app/cleaning' component={Cleaning}/>
 
-                <Route exact path='/app/tab2' component={Tab2}/>
+                <Route exact path='/app/finance' component={Finance}/>
 
-                <Route exact path='/app/tab3' component={Tab3}/>
+                <Route exact path='/app/contracts' component={Contracts}/>
 
-                <Route exact path='/app/tab4' component={Tab4}/>
+                <Route exact path='/app/shopping' component={Shopping}/>
             </IonRouterOutlet>
 
             <IonTabBar slot='bottom' color='primary'>
-                <IonTabButton tab='tab1' href='/app/tab1'>
-                    <IonIcon icon={currentPath === '/app/tab1' ? calendar : calendarOutline}/>
+                <IonTabButton tab='cleaning' href='/app/cleaning'>
+                    <IonIcon icon={currentPath === '/app/cleaning' ? calendar : calendarOutline}/>
                     <IonLabel>Putzen</IonLabel>
                 </IonTabButton>
-                <IonTabButton tab='tab2' href='/app/tab2'>
-                    <IonIcon icon={currentPath === '/app/tab2' ? wallet : walletOutline}/>
+                <IonTabButton tab='finance' href='/app/finance'>
+                    <IonIcon icon={currentPath === '/app/finance' ? wallet : walletOutline}/>
                     <IonLabel>Finanzen</IonLabel>
                 </IonTabButton>
-                <IonTabButton tab='tab3' href='/app/tab3'>
-                    <IonIcon icon={currentPath === '/app/tab3' ? document : documentOutline}/>
+                <IonTabButton tab='contracts' href='/app/contracts'>
+                    <IonIcon icon={currentPath === '/app/contracts' ? document : documentOutline}/>
                     <IonLabel>Verträge</IonLabel>
                 </IonTabButton>
-                <IonTabButton tab='tab4' href='/app/tab4'>
-                    <IonIcon icon={currentPath === '/app/tab4' ? cart : cartOutline}/>
+                <IonTabButton tab='shopping' href='/app/shopping'>
+                    <IonIcon icon={currentPath === '/app/shopping' ? cart : cartOutline}/>
                     <IonLabel>Kaufen</IonLabel>
                 </IonTabButton>
             </IonTabBar>

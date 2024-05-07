@@ -34,7 +34,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 
 /* Pages */
-import Tabs from "./pages/Tabs";
+import TabsLayout from "./pages/Tabs-Layout";
 
 setupIonicReact();
 
@@ -44,7 +44,7 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         <Route exact path='/' component={Welcome}/>
         {/*<Route exact path='/auth' component={Auth}/>*/}
-        <Route path='/app' component={Tabs}/>
+        <Route path='/app' component={TabsLayout}/>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

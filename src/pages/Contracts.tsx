@@ -12,33 +12,32 @@ import {
 } from '@ionic/react';
 import {closeOutline} from "ionicons/icons";
 
-function Tab2() {
+function Contracts() {
 
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Putzen</IonTitle>
+                <IonToolbar color=''>
+                    <IonTitle>Verträge</IonTitle>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent className="ion-padding" color='dark'>
 
                 <IonCard>
-                    <IonCardTitle className='ion-padding'>Putzpläne</IonCardTitle>
+                    <IonCardTitle className='ion-padding'>Verträge</IonCardTitle>
                 </IonCard>
 
-
-                <IonButton expand="block" onClick={() => setIsOpen(true)} color='primary'>
+                <IonButton expand="block" onClick={() => setIsOpen(true)}>
                     Open
                 </IonButton>
 
                 <IonModal isOpen={isOpen}>
                     <IonHeader>
                         <IonToolbar>
-                            <IonTitle>Neue Aufgabe</IonTitle>
+                            <IonTitle>Vertrag hinzufügen</IonTitle>
                             <IonButtons slot="end">
                                 <IonButton onClick={() => setIsOpen(false)}>
                                     <IonIcon color='primary' icon={closeOutline} size=''/>
@@ -46,7 +45,7 @@ function Tab2() {
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
-                    <IonContent className="ion-padding" color='dark'>
+                    <IonContent className="ion-padding">
 
                     </IonContent>
                 </IonModal>
@@ -56,4 +55,4 @@ function Tab2() {
     );
 }
 
-export default Tab2;
+export default Contracts;

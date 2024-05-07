@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import {closeOutline} from "ionicons/icons";
 
-function Tab2() {
+function Cleaning() {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -20,32 +20,33 @@ function Tab2() {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Finanzen</IonTitle>
+                    <IonTitle>Putzen</IonTitle>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent className="ion-padding" color='dark'>
 
                 <IonCard>
-                    <IonCardTitle className='ion-padding'>Finanzen</IonCardTitle>
+                    <IonCardTitle className='ion-padding'>Putzpläne</IonCardTitle>
                 </IonCard>
 
-                <IonButton expand="block" onClick={() => setIsOpen(true)}>
+
+                <IonButton expand="block" onClick={() => setIsOpen(true)} color='primary'>
                     Open
                 </IonButton>
 
                 <IonModal isOpen={isOpen}>
                     <IonHeader>
                         <IonToolbar>
-                            <IonTitle>Neuer Eintrag</IonTitle>
+                            <IonTitle>Neue Aufgabe</IonTitle>
                             <IonButtons slot="end">
                                 <IonButton onClick={() => setIsOpen(false)}>
-                                    <IonIcon color='primary' icon={closeOutline}/>
+                                    <IonIcon color='primary' icon={closeOutline} size=''/>
                                 </IonButton>
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
-                    <IonContent className="ion-padding">
+                    <IonContent className="ion-padding" color='dark'>
 
                     </IonContent>
                 </IonModal>
@@ -55,4 +56,4 @@ function Tab2() {
     );
 }
 
-export default Tab2;
+export default Cleaning;
