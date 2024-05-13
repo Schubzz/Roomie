@@ -1,33 +1,35 @@
 
 :root, :root.ios, :root.md {
-    --ion-background-color: #121212;
-    --ion-background-color-rgb: 36,36,36;
 
-    --ion-toolbar-background: #121212;
+    --ion-background-color: #1c1c1d;
+
+    --ion-toolbar-background: #171717;
     --ion-toolbar-border-color: transparent;
+    --ion-backdrop-opacity: .5;
+
 
     --ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
 
-    --ion-color-primary: #23FF85;
-    --ion-color-primary-rgb: 35,255,133;
+    --ion-color-primary: #90ffae;
+    --ion-color-primary-rgb: 144,255,174;
     --ion-color-primary-contrast: #000000;
     --ion-color-primary-contrast-rgb: 0,0,0;
-    --ion-color-primary-shade: #1fe075;
-    --ion-color-primary-tint: #39ff91;
+    --ion-color-primary-shade: #7fe099;
+    --ion-color-primary-tint: #9bffb6;
 
-    --ion-color-secondary: #7D8491;
-    --ion-color-secondary-rgb: 125,132,145;
-    --ion-color-secondary-contrast: #000000;
-    --ion-color-secondary-contrast-rgb: 0,0,0;
-    --ion-color-secondary-shade: #6e7480;
-    --ion-color-secondary-tint: #8a909c;
+    --ion-color-secondary: #0163aa;
+    --ion-color-secondary-rgb: 1,99,170;
+    --ion-color-secondary-contrast: #ffffff;
+    --ion-color-secondary-contrast-rgb: 255,255,255;
+    --ion-color-secondary-shade: #015796;
+    --ion-color-secondary-tint: #1a73b3;
 
-    --ion-color-tertiary: #7F055F;
-    --ion-color-tertiary-rgb: 127,5,95;
+    --ion-color-tertiary: #6030ff;
+    --ion-color-tertiary-rgb: 96,48,255;
     --ion-color-tertiary-contrast: #ffffff;
     --ion-color-tertiary-contrast-rgb: 255,255,255;
-    --ion-color-tertiary-shade: #700454;
-    --ion-color-tertiary-tint: #8c1e6f;
+    --ion-color-tertiary-shade: #542ae0;
+    --ion-color-tertiary-tint: #7045ff;
 
     --ion-color-success: #2dd55b;
     --ion-color-success-rgb: 45,213,91;
@@ -50,26 +52,26 @@
     --ion-color-danger-shade: #ad000d;
     --ion-color-danger-tint: #cb1a27;
 
-    --ion-color-light: #FCFCFC;
-    --ion-color-light-rgb: 252,252,252;
+    --ion-color-light: #f6f8fc;
+    --ion-color-light-rgb: 246,248,252;
     --ion-color-light-contrast: #000000;
     --ion-color-light-contrast-rgb: 0,0,0;
-    --ion-color-light-shade: #dedede;
-    --ion-color-light-tint: #fcfcfc;
+    --ion-color-light-shade: #d8dade;
+    --ion-color-light-tint: #f7f9fc;
 
-    --ion-color-medium: #3E4240;
-    --ion-color-medium-rgb: 62,66,64;
+    --ion-color-medium: #1c1c1c;
+    --ion-color-medium-rgb: 28,28,28;
     --ion-color-medium-contrast: #ffffff;
     --ion-color-medium-contrast-rgb: 255,255,255;
-    --ion-color-medium-shade: #373a38;
-    --ion-color-medium-tint: #515553;
+    --ion-color-medium-shade: #191919;
+    --ion-color-medium-tint: #333333;
 
-    --ion-color-dark: #121212;
-    --ion-color-dark-rgb: 18,18,18;
+    --ion-color-dark: #171717;
+    --ion-color-dark-rgb: 23,23,23;
     --ion-color-dark-contrast: #ffffff;
     --ion-color-dark-contrast-rgb: 255,255,255;
-    --ion-color-dark-shade: #101010;
-    --ion-color-dark-tint: #2a2a2a;
+    --ion-color-dark-shade: #141414;
+    --ion-color-dark-tint: #2e2e2e;
 
 
     --ion-text-color: #FCFCFC;
@@ -114,4 +116,30 @@
     --ion-background-color-step-850: #dcdcdc;
     --ion-background-color-step-900: #e6e6e6;
     --ion-background-color-step-950: #f1f1f1;
+}
+
+.tabbar {
+    border-top: 0;
+    box-shadow:  0px 15px 25px 0px #000000;
+    padding: .5rem 0;
+}
+
+.toolbar {
+    box-shadow:  0px -15px 25px 0px #000000;
+    padding-inline: .5rem;
+    min-height: 8%;
+}
+
+#example-modal {
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+#example-modal::part(backdrop) {
+    background: #090909;
+}
+
+#example-modal .ion-toolbar {
+    --background: rgb(14 116 144);
+    --color: white;
 }

@@ -8,47 +8,70 @@ import {
     IonToolbar,
     IonTitle,
     IonPage,
-    IonCard, IonCardTitle, IonIcon
+    IonCard, IonCardTitle, IonIcon, IonCardSubtitle, IonItem, IonInput
 } from '@ionic/react';
-import {closeOutline} from "ionicons/icons";
+import {addCircleSharp, closeOutline, text} from "ionicons/icons";
+import AddModal from "../components/AddModal";
 
 function Contracts() {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [text, setText] = useState('Hallo, ');
+    const [showModal, setShowModal] = useState(false);
+
+    const handleInputChange = (event) => {
+        const inputValue = event.detail.value;
+        setText('Hallo, ' + inputValue);
+    }
+
+    const printText = () => {
+        setShowModal(false);
+    }
+
+    const handleEnterPress = (event) => {
+        if (event.key === 'Enter') {
+            printText();
+        }
+    }
 
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color=''>
+                <IonToolbar className='toolbar'>
                     <IonTitle>Verträge</IonTitle>
+                    <IonButtons slot='end'>
+                        <IonButton onClick={() => setShowModal(true)}>
+                            <IonIcon icon={addCircleSharp} size='large'/>
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
 
-            <IonContent className="ion-padding" color='dark'>
+            <IonContent color='medium'>
 
-                <IonCard>
+                <IonCard color='dark'>
                     <IonCardTitle className='ion-padding'>Verträge</IonCardTitle>
                 </IonCard>
 
-                <IonButton expand="block" onClick={() => setIsOpen(true)}>
-                    Open
-                </IonButton>
+                <div className='ion-padding'>
+                    <IonCardSubtitle>
+                        {text}
+                    </IonCardSubtitle>
+                </div>
 
-                <IonModal isOpen={isOpen}>
-                    <IonHeader>
-                        <IonToolbar>
-                            <IonTitle>Vertrag hinzufügen</IonTitle>
-                            <IonButtons slot="end">
-                                <IonButton onClick={() => setIsOpen(false)}>
-                                    <IonIcon color='primary' icon={closeOutline} size=''/>
-                                </IonButton>
-                            </IonButtons>
-                        </IonToolbar>
-                    </IonHeader>
-                    <IonContent className="ion-padding">
-
-                    </IonContent>
-                </IonModal>
+                <AddModal
+                    modalTitle='Hinzufügen'
+                    isOpen={showModal}
+                    onDismiss={() => setShowModal(false)}
+                    onCreate={printText}
+                >
+                    <IonItem color='dark'>
+                        <IonInput
+                            onIonChange={handleInputChange}
+                            onKeyPress={handleEnterPress}
+                            placeholder="Dein Name"
+                        />
+                    </IonItem>
+                </AddModal>
 
             </IonContent>
         </IonPage>
