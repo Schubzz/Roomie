@@ -18,7 +18,7 @@ function Contracts() {
     const [text, setText] = useState('Hallo, ');
     const [showModal, setShowModal] = useState(false);
 
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: CustomEvent) => {
         const inputValue = event.detail.value;
         setText('Hallo, ' + inputValue);
     }
@@ -27,7 +27,7 @@ function Contracts() {
         setShowModal(false);
     }
 
-    const handleEnterPress = (event) => {
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLIonInputElement>) => {
         if (event.key === 'Enter') {
             printText();
         }
