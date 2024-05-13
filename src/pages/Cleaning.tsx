@@ -16,12 +16,12 @@ import AddModal from "../components/AddModal";
 
 function Cleaning() {
 
-    const [text, setText] = useState('Hallo, ');
+    const [text, setText] = useState('Du hast aktuell nichts, aber auch wirklich garnichts zu tun... ');
     const [showModal, setShowModal] = useState(false);
 
     const handleInputChange = (event: CustomEvent) => {
         const inputValue = event.detail.value;
-        setText('Hallo, ' + inputValue);
+        setText('TU ES: ' + inputValue);
     }
 
     const printText = () => {
