@@ -103,7 +103,7 @@ const Cleaning = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Putzen Seite</IonTitle>
+                    <IonTitle>Putzen</IonTitle>
                     <IonButton slot="end" onClick={() => setShowModal(true)}>
                         <IonIcon icon={addCircleSharp}/>
                     </IonButton>
