@@ -3,7 +3,7 @@ import {
     IonButton,
     IonCard,
     IonCardContent,
-    IonCardSubtitle,
+    IonCardSubtitle, IonIcon,
     IonInput,
     IonItem,
     IonLabel,
@@ -12,6 +12,7 @@ import {
     IonText
 } from '@ionic/react';
 import NavigationButtons from './NavigationButtons';
+import {arrowForward, saveOutline, saveSharp, ticket} from "ionicons/icons";
 
 interface Props {
     onPrev: () => void;
@@ -55,9 +56,12 @@ const CreateWgStep2: React.FC<Props> = ({onPrev, handleInputChange, handleSubmit
                         color="primary"
                         onClick={handleSubmit}
                         disabled={isNextDisabled}
+                        routerLink='/app/cleaning'
                     >
-                        Speichern
+                        <IonText>Speichern</IonText>
+                        <IonIcon color='dark' icon={arrowForward}/>
                     </IonButton>
+
                     <div style={{ textAlign: 'center', marginTop: '1em' }}>
                         <button
                             onClick={onPrev}
