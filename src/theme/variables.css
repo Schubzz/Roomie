@@ -143,3 +143,9 @@
     --background: rgb(14 116 144);
     --color: white;
 }
+
+/* App.css */
+.custom-input, .custom-select  {
+    font-size: 1.5rem;
+    font-weight: bolder;
+}

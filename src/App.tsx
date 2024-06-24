@@ -35,6 +35,7 @@ import './theme/variables.css';
 
 /* Pages */
 import TabsLayout from "./pages/Tabs-Layout";
+import Register from "./pages/Register/Register";
 
 setupIonicReact();
 
@@ -43,6 +44,7 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path='/' component={Welcome}/>
+        <Route exact path='/register' component={Register}/>
         {/*<Route exact path='/auth' component={Auth}/>*/}
         <Route path='/app' component={TabsLayout}/>
       </IonRouterOutlet>

@@ -53,6 +53,10 @@ const Welcome: React.FC = () => {
                     <IonText className='ion-text-uppercase'>zur App</IonText>
                     <IonIcon color='primary' icon={arrowForward}/>
                 </IonButton>
+                <IonButton expand='block' color='secondary' routerLink='/register'>
+                    <IonText className='ion-text-uppercase'>Neue WG</IonText>
+                    <IonIcon color='primary' icon={arrowForward}/>
+                </IonButton>
 
             </IonContent>
         </IonPage>
