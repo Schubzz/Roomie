@@ -7,75 +7,74 @@
     --ion-toolbar-border-color: transparent;
     --ion-backdrop-opacity: .5;
 
-
     --ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
 
     --ion-color-primary: #90ffae;
-    --ion-color-primary-rgb: 144,255,174;
+    --ion-color-primary-rgb: 144, 255, 174;
     --ion-color-primary-contrast: #000000;
-    --ion-color-primary-contrast-rgb: 0,0,0;
+    --ion-color-primary-contrast-rgb: 0, 0, 0;
     --ion-color-primary-shade: #7fe099;
     --ion-color-primary-tint: #9bffb6;
 
     --ion-color-secondary: #0163aa;
-    --ion-color-secondary-rgb: 1,99,170;
+    --ion-color-secondary-rgb: 1, 99, 170;
     --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-contrast-rgb: 255,255,255;
+    --ion-color-secondary-contrast-rgb: 255, 255, 255;
     --ion-color-secondary-shade: #015796;
     --ion-color-secondary-tint: #1a73b3;
 
     --ion-color-tertiary: #6030ff;
-    --ion-color-tertiary-rgb: 96,48,255;
+    --ion-color-tertiary-rgb: 96, 48, 255;
     --ion-color-tertiary-contrast: #ffffff;
-    --ion-color-tertiary-contrast-rgb: 255,255,255;
+    --ion-color-tertiary-contrast-rgb: 255, 255, 255;
     --ion-color-tertiary-shade: #542ae0;
     --ion-color-tertiary-tint: #7045ff;
 
     --ion-color-success: #2dd55b;
-    --ion-color-success-rgb: 45,213,91;
+    --ion-color-success-rgb: 45, 213, 91;
     --ion-color-success-contrast: #000000;
-    --ion-color-success-contrast-rgb: 0,0,0;
+    --ion-color-success-contrast-rgb: 0, 0, 0;
     --ion-color-success-shade: #28bb50;
     --ion-color-success-tint: #42d96b;
 
     --ion-color-warning: #ffc409;
-    --ion-color-warning-rgb: 255,196,9;
+    --ion-color-warning-rgb: 255, 196, 9;
     --ion-color-warning-contrast: #000000;
-    --ion-color-warning-contrast-rgb: 0,0,0;
+    --ion-color-warning-contrast-rgb: 0, 0, 0;
     --ion-color-warning-shade: #e0ac08;
     --ion-color-warning-tint: #ffca22;
 
     --ion-color-danger: #c5000f;
-    --ion-color-danger-rgb: 197,0,15;
+    --ion-color-danger-rgb: 197, 0, 15;
     --ion-color-danger-contrast: #ffffff;
-    --ion-color-danger-contrast-rgb: 255,255,255;
+    --ion-color-danger-contrast-rgb: 255, 255, 255;
     --ion-color-danger-shade: #ad000d;
     --ion-color-danger-tint: #cb1a27;
 
     --ion-color-light: #f6f8fc;
-    --ion-color-light-rgb: 246,248,252;
+    --ion-color-light-rgb: 246, 248, 252;
     --ion-color-light-contrast: #000000;
-    --ion-color-light-contrast-rgb: 0,0,0;
+    --ion-color-light-contrast-rgb: 0, 0, 0;
     --ion-color-light-shade: #d8dade;
     --ion-color-light-tint: #f7f9fc;
 
     --ion-color-medium: #1c1c1c;
-    --ion-color-medium-rgb: 28,28,28;
+    --ion-color-medium-rgb: 28, 28, 28;
     --ion-color-medium-contrast: #ffffff;
-    --ion-color-medium-contrast-rgb: 255,255,255;
+    --ion-color-medium-contrast-rgb: 255, 255, 255;
     --ion-color-medium-shade: #191919;
     --ion-color-medium-tint: #333333;
 
     --ion-color-dark: #171717;
-    --ion-color-dark-rgb: 23,23,23;
+    --ion-color-dark-rgb: 23, 23, 23;
     --ion-color-dark-contrast: #ffffff;
-    --ion-color-dark-contrast-rgb: 255,255,255;
+    --ion-color-dark-contrast-rgb: 255, 255, 255;
     --ion-color-dark-shade: #141414;
     --ion-color-dark-tint: #2e2e2e;
 
 
     --ion-text-color: #FCFCFC;
-    --ion-text-color-rgb: 252,252,252;
+    --ion-text-color-rgb: 252, 252, 252;
 
     --ion-text-color-step-50: #f1f1f1;
     --ion-text-color-step-100: #e6e6e6;
@@ -116,16 +115,18 @@
     --ion-background-color-step-850: #dcdcdc;
     --ion-background-color-step-900: #e6e6e6;
     --ion-background-color-step-950: #f1f1f1;
+
+
 }
 
 .tabbar {
     border-top: 0;
-    box-shadow:  0px 15px 25px 0px #000000;
+    box-shadow: 0px 15px 25px 0px #000000;
     padding: .5rem 0;
 }
 
 .toolbar {
-    box-shadow:  0px -15px 25px 0px #000000;
+    box-shadow: 0px -15px 25px 0px #000000;
     padding-inline: .5rem;
     min-height: 8%;
 }
@@ -144,8 +145,35 @@
     --color: white;
 }
 
-/* App.css */
-.custom-input, .custom-select  {
+.custom-input, .custom-select {
     font-size: 1.2rem;
     font-weight: bolder;
+    text-align: start;
+}
+
+.custom-input-item {
+    border: 2px solid;
+}
+
+.custom-input-form {
+    border: 2px solid #7fe099;
+}
+
+.swiper {
+    height: 100vh;
+    background-color: #7fe099;
+    padding: 5rem;
+}
+
+.swiper-slide img {
+    height:40vh;
+    object-fit: contain;
+}
+
+.swiper-slide {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
 }

@@ -20,25 +20,44 @@ interface Props {
 const RegisterStep1: React.FC<Props> = ({onNext, handleInputChange, isNextDisabled}) => {
     return (
         <IonCard>
+
             <IonText color="primary">
                 <h2> Erstelle einen Account um zu starten</h2>
             </IonText>
+
             <IonCardContent>
+
                 <IonCardSubtitle>1 / 5</IonCardSubtitle>
-                <IonItem>
-                    <IonLabel position="stacked">Email</IonLabel>
-                    <IonInput type="email" className="custom-input" required
-                              onIonChange={(e) => handleInputChange('email', e.detail.value)}></IonInput>
-                </IonItem>
-                <IonItem>
-                    <IonLabel position="stacked">Passwort</IonLabel>
-                    <IonInput type="password" className="custom-input" required
-                              onIonChange={(e) => handleInputChange('password', e.detail.value)}></IonInput>
-                </IonItem>
-                <IonButton expand="block" color="primary" style={{marginTop: '1em'}} disabled>
-                    Login per Google
-                </IonButton>
-                <NavigationButtons onNext={onNext} isNextDisabled={isNextDisabled} />
+
+                <IonInput
+                    type="email"
+                    labelPlacement="floating"
+                    label="Email"
+                    aria-label="Email"
+                    fill="outline"
+                    className="custom-input ion-margin-top"
+                    required
+                    onIonInput={(e) => handleInputChange('email', e.detail.value)}
+                ></IonInput>
+
+                <IonInput
+                    type="password"
+                    labelPlacement="floating"
+                    label="Passwort"
+                    aria-label="Passwort"
+                    fill="outline"
+                    className="custom-input ion-margin-top"
+                    required
+                    onIonInput={(e) => handleInputChange('password', e.detail.value)}
+                ></IonInput>
+
+
+                <NavigationButtons onNext={onNext} isNextDisabled={isNextDisabled}/>
+
+                {/*<IonButton expand="block" color="light" style={{marginTop: '1em'}}>*/}
+                {/*    Login per Google*/}
+                {/*</IonButton>*/}
+
             </IonCardContent>
         </IonCard>
     );

@@ -41,32 +41,46 @@ const RegisterStep3: React.FC<Props> = ({ onNext, onPrev, handleInputChange }) =
 
     return (
         <IonCard>
+
             <IonText color="primary">
                 <h2>Zeig dein schönstes Gesicht.</h2>
             </IonText>
+
                 <p>An deinem Profilbild können dich deine Roomies besser erkennen.</p>
+
             <IonCardContent>
+
                 <IonCardSubtitle>3 / 5</IonCardSubtitle>
+
                 <IonItem>
+
                     <IonLabel>Profilbild hochladen</IonLabel>
+
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleProfilePictureChange}
-                        style={{ display: 'none' }}  // Verstecke das ursprüngliche Datei-Input-Element
+                        style={{ display: 'none' }}
+                        className="ion-margin-top"
                         ref={fileInputRef}
                     />
+
                     <IonButton onClick={handleButtonClick}>
                         <IonIcon icon={cloudUpload} />  {/* Verwende das gewünschte Icon */}
                     </IonButton>
+
                 </IonItem>
+
                 {profilePicturePreview && (
                     <IonItem>
                         <img src={profilePicturePreview} alt="Profile Preview" style={{ width: '100%', marginTop: '1em' }} />
                     </IonItem>
                 )}
-                <NavigationButtons onNext={onNext} onPrev={onPrev} />
+
+                <NavigationButtons onNext={onNext} onPrev={onPrev}/>
+
             </IonCardContent>
+
         </IonCard>
     );
 };

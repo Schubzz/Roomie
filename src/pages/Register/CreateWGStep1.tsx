@@ -17,21 +17,34 @@ interface Props {
     isNextDisabled: boolean;
 }
 
-const CreateWgStep1: React.FC<Props> = ({ onNext, onPrev, handleInputChange, isNextDisabled }) => {
+const CreateWgStep1: React.FC<Props> = ({onNext, onPrev, handleInputChange, isNextDisabled}) => {
     return (
         <IonCard>
+
             <IonText color="primary">
                 <h2>Wie möchtest du deine WG nennen?</h2>
             </IonText>
+
             <p>Gib deiner WG einen einzigartigen Namen.</p>
+
             <IonCardContent>
+
                 <IonCardSubtitle>4 / 5</IonCardSubtitle>
-                <IonItem>
-                    <IonLabel position="stacked">Name der WG</IonLabel>
-                    <IonInput type="text" className="custom-input" required onIonChange={(e) => handleInputChange('wgName', e.detail.value)}></IonInput>
-                </IonItem>
-                <NavigationButtons onNext={onNext} onPrev={onPrev} isNextDisabled={isNextDisabled} />
+
+                <IonInput
+                    fill="outline"
+                    labelPlacement="floating"
+                    label="Name der WG"
+                    type="text"
+                    className="custom-input ion-margin-top"
+                    required
+                    onIonInput={(e) => handleInputChange('wgName', e.detail.value)}
+                ></IonInput>
+
+                <NavigationButtons onNext={onNext} onPrev={onPrev} isNextDisabled={isNextDisabled}/>
+
             </IonCardContent>
+
         </IonCard>
     );
 };

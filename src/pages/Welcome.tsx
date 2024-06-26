@@ -1,65 +1,96 @@
-import {
-    IonButton,
-    IonButtons, IonCol,
-    IonContent, IonGrid,
-    IonHeader, IonIcon,
-    IonImg,
-    IonItem,
-    IonPage, IonRow,
-    IonText,
-    IonTitle,
-    IonToolbar
-} from '@ionic/react';
-import {arrowForward, closeOutline} from "ionicons/icons";
 import React from "react";
+import {IonButton, IonPage, IonText} from '@ionic/react';
+import {Swiper, SwiperSlide, useSwiper} from "swiper/react";
+import 'swiper/css'
 
-const Welcome: React.FC = () => {
+// Img
+import Sponge from '/img/Cleaning.png';
+import Contract from '/img/Contract.png'
+import Finance from "/img/Finance.png";
+import Device from "/img/Device.png";
+import Logo from '/icons/roomie-icon-512x512.png'
+
+interface ContainerProps {
+    onFinish: () => void;
+}
+
+const SwiperButtonNext = ({children}: any) => {
+    const swiper = useSwiper();
+    return <IonButton
+        onClick={() => swiper.slideNext()}
+        color="tertiary"
+        expand="block"
+        shape="round"
+    >
+        {children}
+    </IonButton>
+}
+
+const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
+
     return (
-        <IonPage>
-            <IonContent className="ion-padding" fullscreen>
-                <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">Guude!</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
-
-                <IonGrid>
-                    <IonRow>
-                        <IonCol>
-                            <div className='ion-text-center'>
-                                <h3>Hallo</h3>
-                            </div>
-                        </IonCol>
-                    </IonRow>
-                    <IonRow>
-                        <IonCol style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <div>
-                                <IonImg
-                                    style={{width: '100px', height: '100px',}}
-                                    src='/icons/roomie-icon-trans.png'
-                                    alt='Roomie Logo'
-                                />
-                            </div>
-                        </IonCol>
-                    </IonRow>
-                </IonGrid>
-
-
-                <IonText className='ion-padding ion-text-lg-capitalize'>
-                    Hier beginnt das Onboarding
-                </IonText>
-
-                <IonButton expand='block' color='secondary' routerLink='/app/cleaning'>
-                    <IonText className='ion-text-uppercase'>zur App</IonText>
-                    <IonIcon color='primary' icon={arrowForward}/>
-                </IonButton>
-                <IonButton expand='block' color='secondary' routerLink='/register'>
-                    <IonText className='ion-text-uppercase'>Neue WG</IonText>
-                    <IonIcon color='primary' icon={arrowForward}/>
-                </IonButton>
-
-            </IonContent>
-        </IonPage>
+        <div>
+            <Swiper>
+                <SwiperSlide>
+                    <IonText color="dark">
+                        <h2>Willkommen bei Roomie!</h2>
+                    </IonText>
+                    <img src={Logo} alt="Putzen"/>
+                    <IonText color="dark">
+                        <p>Deiner allrounder WG-App</p>
+                    </IonText>
+                    <SwiperButtonNext>Los gehts!</SwiperButtonNext>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <IonText color="dark">
+                        <h2>Putzpläne</h2>
+                    </IonText>
+                    <img src={Sponge} alt="Putzen"/>
+                    <IonText color="dark">
+                        <p>Legt automatisch rotierende Putzpläne an, damit jeder weiß wer welche Aufgabe hat.</p>
+                    </IonText>
+                    <SwiperButtonNext>weiter</SwiperButtonNext>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <IonText color="dark">
+                        <h2>Verträge</h2>
+                    </IonText>
+                    <img src={Contract} alt="Verträge"/>
+                    <IonText color="dark">
+                        <p>Ganz einfaches zuordnen von Verträgen. So entstehen keine Konflikte, wer welchen Vertrag
+                            hält</p>
+                    </IonText>
+                    <SwiperButtonNext>weiter</SwiperButtonNext>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <IonText color="dark">
+                        <h2>Finanzen</h2>
+                    </IonText>
+                    <img src={Finance} alt="Finanzen"/>
+                    <IonText color="dark">
+                        <p>Erstellt ganz einfach Ausgaben, damit jeder sieht wer wem wieviel schuldet.</p>
+                    </IonText>
+                    <SwiperButtonNext>weiter</SwiperButtonNext>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <IonText color="dark">
+                        <h2>Auf allen Geräten!</h2>
+                    </IonText>
+                    <img src={Device} alt="Gerät"/>
+                    <IonText color="dark">
+                        <p>Auf dem Smartphone oder auf dem PC. Nutze Roomie wo du möchtest!</p>
+                    </IonText>
+                    <IonButton
+                        onClick={() => onFinish()}
+                        color="success"
+                        expand="block"
+                        shape="round"
+                    >
+                        Neue WG
+                    </IonButton>
+                </SwiperSlide>
+            </Swiper>
+        </div>
     );
 };
 
