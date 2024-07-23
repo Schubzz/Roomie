@@ -26,12 +26,12 @@ const TabsLayout: React.FC = () => {
                 ))}
             </IonRouterOutlet>
 
-            <IonTabBar slot="bottom" color="dark" className='tabbar'>
+            <IonTabBar slot="bottom" color="light" className='tabbar'>
                 {tabs.map(tab => (
                     <IonTabButton key={tab.id} tab={tab.id} href={makePath(tab.id)}>
                         <IonIcon
                             icon={currentPath === makePath(tab.id) ? tab.icon.active : tab.icon.default}
-                            color='primary'
+                            color='dark'
                         />
                         <IonLabel>{tab.label}</IonLabel>
                     </IonTabButton>

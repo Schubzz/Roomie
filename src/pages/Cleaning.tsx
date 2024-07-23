@@ -83,7 +83,17 @@
 
 
 import React, {useState} from 'react';
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonInput} from '@ionic/react';
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonIcon,
+    IonInput,
+    IonText
+} from '@ionic/react';
 import {addCircleSharp} from 'ionicons/icons';
 import Modal from '../components/Modal';
 import ListItem from '../components/ListItem';
@@ -91,11 +101,9 @@ import ListItem from '../components/ListItem';
 const Cleaning = () => {
     const [showModal, setShowModal] = useState(false);
 
-    const tasks = [{id: 1, name: 'Staubsaugen'}, {id: 2, name: 'Abwaschen'}];
-
     const handleSave = () => {
         // Logik zum Speichern der Daten
-        console.log("Task added: " + tasks[0])
+        console.log("Task added: ")
         setShowModal(false);
     };
 
@@ -109,20 +117,22 @@ const Cleaning = () => {
                     </IonButton>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
-                {tasks.map(task => (
-                    <ListItem key={task.id} item={task} onEdit={() => {
-                    }} onDelete={() => {
-                    }}/>
-                ))}
+
+            <IonContent className="ion-padding">
+
+                <IonText>Hallo</IonText>
+
                 <Modal isOpen={showModal}
-                       title="Aufgabe hinzufügen"
+                       title="Neue Aufgabe"
                        onClose={() => setShowModal(false)}
                        onSave={handleSave}
                 >
                     <IonInput placeholder='Hi'/>
+
                 </Modal>
+
             </IonContent>
+
         </IonPage>
     );
 };

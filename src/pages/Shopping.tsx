@@ -1,56 +1,169 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { db } from "../config/firebaseConfig.js";
+import { getDocs, collection, doc, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import "../theme/Shopping.css"
 import {
-    IonButtons,
-    IonButton,
-    IonModal,
     IonHeader,
     IonContent,
     IonToolbar,
-    IonTitle,
     IonPage,
-    IonCard, IonCardTitle, IonIcon
+    IonIcon,
+    IonButtons,
+    IonTitle, IonButton,
 } from '@ionic/react';
-import {closeOutline} from "ionicons/icons";
+import { cog } from "ionicons/icons";
+import ShoppingModal from "../components/Shopping/ShoppingModal";
+import ShoppingInput from '../components/Shopping/ShoppingInput';
+import ShoppingItem from '../components/Shopping/ShoppingItem';
+import ShoppingModalContent from '../components/Shopping/ShoppingModalContent';
 
 function Shopping() {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [updatedProductTitle, setUpdatedProductTitle] = useState("");
+    const [updatedProductInfo, setUpdatedProductInfo] = useState("");
+    const [updatedProductAlert, setUpdatedProductAlert] = useState(false);
+    const [newProductTitle, setNewProductTitle] = useState("");
+    const [newInfo, setNewInfo] = useState("");
+    const [newAlert, setNewAlert] = useState(false);
+    const [shoppingList, setShoppingList] = useState([]);
+
+    const shoppingCollectionRef = collection(db, "shopping");
+
+    const getShoppingList = async () => {
+        try {
+            // @ts-ignore
+            const data = await getDocs(shoppingCollectionRef);
+            const filteredData = data.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+            }));
+
+            // Sortieren der Liste nach `alert`
+            const sortedData = filteredData.sort((a, b) => {
+                if (a.alert === b.alert) {
+                    return a.createdAt > b.createdAt ? -1 : 1;
+                }
+                return b.alert ? 1 : -1;
+            });
+
+            setShoppingList(sortedData);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const onSubmitProduct = async () => {
+        try {
+            // @ts-ignore
+            await addDoc(shoppingCollectionRef, {
+                title: newProductTitle,
+                info: newInfo,
+                alert: newAlert,
+                createdAt: new Date()
+            });
+            getShoppingList();
+            setNewProductTitle("");
+            setNewInfo("");
+            setNewAlert(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const updateProduct = async () => {
+        try {
+            if (selectedProduct) {
+
+                const productDoc = doc(db, "shopping", selectedProduct.id);
+                // @ts-ignore
+                await updateDoc(productDoc, {
+                    title: updatedProductTitle,
+                    info: updatedProductInfo,
+                    alert: updatedProductAlert
+                });
+                setShowModal(false);
+                getShoppingList();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const deleteProduct = async (id) => {
+        try {
+            const productDoc = doc(db, "shopping", id);
+            await deleteDoc(productDoc);
+            setShoppingList(prevList => prevList.filter(item => item.id !== id));
+            setShowModal(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const openModal = (product) => {
+        setSelectedProduct(product);
+        setUpdatedProductTitle(product.title);
+        setUpdatedProductInfo(product.info);
+        setUpdatedProductAlert(product.alert || false);
+        setShowModal(true);
+    };
+
+    useEffect(() => {
+        getShoppingList();
+    }, []);
 
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Einkaufen</IonTitle>
+                    <IonButtons slot="start">
+                        <IonButton>
+                            <IonIcon icon={cog} size="large" color="dark"/>
+                        </IonButton>
+                    </IonButtons>
+                    <IonTitle>Einkäufe</IonTitle>
                 </IonToolbar>
             </IonHeader>
 
-            <IonContent className="ion-padding" color='dark'>
+            <IonContent>
+                <ShoppingInput
+                    newProductTitle={newProductTitle}
+                    setNewProductTitle={setNewProductTitle}
+                    newInfo={newInfo}
+                    setNewInfo={setNewInfo}
+                    onSubmitProduct={onSubmitProduct}
+                />
 
-                <IonCard>
-                    <IonCardTitle className='ion-padding'>Einkaufen</IonCardTitle>
-                </IonCard>
+                <div className="shopping-item-container">
+                    {shoppingList.map((product) => (
+                        <ShoppingItem
+                            key={product.id}
+                            product={product}
+                            deleteProduct={deleteProduct}
+                            openModal={openModal}
+                        />
+                    ))}
+                </div>
 
-
-                <IonButton expand="block" onClick={() => setIsOpen(true)}>
-                    Open
-                </IonButton>
-
-                <IonModal isOpen={isOpen}>
-                    <IonHeader>
-                        <IonToolbar>
-                            <IonTitle>Neuer Eintrag</IonTitle>
-                            <IonButtons slot="end">
-                                <IonButton onClick={() => setIsOpen(false)}>
-                                    <IonIcon color='primary' icon={closeOutline} size=''/>
-                                </IonButton>
-                            </IonButtons>
-                        </IonToolbar>
-                    </IonHeader>
-                    <IonContent className="ion-padding">
-
-                    </IonContent>
-                </IonModal>
-
+                <ShoppingModal
+                    isOpen={showModal}
+                    title="Produkt bearbeiten"
+                    onClose={() => setShowModal(false)}
+                >
+                    <ShoppingModalContent
+                        updatedProductTitle={updatedProductTitle}
+                        setUpdatedProductTitle={setUpdatedProductTitle}
+                        updatedProductInfo={updatedProductInfo}
+                        setUpdatedProductInfo={setUpdatedProductInfo}
+                        updatedProductAlert={updatedProductAlert}
+                        setUpdatedProductAlert={setUpdatedProductAlert}
+                        updateProduct={updateProduct}
+                        deleteProduct={deleteProduct}
+                        selectedProduct={selectedProduct}
+                    />
+                </ShoppingModal>
             </IonContent>
         </IonPage>
     );
