@@ -4,8 +4,6 @@ import {
     IonCardContent,
     IonCardSubtitle,
     IonInput,
-    IonItem,
-    IonLabel,
     IonText
 } from '@ionic/react';
 import NavigationButtons from './NavigationButtons';

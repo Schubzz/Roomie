@@ -17,10 +17,19 @@ import ShoppingInput from '../components/Shopping/ShoppingInput';
 import ShoppingItem from '../components/Shopping/ShoppingItem';
 import ShoppingModalContent from '../components/Shopping/ShoppingModalContent';
 
+
+interface ShoppingItem {
+    id: string;
+    title: string;
+    info: string;
+    alert: boolean;
+    createdAt: Date;
+}
+
 function Shopping() {
 
     const [showModal, setShowModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState<ShoppingItem | null>(null);
     const [updatedProductTitle, setUpdatedProductTitle] = useState("");
     const [updatedProductInfo, setUpdatedProductInfo] = useState("");
     const [updatedProductAlert, setUpdatedProductAlert] = useState(false);
@@ -33,12 +42,11 @@ function Shopping() {
 
     const getShoppingList = async () => {
         try {
-            // @ts-ignore
             const data = await getDocs(shoppingCollectionRef);
-            const filteredData = data.docs.map((doc) => ({
+            const filteredData: ShoppingItem[] = data.docs.map((doc) => ({
                 ...doc.data(),
                 id: doc.id,
-            }));
+            })) as ShoppingItem[];
 
             // Sortieren der Liste nach `alert`
             const sortedData = filteredData.sort((a, b) => {
@@ -53,6 +61,7 @@ function Shopping() {
             console.log(err);
         }
     };
+
 
     const onSubmitProduct = async () => {
         try {
@@ -114,6 +123,7 @@ function Shopping() {
         getShoppingList();
     }, []);
 
+    // @ts-ignore
     return (
         <IonPage>
             <IonHeader>

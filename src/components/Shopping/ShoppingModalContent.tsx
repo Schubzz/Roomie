@@ -1,5 +1,5 @@
 import React from 'react';
-import {IonInput, IonButton, IonToggle, IonButtons} from '@ionic/react';
+import {IonInput, IonButton, IonToggle} from '@ionic/react';
 
 const ShoppingModalContent = ({
                                   updatedProductTitle,
@@ -11,7 +11,6 @@ const ShoppingModalContent = ({
                                   updateProduct,
                                   deleteProduct,
                                   selectedProduct,
-                                  onClose
                               }) => {
     return (
         <div className="update-container">

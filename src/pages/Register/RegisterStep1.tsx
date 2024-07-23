@@ -1,12 +1,9 @@
 import React from 'react';
 import {
-    IonButton,
     IonCard,
     IonCardContent,
     IonCardSubtitle,
     IonInput,
-    IonItem,
-    IonLabel,
     IonText
 } from '@ionic/react';
 import NavigationButtons from './NavigationButtons';
