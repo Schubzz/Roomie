@@ -1,21 +1,33 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import legacy from '@vitejs/plugin-legacy';
 
 export default defineConfig({
     plugins: [
         react(),
-        legacy(),
         VitePWA({
             registerType: 'autoUpdate',
             workbox: {
                 runtimeCaching: [
                     {
-                        urlPattern: /^https:\/\/firestore\.googleapis\.com\/*/,
-                        handler: 'CacheFirst',
+                        urlPattern: /^https:\/\/firestore\.googleapis\.com\/google\.firestore\.v1\.Firestore\/Write\/channel.*/,
+                        handler: 'NetworkFirst',
                         options: {
-                            cacheName: 'firebase-cache',
+                            cacheName: 'firebase-write-cache',
+                            expiration: {
+                                maxEntries: 50,
+                                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Tage
+                            },
+                            cacheableResponse: {
+                                statuses: [0, 200],
+                            },
+                        },
+                    },
+                    {
+                        urlPattern: /^https:\/\/firestore\.googleapis\.com\/google\.firestore\.v1\.Firestore\/Listen\/channel.*/,
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'firebase-listen-cache',
                             expiration: {
                                 maxEntries: 50,
                                 maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Tage
@@ -32,7 +44,7 @@ export default defineConfig({
                             cacheName: 'assets-cache',
                             expiration: {
                                 maxEntries: 50,
-                                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Tage
+                                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Tage,
                             },
                             cacheableResponse: {
                                 statuses: [0, 200],
