@@ -1,19 +1,19 @@
-import legacy from '@vitejs/plugin-legacy';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import {defineConfig} from 'vite';
-import {VitePWA} from 'vite-plugin-pwa';
+import { VitePWA } from 'vite-plugin-pwa';
+import legacy from '@vitejs/plugin-legacy';
 
 export default defineConfig({
     plugins: [
         react(),
         legacy(),
         VitePWA({
-            registerType: "autoUpdate",
+            registerType: 'autoUpdate',
             workbox: {
                 runtimeCaching: [
                     {
-                        urlPattern: /^https:\/\/firestore\.googleapis\.com\/*/,
-                        handler: "NetworkFirst",
+                        urlPattern: /^https:\/\/firestore\.googleapis\.com\//,
+                        handler: 'NetworkFirst',
                         options: {
                             cacheName: 'firebase-cache',
                             expiration: {
@@ -23,13 +23,10 @@ export default defineConfig({
                             cacheableResponse: {
                                 statuses: [0, 200],
                             },
-                        }
+                        },
                     },
                     {
-                        urlPattern: ({request}) =>
-                            request.destination === 'document' ||
-                            request.destination === 'script' ||
-                            request.destination === 'style',
+                        urlPattern: ({ request }) => request.destination === 'document' || request.destination === 'script' || request.destination === 'style',
                         handler: 'NetworkFirst',
                         options: {
                             cacheName: 'assets-cache',
@@ -41,9 +38,9 @@ export default defineConfig({
                                 statuses: [0, 200],
                             },
                         },
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         }),
     ],
 });
