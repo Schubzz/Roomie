@@ -12,8 +12,8 @@ export default defineConfig({
             workbox: {
                 runtimeCaching: [
                     {
-                        urlPattern: /^https:\/\/firestore\.googleapis\.com\//,
-                        handler: 'NetworkFirst',
+                        urlPattern: /^https:\/\/firestore\.googleapis\.com\/*/,
+                        handler: 'CacheFirst',
                         options: {
                             cacheName: 'firebase-cache',
                             expiration: {
