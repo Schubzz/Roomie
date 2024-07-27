@@ -10,7 +10,7 @@ import {
     IonTitle,
     IonLabel,
     IonSegmentButton,
-    IonSegment, IonFab, IonFabButton,
+    IonSegment, IonFab, IonFabButton, IonRefresherContent, IonRefresher, RefresherEventDetail,
 } from '@ionic/react';
 import {
     add, cog,
@@ -89,6 +89,7 @@ const Contracts: React.FC = () => {
                 cost: newContractCost,
                 owner: newContractOwner,
                 category: newContractCategory,
+                createdAt: new Date(),
             });
             getContractList();
             setNewContractTitle("");
@@ -100,6 +101,17 @@ const Contracts: React.FC = () => {
             console.error(err);
         }
     };
+
+    const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+        try {
+            await getContractList();
+            event.detail.complete();
+        } catch (err) {
+            console.error(err);
+            event.detail.complete();
+        }
+    };
+
 
     const totalContracts = contractList.length;
     const totalCost = contractList.reduce((sum, contract) => sum + parseFloat(contract.cost), 0);
@@ -150,6 +162,10 @@ const Contracts: React.FC = () => {
             </IonHeader>
 
             <IonContent>
+                <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+                    <IonRefresherContent></IonRefresherContent>
+                </IonRefresher>
+
                 <ContractList
                     contractList={contractList}
                     getContractList={getContractList}

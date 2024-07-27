@@ -9,7 +9,7 @@ import {
     IonPage,
     IonIcon,
     IonButtons,
-    IonTitle, IonButton,
+    IonTitle, IonButton, RefresherEventDetail, IonRefresher, IonRefresherContent,
 } from '@ionic/react';
 import { cog } from "ionicons/icons";
 import ShoppingModal from "../components/Shopping/ShoppingModal";
@@ -119,6 +119,16 @@ function Shopping() {
         setShowModal(true);
     };
 
+    const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+        try {
+            await getShoppingList();
+            event.detail.complete();
+        } catch (err) {
+            console.error(err);
+            event.detail.complete();
+        }
+    };
+
     useEffect(() => {
         getShoppingList();
     }, []);
@@ -148,6 +158,9 @@ function Shopping() {
 
             <IonContent>
 
+                <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+                    <IonRefresherContent></IonRefresherContent>
+                </IonRefresher>
 
                 <div className="shopping-item-container">
                     {shoppingList.map((product) => (
