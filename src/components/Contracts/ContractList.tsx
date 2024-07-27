@@ -5,7 +5,7 @@ import {
     IonButton,
     IonAvatar,
     IonChip,
-    IonLabel
+    IonLabel, IonRow
 } from '@ionic/react';
 import {chevronForward, trashBinOutline, documentText} from 'ionicons/icons';
 import ContractModal from './ContractModal';
@@ -82,26 +82,26 @@ const ContractList: React.FC<{
                     <div className="item-label">
 
                         <div className="item-info">
-
-                            <IonIcon icon={getCategoryIcon(contract.category).icon}
-                                     style={{color: getCategoryIcon(contract.category).color}}
-                                     className="item-icon"
-                                     size=""
-                            />
                             <p className="item-title">{contract.title}</p>
                             <p className="item-cost">{contract.cost} €</p>
                         </div>
 
 
+                        <IonRow className="ion-align-items-center">
+                            <IonIcon icon={getCategoryIcon(contract.category).icon}
+                                     style={{color: getCategoryIcon(contract.category).color}}
+                                     className="item-icon"
+                                     size="large"
+                            />
 
-                        <IonChip outline={true}>
-                            <IonAvatar>
-                                <img alt="Silhouette of a person's head"
-                                     src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
-                            </IonAvatar>
-                            <IonLabel>{getOwnerName(contract.owner)}</IonLabel>
-                        </IonChip>
-
+                            <IonChip outline={true}>
+                                <IonAvatar>
+                                    <img alt="Silhouette of a person's head"
+                                         src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
+                                </IonAvatar>
+                                <IonLabel>{getOwnerName(contract.owner)}</IonLabel>
+                            </IonChip>
+                        </IonRow>
 
                     </div>
 

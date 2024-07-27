@@ -128,7 +128,7 @@ const ContractModal: React.FC<{
                             fill="clear"
                             expand="block"
                         >
-                            Produkt löschen
+                            Vertrag löschen
                         </IonButton>
                     </div>
                 </div>
