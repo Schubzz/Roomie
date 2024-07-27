@@ -135,16 +135,19 @@ function Shopping() {
                     </IonButtons>
                     <IonTitle>Einkäufe</IonTitle>
                 </IonToolbar>
+                <IonToolbar>
+                    <ShoppingInput
+                        newProductTitle={newProductTitle}
+                        setNewProductTitle={setNewProductTitle}
+                        newInfo={newInfo}
+                        setNewInfo={setNewInfo}
+                        onSubmitProduct={onSubmitProduct}
+                    />
+                </IonToolbar>
             </IonHeader>
 
             <IonContent>
-                <ShoppingInput
-                    newProductTitle={newProductTitle}
-                    setNewProductTitle={setNewProductTitle}
-                    newInfo={newInfo}
-                    setNewInfo={setNewInfo}
-                    onSubmitProduct={onSubmitProduct}
-                />
+
 
                 <div className="shopping-item-container">
                     {shoppingList.map((product) => (

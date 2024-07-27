@@ -16,12 +16,15 @@ const ShoppingModalContent = ({
         <div className="update-container">
             <div className="update-input">
                 <IonInput
-                    placeholder="Produkt"
+                    label="Produkt:"
                     value={updatedProductTitle}
                     onIonInput={(e) => setUpdatedProductTitle(e.target.value)}
                 />
+            </div>
+
+            <div className="update-input">
                 <IonInput
-                    placeholder="info"
+                    label="Info: "
                     value={updatedProductInfo}
                     onIonInput={(e) => setUpdatedProductInfo(e.target.value)}
                 />
@@ -36,7 +39,11 @@ const ShoppingModalContent = ({
                 />
             </div>
             <div className="update-button-container">
-                <IonButton expand="block" onClick={updateProduct} color="success">
+                <IonButton
+                    expand="block"
+                    onClick={updateProduct}
+                    color="success"
+                >
                     Aktualisieren
                 </IonButton>
                 <div className="delete-button">

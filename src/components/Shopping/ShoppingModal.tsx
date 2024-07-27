@@ -13,8 +13,8 @@ const ShoppingModal = ({ isOpen, title, onClose, children }) => {
         <IonModal
             isOpen={isOpen}
             onDidDismiss={onClose}
-            initialBreakpoint={0.4}
-            breakpoints={[0, 0.4,]}
+            initialBreakpoint={0.75}
+            breakpoints={[0, 0.5, 0.75, 1]}
         >
             <IonHeader>
                 <IonToolbar>

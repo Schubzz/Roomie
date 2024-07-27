@@ -1,0 +1,166 @@
+.contract-header {
+    box-shadow: 2px 2px 2px #ececec;
+}
+
+.contract-item-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .5rem;
+    width: 90vw;
+    margin: 1rem auto;
+
+    .contract-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        background-color: #f1efef;
+
+        .item-label {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            width: 90%;
+            max-width: 90%;
+
+            .item-info {
+                display: flex;
+                width: 100%;
+                align-items: baseline;
+                justify-content: flex-start;
+
+                .item-title {
+                    font-size: 1.5rem;
+                    margin: 0 1rem 0 .5rem;
+                }
+
+                .item-cost {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    color: #adadad;
+                    margin: .1rem 0 .3rem 0;
+                }
+
+                .item-icon {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+
+        .item-options {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+
+            .item-option-span {
+                font-weight: normal;
+                cursor: pointer;
+                color: #b0b0b0;
+            }
+
+            .separator {
+                width: 2px;
+                height: 1.5rem;
+                background-color: #bebebe;
+            }
+
+        }
+    }
+}
+
+.counter {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: .2rem;
+    color: #5f5f5f;
+    font-size: .9rem;
+
+    span {
+        font-weight: bold;
+        color: #5f5f5f;
+        font-size: .9rem;
+    }
+}
+
+
+.update-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .update-input {
+        display: flex;
+        justify-content: center;
+        background-color: #f3f3f3;
+        padding-inline: 1rem;
+        border-radius: 1rem;
+    }
+
+    .alert-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        margin-left: .5rem;
+    }
+
+    .update-button-container {
+        margin-top: 1rem;
+
+
+        .delete-button {
+            text-align: center;
+        }
+    }
+}
+
+
+.relative-container {
+    position: relative;
+
+    .fab-button {
+        position: absolute;
+        top: -1rem;
+        right: 1rem;
+    }
+
+}
+
+.contract-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .contract-input {
+
+        background-color: #f3f3f3;
+        width: 100%;
+        margin: .5rem auto;
+        padding-inline: 1rem;
+        border-radius: 1rem;
+    }
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: .5rem;
+    width: 50%;
+
+    .price-input {
+        background-color: #f3f3f3;
+        width: 100%;
+        padding-inline: 1rem;
+        border-radius: 1rem;
+    }
+
+    p {
+        font-weight: bold;
+        color: #6f6f6f;
+    }
+}

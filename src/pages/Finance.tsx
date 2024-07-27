@@ -5,7 +5,7 @@ import {
     IonContent,
     IonToolbar,
     IonTitle,
-    IonPage, IonIcon, IonText, IonInput
+    IonPage, IonIcon, IonText, IonInput, IonLabel, IonSegment, IonSegmentButton
 } from '@ionic/react';
 import {addCircleSharp} from "ionicons/icons";
 import Modal from "../components/Modal";
@@ -28,6 +28,17 @@ function Finance() {
                     <IonButton slot="end" onClick={() => setShowModal(true)}>
                         <IonIcon icon={addCircleSharp}/>
                     </IonButton>
+                </IonToolbar>
+
+                <IonToolbar>
+                    <IonSegment value="finance">
+                        <IonSegmentButton value="finanance">
+                            <IonLabel>Finanzen</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="saldos">
+                            <IonLabel>Saldos</IonLabel>
+                        </IonSegmentButton>
+                    </IonSegment>
                 </IonToolbar>
             </IonHeader>
 

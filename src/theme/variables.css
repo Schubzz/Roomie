@@ -1,5 +1,7 @@
 :root, :root.ios, :root.md {
 
+    box-sizing: border-box;
+
     --ion-background-color: #fafafa;
     --ion-text-color: #1a1a1a;
     --ion-toolbar-background: #fafafa;
@@ -8,26 +10,26 @@
 
     --ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
 
-    --ion-color-primary: #0054e9;
-    --ion-color-primary-rgb: 0,84,233;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255,255,255;
-    --ion-color-primary-shade: #004acd;
-    --ion-color-primary-tint: #1a65eb;
+    --ion-color-primary: #2dd55b;
+    --ion-color-primary-rgb: 45,213,91;
+    --ion-color-primary-contrast: #000000;
+    --ion-color-primary-contrast-rgb: 0,0,0;
+    --ion-color-primary-shade: #28bb50;
+    --ion-color-primary-tint: #42d96b;
 
-    --ion-color-secondary: #0163aa;
-    --ion-color-secondary-rgb: 1,99,170;
+    --ion-color-secondary: #212738;
+    --ion-color-secondary-rgb: 33,39,56;
     --ion-color-secondary-contrast: #ffffff;
     --ion-color-secondary-contrast-rgb: 255,255,255;
-    --ion-color-secondary-shade: #015796;
-    --ion-color-secondary-tint: #1a73b3;
+    --ion-color-secondary-shade: #1d2231;
+    --ion-color-secondary-tint: #373d4c;
 
-    --ion-color-tertiary: #6030ff;
-    --ion-color-tertiary-rgb: 96,48,255;
-    --ion-color-tertiary-contrast: #ffffff;
-    --ion-color-tertiary-contrast-rgb: 255,255,255;
-    --ion-color-tertiary-shade: #542ae0;
-    --ion-color-tertiary-tint: #7045ff;
+    --ion-color-tertiary: #759FBC;
+    --ion-color-tertiary-rgb: 117,159,188;
+    --ion-color-tertiary-contrast: #000000;
+    --ion-color-tertiary-contrast-rgb: 0,0,0;
+    --ion-color-tertiary-shade: #678ca5;
+    --ion-color-tertiary-tint: #83a9c3;
 
     --ion-color-success: #2dd55b;
     --ion-color-success-rgb: 45,213,91;
@@ -116,4 +118,47 @@
     justify-content: center;
     text-align: center;
     padding: 1rem;
+}
+
+
+.update-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .update-input {
+        display: flex;
+        justify-content: center;
+        background-color: #f3f3f3;
+        padding-inline: 1rem;
+        border-radius: 1rem;
+    }
+
+    .alert-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        margin-left: .5rem;
+    }
+
+    .update-button-container {
+        margin-top: 1rem;
+
+
+        .delete-button {
+            text-align: center;
+        }
+    }
+}
+
+.add-button {
+    font-size: 1.75rem;
+    background-color: #2dd55b;
+    border-radius: 100%;
+}
+
+.cancel-button {
+    text-align: center;
 }

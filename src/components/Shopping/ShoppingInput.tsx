@@ -1,8 +1,8 @@
 import React from 'react';
-import { IonInput, IonButton, IonIcon, IonButtons } from '@ionic/react';
-import { add } from 'ionicons/icons';
+import {IonInput, IonButton, IonIcon, IonButtons} from '@ionic/react';
+import {add} from 'ionicons/icons';
 
-const ShoppingInput = ({ newProductTitle, setNewProductTitle, newInfo, setNewInfo, onSubmitProduct }) => {
+const ShoppingInput = ({newProductTitle, setNewProductTitle, newInfo, setNewInfo, onSubmitProduct}) => {
     return (
         <div className="shopping-input-container">
             <div className="shopping-input">
@@ -18,11 +18,13 @@ const ShoppingInput = ({ newProductTitle, setNewProductTitle, newInfo, setNewInf
                     value={newInfo}
                     onIonInput={(e) => setNewInfo(e.target.value)}
                 />
-                <IonButtons>
-                    <IonButton onClick={onSubmitProduct}>
-                        <IonIcon icon={add} size="large" />
-                    </IonButton>
-                </IonButtons>
+                <IonButton
+                    onClick={onSubmitProduct}
+                    shape="round"
+                    color="success"
+                >
+                    <IonIcon icon={add} slot="icon-only" size="large"/>
+                </IonButton>
             </div>
         </div>
     );

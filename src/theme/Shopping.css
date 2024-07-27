@@ -1,30 +1,21 @@
-.shopping-input-container{
-    background-color: #fafafa;
+.shopping-input-container {
     width: 100vw;
-    height: 14vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: auto;
     z-index: 20;
+    padding-bottom: .1rem;
     box-shadow: 2px 2px 2px #ececec;
 
     .shopping-input {
         z-index: 20;
-        position: fixed;
-        top: 76px;
-        left: 0;
-        right: 0;
         display: flex;
         justify-content: center;
         background-color: #f3f3f3;
         max-width: 90vw;
-        margin: auto;
+        margin: .5rem auto;
         padding-inline: 1rem;
         border-radius: 1rem;
     }
 }
-
 
 
 .shopping-item-container {
@@ -33,7 +24,7 @@
     justify-content: center;
     gap: .5rem;
     width: 90vw;
-    margin:  6rem auto;
+    margin: 1rem auto;
 
     .shopping-item {
         display: flex;
@@ -96,41 +87,6 @@
         }
     }
 
-}
-
-
-
-
-.update-container {
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    .update-input {
-        display: flex;
-        justify-content: center;
-        background-color: #f3f3f3;
-        padding-inline: 1rem;
-        border-radius: 1rem;
-    }
-
-    .alert-container {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1rem;
-        margin-left: .5rem;
-    }
-
-    .update-button-container {
-        margin-top: 1rem;
-
-
-        .delete-button {
-            text-align: center;
-        }
-    }
 }
 
 
