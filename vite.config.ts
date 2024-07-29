@@ -11,7 +11,7 @@ export default defineConfig({
                 runtimeCaching: [
                     {
                         urlPattern: /^https:\/\/firestore\.googleapis\.com\/google\.firestore\.v1\.Firestore\/Write\/channel.*/,
-                        handler: 'NetworkFirst',
+                        handler: 'CacheFirst',
                         options: {
                             cacheName: 'firebase-write-cache',
                             expiration: {
@@ -25,7 +25,7 @@ export default defineConfig({
                     },
                     {
                         urlPattern: /^https:\/\/firestore\.googleapis\.com\/google\.firestore\.v1\.Firestore\/Listen\/channel.*/,
-                        handler: 'NetworkFirst',
+                        handler: 'CacheFirst',
                         options: {
                             cacheName: 'firebase-listen-cache',
                             expiration: {
