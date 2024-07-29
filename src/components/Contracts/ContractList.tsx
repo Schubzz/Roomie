@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     IonIcon,
     IonButtons,
@@ -7,17 +7,20 @@ import {
     IonChip,
     IonLabel, IonRow
 } from '@ionic/react';
-import {chevronForward, trashBinOutline, documentText} from 'ionicons/icons';
+import { chevronForward, trashBinOutline, documentText } from 'ionicons/icons';
 import ContractModal from './ContractModal';
-import {deleteDoc, doc, updateDoc} from "firebase/firestore";
-import {db} from "../../config/firebaseConfig";
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { db } from "../../config/firebaseConfig";
+import { useAuth } from "../../AuthContext";
 
 const ContractList: React.FC<{
     contractList: any[],
     getContractList: () => void,
     roommates: any[],
     categories: { name: string, icon: string, color: string }[]
-}> = ({contractList, getContractList, roommates, categories}) => {
+}> = ({ contractList, getContractList, roommates, categories }) => {
+
+    const { user, wgId } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedContract, setSelectedContract] = useState<any>(null);
     const [updatedContractTitle, setUpdatedContractTitle] = useState("");
@@ -27,19 +30,21 @@ const ContractList: React.FC<{
 
     const deleteContract = async (id: string) => {
         try {
-            const contractDoc = doc(db, "contracts", id);
-            await deleteDoc(contractDoc);
-            getContractList();
-            setShowEditModal(false);
+            if (wgId) {
+                const contractDoc = doc(db, `wgs/${wgId}/contracts`, id);
+                await deleteDoc(contractDoc);
+                getContractList();
+                setShowEditModal(false);
+            }
         } catch (err) {
-            console.error(err);
+            console.error('Fehler beim Löschen des Vertrags: ', err);
         }
     };
 
     const updateContract = async () => {
         try {
-            if (selectedContract) {
-                const contractDoc = doc(db, "contracts", selectedContract.id);
+            if (selectedContract && wgId) {
+                const contractDoc = doc(db, `wgs/${wgId}/contracts`, selectedContract.id);
                 await updateDoc(contractDoc, {
                     title: updatedContractTitle,
                     cost: updatedContractCost,
@@ -50,7 +55,7 @@ const ContractList: React.FC<{
                 getContractList();
             }
         } catch (err) {
-            console.error(err);
+            console.error('Fehler beim Aktualisieren des Vertrags: ', err);
         }
     };
 
@@ -61,7 +66,7 @@ const ContractList: React.FC<{
 
     const getCategoryIcon = (categoryName: string) => {
         const category = categories.find(cat => cat.name === categoryName);
-        return category ? {icon: category.icon, color: category.color} : {icon: documentText, color: "grey"};
+        return category ? { icon: category.icon, color: category.color } : { icon: documentText, color: "grey" };
     };
 
     const openEditModal = (contract: any) => {
@@ -77,44 +82,35 @@ const ContractList: React.FC<{
         <div className="contract-item-container">
             {contractList.map((contract) => (
                 <div key={contract.id} className="contract-item">
-
-
                     <div className="item-label">
-
                         <div className="item-info">
                             <p className="item-title">{contract.title}</p>
                             <p className="item-cost">{contract.cost} €</p>
                         </div>
-
-
                         <IonRow className="ion-align-items-center">
                             <IonIcon icon={getCategoryIcon(contract.category).icon}
-                                     style={{color: getCategoryIcon(contract.category).color}}
+                                     style={{ color: getCategoryIcon(contract.category).color }}
                                      className="item-icon"
                                      size="large"
                             />
-
                             <IonChip outline={true}>
                                 <IonAvatar>
                                     <img alt="Silhouette of a person's head"
-                                         src="https://ionicframework.com/docs/img/demos/avatar.svg"/>
+                                         src="https://ionicframework.com/docs/img/demos/avatar.svg" />
                                 </IonAvatar>
                                 <IonLabel>{getOwnerName(contract.owner)}</IonLabel>
                             </IonChip>
                         </IonRow>
-
                     </div>
-
-
                     <div className="item-options">
                         <span className="item-option-span">
                             <IonButtons>
                                 <IonButton onClick={() => deleteContract(contract.id)}>
-                                    <IonIcon icon={trashBinOutline} color="danger"/>
+                                    <IonIcon icon={trashBinOutline} color="danger" />
                                 </IonButton>
                             </IonButtons>
                         </span>
-                        <div className="separator"/>
+                        <div className="separator" />
                         <span className="item-option-span">
                             <IonIcon
                                 icon={chevronForward}
@@ -123,8 +119,6 @@ const ContractList: React.FC<{
                             />
                         </span>
                     </div>
-
-
                     <ContractModal
                         isOpen={showEditModal}
                         onClose={() => setShowEditModal(false)}

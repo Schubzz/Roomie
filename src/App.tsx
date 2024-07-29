@@ -1,6 +1,6 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import {Redirect, Route} from 'react-router-dom';
+import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
+import {IonReactRouter} from '@ionic/react-router';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -23,20 +23,31 @@ import './theme/variables.css';
 
 /* Pages */
 
-import Register from "./pages/Register/Register";
+import Register from "./pages/Register";
 import TabsLayout from "./components/TabsLayout/Tabs-Layout";
+import CreateWG from "./pages/CreateWG";
+import SelectWG from "./pages/SelectWg";
+import {AuthProvider} from "./AuthContext";
+import Login from "./pages/Login";
+import Settings from "./pages/Settings";
 
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path='/' component={Register}/>
-        <Route path='/app' component={TabsLayout}/>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+    <IonApp>
+        <AuthProvider>
+            <IonReactRouter>
+                <IonRouterOutlet>
+                    <Route path="/" component={Register} exact/>
+                    <Route path="/login" component={Login} exact/>
+                    <Route path="/select-wg" component={SelectWG} exact/>
+                    <Route path="/create-wg" component={CreateWG} exact/>
+                    <Route path="/settings" component={Settings} exact />
+                    <Route path='/app' component={TabsLayout}/>
+                </IonRouterOutlet>
+            </IonReactRouter>
+        </AuthProvider>
+    </IonApp>
 );
 
 export default App;

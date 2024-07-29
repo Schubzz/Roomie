@@ -38,6 +38,20 @@ export default defineConfig({
                         },
                     },
                     {
+                        urlPattern: /^https:\/\/apis\.google\.com\/.*/,
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'google-cache',
+                            expiration: {
+                                maxEntries: 50,
+                                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Tage
+                            },
+                            cacheableResponse: {
+                                statuses: [0, 200],
+                            },
+                        },
+                    },
+                    {
                         urlPattern: ({ request }) => request.destination === 'document' || request.destination === 'script' || request.destination === 'style',
                         handler: 'NetworkFirst',
                         options: {

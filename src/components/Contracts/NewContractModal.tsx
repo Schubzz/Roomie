@@ -6,14 +6,10 @@ import {
     IonTitle,
     IonContent,
     IonButton,
-    IonButtons,
-    IonItem,
-    IonLabel,
-    IonInput,
     IonSelect,
-    IonSelectOption, IonCard, IonCardContent, IonIcon
+    IonSelectOption,
+    IonInput
 } from '@ionic/react';
-import {add} from "ionicons/icons";
 
 const NewContractModal: React.FC<{
     isOpen: boolean,
@@ -96,7 +92,7 @@ const NewContractModal: React.FC<{
                     <div className="contract-input">
                         <IonSelect
                             placeholder="Kategorie"
-                            value={newContractCategory || "Sonstige Kategorie"}
+                            value={newContractCategory}
                             onIonChange={(e) => setNewContractCategory(e.detail.value)}
                         >
                             {categories.map((category) => (
@@ -107,7 +103,6 @@ const NewContractModal: React.FC<{
                         </IonSelect>
                     </div>
                 </div>
-
 
                 <IonButton
                     expand="block"

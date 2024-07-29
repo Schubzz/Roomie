@@ -16,6 +16,7 @@ import ShoppingModal from "../components/Shopping/ShoppingModal";
 import ShoppingInput from '../components/Shopping/ShoppingInput';
 import ShoppingItem from '../components/Shopping/ShoppingItem';
 import ShoppingModalContent from '../components/Shopping/ShoppingModalContent';
+import {useParams} from "react-router";
 
 
 interface ShoppingItem {
@@ -28,6 +29,7 @@ interface ShoppingItem {
 
 function Shopping() {
 
+    const { wgId } = useParams<{ wgId: string }>();
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ShoppingItem | null>(null);
     const [updatedProductTitle, setUpdatedProductTitle] = useState("");
@@ -38,7 +40,7 @@ function Shopping() {
     const [newAlert, setNewAlert] = useState(false);
     const [shoppingList, setShoppingList] = useState([]);
 
-    const shoppingCollectionRef = collection(db, "shopping");
+    const shoppingCollectionRef = collection(db, `wgs/${wgId}/shopping`);
 
     const getShoppingList = async () => {
         try {
@@ -85,7 +87,7 @@ function Shopping() {
         try {
             if (selectedProduct) {
 
-                const productDoc = doc(db, "shopping", selectedProduct.id);
+                const productDoc = doc(db, `wgs/${wgId}/shopping`, selectedProduct.id);
                 // @ts-ignore
                 await updateDoc(productDoc, {
                     title: updatedProductTitle,
@@ -102,7 +104,7 @@ function Shopping() {
 
     const deleteProduct = async (id) => {
         try {
-            const productDoc = doc(db, "shopping", id);
+            const productDoc = doc(db, `wgs/${wgId}/shopping`, id);
             await deleteDoc(productDoc);
             setShoppingList(prevList => prevList.filter(item => item.id !== id));
             setShowModal(false);
@@ -111,7 +113,7 @@ function Shopping() {
         }
     };
 
-    const openModal = (product) => {
+    const openModal = (product: ShoppingItem) => {
         setSelectedProduct(product);
         setUpdatedProductTitle(product.title);
         setUpdatedProductInfo(product.info);
