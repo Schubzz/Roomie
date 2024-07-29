@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel } from '@ionic/react';
+import {
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonText
+} from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../config/firebaseConfig';
-import { useHistory } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import { setDoc, doc } from 'firebase/firestore';
 
 const Register: React.FC = () => {
@@ -54,6 +65,9 @@ const Register: React.FC = () => {
                     <IonInput type="password" value={password} onIonInput={(e: any) => setPassword(e.target.value)} />
                 </IonItem>
                 <IonButton expand="block" onClick={handleRegister}>Registrieren</IonButton>
+                <Link to="/login">
+                <IonButton expand="block" fill="clear" onClick={handleRegister}>Login</IonButton>
+                </Link>
             </IonContent>
         </IonPage>
     );
