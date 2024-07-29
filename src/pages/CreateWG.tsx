@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel } from '@ionic/react';
-import {addDoc, collection, doc, setDoc} from 'firebase/firestore';
+import { addDoc, collection, updateDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
 const CreateWG: React.FC = () => {
     const [wgName, setWgName] = useState('');
-    const { user, setWgId } = useAuth();
+    const { user, setWgId, updateUser } = useAuth();
     const history = useHistory();
 
     const handleCreateWG = async () => {
@@ -18,18 +18,19 @@ const CreateWG: React.FC = () => {
                     members: [user.uid]
                 });
 
-                // Setze die wgId für den Benutzer innerhalb der WG
-                await setDoc(doc(db, 'wgs', wgRef.id, 'users', user.uid), {
-                    name: user.displayName || 'Unbekannt',
-                    wgId: wgRef.id
+                const wgId = wgRef.id;
+
+                await setDoc(doc(db, 'wgs', wgId, 'users', user.uid), {
+                    displayName: user.displayName,
+                    email: user.email,
+                    uid: user.uid,
+                    wgId
                 });
 
-                // Aktualisiere das Benutzerprofil auf der obersten Ebene
-                await setDoc(doc(db, 'users', user.uid), {
-                    wgId: wgRef.id
-                });
+                await updateDoc(doc(db, 'users', user.uid), { wgId });
 
-                setWgId(wgRef.id); // Update wgId im AuthContext
+                setWgId(wgId);
+                updateUser({ wgId });
 
                 history.push('/app');
             }

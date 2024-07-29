@@ -36,20 +36,20 @@ setupIonicReact();
 
 const App: React.FC = () => (
     <IonApp>
-        < ReloadPrompt />
+        < ReloadPrompt/>
 
-        <AuthProvider>
-            <IonReactRouter>
-                <IonRouterOutlet>
-                    <Route path="/" component={Register} exact/>
-                    <Route path="/login" component={Login} exact/>
-                    <Route path="/select-wg" component={SelectWG} exact/>
-                    <Route path="/create-wg" component={CreateWG} exact/>
-                    <Route path="/settings" component={Settings} exact />
-                    <Route path='/app' component={TabsLayout}/>
-                </IonRouterOutlet>
-            </IonReactRouter>
-        </AuthProvider>
+        <IonReactRouter>
+                <AuthProvider>
+                    <IonRouterOutlet>
+                        <Route path="/" component={Register} exact/>
+                        <Route path="/login" component={Login} exact/>
+                        <Route path="/select-wg" component={SelectWG} exact/>
+                        <Route path="/create-wg" component={CreateWG} exact/>
+                        <Route path="/settings" component={Settings} exact/>
+                        <Route path='/app' component={TabsLayout}/>
+                    </IonRouterOutlet>
+                </AuthProvider>
+        </IonReactRouter>
     </IonApp>
 );
 

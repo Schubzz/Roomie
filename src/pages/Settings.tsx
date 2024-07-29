@@ -22,7 +22,7 @@ import { useAuth } from '../AuthContext';
 import { auth, db } from '../config/firebaseConfig';
 
 const Settings: React.FC = () => {
-  const { user, wgId } = useAuth();
+  const { user, updateUser } = useAuth();
   const [userName, setUserName] = useState(user?.displayName || '');
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -35,15 +35,25 @@ const Settings: React.FC = () => {
     setLoading(true);
     try {
       // Update Firebase Auth profile
-      await updateProfile(user, {
+      await updateProfile(auth.currentUser!, {
         displayName: userName,
       });
 
       // Update Firestore user document
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, {
-        name: userName,
+        displayName: userName,
       });
+
+      // Update Firestore user document in WG collection
+      if (user.wgId) {
+        const userRefInWG = doc(db, `wgs/${user.wgId}/users/${user.uid}`);
+        await updateDoc(userRefInWG, {
+          displayName: userName,
+        });
+      }
+
+      updateUser({ displayName: userName });
 
       setAlertMessage('Profil aktualisiert!');
       setShowAlert(true);
@@ -68,16 +78,16 @@ const Settings: React.FC = () => {
 
     setLoading(true);
     try {
-      if (wgId) {
+      if (user.wgId) {
         // Recursively delete user's subcollections and documents
-        const userCollectionRef = collection(db, `wgs/${wgId}/users/${user.uid}/subcollection`);
+        const userCollectionRef = collection(db, `wgs/${user.wgId}/users/${user.uid}/subcollection`);
         await deleteCollection(userCollectionRef);
 
         // Delete the user document in the WG collection
-        await deleteDoc(doc(db, `wgs/${wgId}/users/${user.uid}`));
+        await deleteDoc(doc(db, `wgs/${user.wgId}/users/${user.uid}`));
 
         // Remove user from WG members list
-        const wgRef = doc(db, 'wgs', wgId);
+        const wgRef = doc(db, 'wgs', user.wgId);
         await updateDoc(wgRef, {
           members: arrayRemove(user.uid)
         });
@@ -88,7 +98,7 @@ const Settings: React.FC = () => {
       await deleteDoc(userRef);
 
       // Delete Firebase Auth user
-      await deleteUser(user);
+      await deleteUser(auth.currentUser!);
 
       setAlertMessage('Profil gelöscht!');
       setShowAlert(true);

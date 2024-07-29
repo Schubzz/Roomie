@@ -1,35 +1,49 @@
+// Register.tsx
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel, IonLoading } from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebaseConfig';
 import { useHistory } from 'react-router-dom';
-import { setDoc, doc } from 'firebase/firestore';
+import { useAuth } from '../AuthContext';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userName, setUserName] = useState('');
+    const [displayName, setDisplayName] = useState('');
+    const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const { updateUser } = useAuth();
 
     const handleRegister = async () => {
+        setLoading(true);
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Setze den displayName für den Benutzer
+            // Set the display name
             await updateProfile(user, {
-                displayName: userName
+                displayName: displayName,
             });
 
-            // Speichere die Benutzerinformationen in Firestore
-            await setDoc(doc(db, "users", user.uid), {
-                name: userName,
+            const userDocData = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
                 wgId: null,
-            });
+            };
+
+            // Save user info in Firestore
+            await setDoc(doc(db, 'users', user.uid), userDocData);
+
+            // Update the user context
+            updateUser(userDocData);
 
             history.push('/select-wg');
         } catch (error) {
-            console.error("Fehler bei der Registrierung: ", error);
+            console.error('Fehler bei der Registrierung:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -43,17 +57,34 @@ const Register: React.FC = () => {
             <IonContent className="ion-padding">
                 <IonItem>
                     <IonLabel position="stacked">Name</IonLabel>
-                    <IonInput value={userName} onIonInput={(e: any) => setUserName(e.target.value)} />
+                    <IonInput
+                        value={displayName}
+                        onIonInput={(e: any) => setDisplayName(e.target.value)}
+                        required
+                    />
                 </IonItem>
                 <IonItem>
-                    <IonLabel position="stacked">Email</IonLabel>
-                    <IonInput type="email" value={email} onIonInput={(e: any) => setEmail(e.target.value)} />
+                    <IonLabel position="stacked">E-Mail</IonLabel>
+                    <IonInput
+                        type="email"
+                        value={email}
+                        onIonInput={(e: any) => setEmail(e.target.value)}
+                        required
+                    />
                 </IonItem>
                 <IonItem>
                     <IonLabel position="stacked">Passwort</IonLabel>
-                    <IonInput type="password" value={password} onIonInput={(e: any) => setPassword(e.target.value)} />
+                    <IonInput
+                        type="password"
+                        value={password}
+                        onIonInput={(e: any) => setPassword(e.target.value)}
+                        required
+                    />
                 </IonItem>
-                <IonButton expand="block" onClick={handleRegister}>Registrieren</IonButton>
+                <IonButton expand="block" onClick={handleRegister} disabled={loading}>
+                    Registrieren
+                </IonButton>
+                <IonLoading isOpen={loading} message={'Bitte warten...'} />
             </IonContent>
         </IonPage>
     );

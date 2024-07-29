@@ -46,7 +46,8 @@ const categories = [
 ];
 
 const Contracts: React.FC = () => {
-    const { user, wgId } = useAuth();
+    const { user } = useAuth();
+    const wgId = user?.wgId;
     const [showNewModal, setShowNewModal] = useState(false);
     const [contractList, setContractList] = useState<any[]>([]);
     const [newContractTitle, setNewContractTitle] = useState('');

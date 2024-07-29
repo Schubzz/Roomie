@@ -20,7 +20,7 @@ const ContractList: React.FC<{
     categories: { name: string, icon: string, color: string }[]
 }> = ({ contractList, getContractList, roommates, categories }) => {
 
-    const { user, wgId } = useAuth();
+    const { user } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedContract, setSelectedContract] = useState<any>(null);
     const [updatedContractTitle, setUpdatedContractTitle] = useState("");
@@ -30,8 +30,8 @@ const ContractList: React.FC<{
 
     const deleteContract = async (id: string) => {
         try {
-            if (wgId) {
-                const contractDoc = doc(db, `wgs/${wgId}/contracts`, id);
+            if (user.wgId) {
+                const contractDoc = doc(db, `wgs/${user.wgId}/contracts`, id);
                 await deleteDoc(contractDoc);
                 getContractList();
                 setShowEditModal(false);
@@ -43,8 +43,8 @@ const ContractList: React.FC<{
 
     const updateContract = async () => {
         try {
-            if (selectedContract && wgId) {
-                const contractDoc = doc(db, `wgs/${wgId}/contracts`, selectedContract.id);
+            if (selectedContract && user.wgId) {
+                const contractDoc = doc(db, `wgs/${user.wgId}/contracts`, selectedContract.id);
                 await updateDoc(contractDoc, {
                     title: updatedContractTitle,
                     cost: updatedContractCost,
@@ -94,10 +94,6 @@ const ContractList: React.FC<{
                                      size="large"
                             />
                             <IonChip outline={true}>
-                                <IonAvatar>
-                                    <img alt="Silhouette of a person's head"
-                                         src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                                </IonAvatar>
                                 <IonLabel>{getOwnerName(contract.owner)}</IonLabel>
                             </IonChip>
                         </IonRow>

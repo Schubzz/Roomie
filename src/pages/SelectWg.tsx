@@ -17,7 +17,7 @@ import { useAuth } from '../AuthContext';
 
 const SelectWG: React.FC = () => {
     const [wgs, setWgs] = useState([]);
-    const { user } = useAuth();
+    const { user, setWgId, updateUser } = useAuth();
     const history = useHistory();
 
     const getWgs = async () => {
@@ -51,15 +51,19 @@ const SelectWG: React.FC = () => {
                 if (!userSnapInWG.exists()) {
                     await setDoc(userRefInWG, {
                         wgId,
-                        name: user?.displayName || "Unbekannt"
+                        displayName: user?.displayName,
+                        email: user?.email,
+                        uid: user?.uid,
                     });
                 }
 
-                // Update the user document on the top level
                 const userRef = doc(db, `users/${user?.uid}`);
                 await updateDoc(userRef, {
                     wgId,
                 });
+
+                setWgId(wgId);
+                updateUser({ wgId });
 
                 history.push('/app');
             } else {
