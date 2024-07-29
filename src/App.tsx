@@ -30,11 +30,14 @@ import SelectWG from "./pages/SelectWg";
 import {AuthProvider} from "./AuthContext";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
+import ReloadPrompt from "./ReloadPrompt";
 
 setupIonicReact();
 
 const App: React.FC = () => (
     <IonApp>
+        < ReloadPrompt />
+
         <AuthProvider>
             <IonReactRouter>
                 <IonRouterOutlet>
