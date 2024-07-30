@@ -1,0 +1,68 @@
+/* Add relevant styles for your components */
+.finance-item-container {
+    padding: 1rem;
+}
+
+.finance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.item-label {
+    flex-grow: 1;
+}
+
+.item-title {
+    font-weight: bold;
+}
+
+.item-amount, .item-paidby {
+    color: #888;
+}
+
+.item-options {
+    display: flex;
+    align-items: center;
+}
+
+.item-option-span {
+    margin-left: 0.5rem;
+}
+
+.update-container {
+    padding: 1rem;
+}
+
+.update-button-container {
+    margin-top: 1rem;
+}
+
+.balance-container {
+    padding: 1rem;
+}
+
+.balance-item {
+    padding: 0.5rem 0;
+}
+
+.relative-container {
+    position: relative;
+}
+
+.counter {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.fab-button {
+    position: absolute;
+    bottom: -25px;
+    right: 10px;
+}
