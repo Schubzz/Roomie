@@ -1,11 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import firebase from "firebase/compat";
+import { getAuth } from "firebase/auth";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 
-// Firebase Konfiguration
 const firebaseConfig = {
-    apiKey: "AIzaSyDJWSALbpixqM3spGgM3PeFOVUudGvNr9I",
+    apiKey: "AIzaSyDJWSALbpixqM3spGgN3PeFOVUudGvNr9I",
     authDomain: "roomie-d356b.firebaseapp.com",
     projectId: "roomie-d356b",
     storageBucket: "roomie-d356b.appspot.com",
@@ -14,43 +12,17 @@ const firebaseConfig = {
     measurementId: "G-M912629J7V"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Auth-Persistenz setzen
-setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-        console.log("Auth persistence enabled");
-    })
-    .catch((error) => {
-        console.error("Error setting auth persistence:", error);
-    });
-
-// Firestore Offline-Persistenz aktivieren
-db.enablePersistence()
-    .then(() => {
-        console.log("Offline persistence enabled");
-    })
+enableIndexedDbPersistence(db)
     .catch((err) => {
         if (err.code === 'failed-precondition') {
-            // Multiple tabs open, persistence can only be enabled in one tab at a time
-            console.error("Persistence failed: Multiple tabs open");
+            console.error("Mehrere Tabs geöffnet, Persistenz kann nur in einem Tab aktiviert werden:", err);
         } else if (err.code === 'unimplemented') {
-            // The current browser does not support all of the features required to enable persistence
-            console.error("Persistence is not available");
+            console.error("Persistenz ist in diesem Browser nicht verfügbar:", err);
         }
     });
 
 export { auth, db };
-
-firebase.firestore().enablePersistence()
-    .catch((err) => {
-        if (err.code === 'failed-precondition') {
-
-        } else if (err.code === 'unimplemented') {
-
-        }
-    });
-// Subsequent queries will use persistence, if it was enabled successfully
