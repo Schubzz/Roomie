@@ -10,6 +10,7 @@ import {
     IonSelectOption,
     IonInput
 } from '@ionic/react';
+import { useWG } from '../../Context/WGContext';
 
 const NewContractModal: React.FC<{
     isOpen: boolean,
@@ -23,7 +24,6 @@ const NewContractModal: React.FC<{
     newContractCategory: string,
     setNewContractCategory: React.Dispatch<React.SetStateAction<string>>,
     onSubmitContract: () => void,
-    roommates: any[],
     categories: { name: string, icon: string }[]
 }> = ({
           isOpen,
@@ -37,9 +37,10 @@ const NewContractModal: React.FC<{
           newContractCategory,
           setNewContractCategory,
           onSubmitContract,
-          roommates,
           categories
       }) => {
+    const { wg } = useWG();
+
     return (
         <IonModal
             isOpen={isOpen}
@@ -53,9 +54,7 @@ const NewContractModal: React.FC<{
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
-
                 <div className="contract-input-container">
-
                     <div className="contract-input">
                         <IonInput
                             placeholder="Titel"
@@ -81,9 +80,9 @@ const NewContractModal: React.FC<{
                             value={newContractOwner}
                             onIonChange={(e) => setNewContractOwner(e.detail.value)}
                         >
-                            {roommates.map((roommate) => (
-                                <IonSelectOption key={roommate.id} value={roommate.id}>
-                                    {roommate.displayName}
+                            {wg?.members.map((member) => (
+                                <IonSelectOption key={member.uid} value={member.uid}>
+                                    {member.displayName}
                                 </IonSelectOption>
                             ))}
                         </IonSelect>

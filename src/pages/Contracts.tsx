@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import {
-    IonHeader,
     IonContent,
+    IonHeader,
     IonToolbar,
     IonPage,
-    IonIcon,
-    IonButton,
-    IonButtons,
     IonTitle,
+    IonButton,
+    IonIcon,
+    IonButtons,
     IonLabel,
-    IonSegmentButton,
     IonSegment,
-    IonRefresherContent,
+    IonSegmentButton,
     IonRefresher,
-    RefresherEventDetail,
+    IonRefresherContent,
+    RefresherEventDetail
 } from '@ionic/react';
-import {
-    add, cog,
-    documentTextOutline,
-    flame,
-    flash,
-    home,
-    musicalNotes,
-    tv,
-    waterOutline,
-    wifi,
-} from 'ionicons/icons';
+import {add, cog, documentTextOutline, flame, flash, home, musicalNotes, tv, waterOutline, wifi} from 'ionicons/icons';
 import '../theme/Contracts.css';
-import { db } from '../config/firebaseConfig.js';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
 import ContractList from '../components/Contracts/ContractList';
 import NewContractModal from '../components/Contracts/NewContractModal';
-import { useAuth } from '../AuthContext';
+import { useUser } from '../Context/UserContext';
+import { useWG } from '../Context/WGContext';
 import { Link } from 'react-router-dom';
 
 const categories = [
@@ -46,27 +37,26 @@ const categories = [
 ];
 
 const Contracts: React.FC = () => {
-    const { user } = useAuth();
-    const wgId = user?.wgId;
+    const { user } = useUser();
+    const { wg, refreshWGData } = useWG();
     const [showNewModal, setShowNewModal] = useState(false);
     const [contractList, setContractList] = useState<any[]>([]);
     const [newContractTitle, setNewContractTitle] = useState('');
     const [newContractCost, setNewContractCost] = useState('');
     const [newContractOwner, setNewContractOwner] = useState('');
     const [newContractCategory, setNewContractCategory] = useState('');
-    const [roommates, setRoommates] = useState<any[]>([]);
     const [filter, setFilter] = useState<string>('all');
 
     useEffect(() => {
-        if (wgId) {
+        if (user?.wgId) {
+            refreshWGData();
             getContractList();
-            getRoommates();
         }
-    }, [wgId]);
+    }, [user?.wgId]);
 
     const getContractList = async () => {
         try {
-            const wgCollectionRef = collection(db, `wgs/${wgId}/contracts`);
+            const wgCollectionRef = collection(db, `wgs/${user?.wgId}/contracts`);
             const data = await getDocs(wgCollectionRef);
             const filteredData = data.docs.map((doc) => ({
                 ...doc.data(),
@@ -78,39 +68,17 @@ const Contracts: React.FC = () => {
         }
     };
 
-    const getRoommates = async () => {
-        try {
-            const usersCollectionRef = collection(db, `wgs/${wgId}/users`);
-            const data = await getDocs(usersCollectionRef);
-            const roommatesData = data.docs.map((doc) => ({
-                ...doc.data(),
-                id: doc.id,
-            }));
-            setRoommates(roommatesData);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     const onSubmitContract = async () => {
         try {
-            const newContract = {
+            const wgCollectionRef = collection(db, `wgs/${user?.wgId}/contracts`);
+            await addDoc(wgCollectionRef, {
                 title: newContractTitle,
                 cost: newContractCost,
                 owner: newContractOwner,
                 category: newContractCategory,
                 createdAt: new Date(),
-            };
-
-            const wgCollectionRef = collection(db, `wgs/${wgId}/contracts`);
-            const docRef = await addDoc(wgCollectionRef, newContract);
-
-
-            setContractList((prevList) => [
-                ...prevList,
-                { ...newContract, id: docRef.id }
-            ]);
-
+            });
+            getContractList();
             setNewContractTitle('');
             setNewContractCost('');
             setNewContractOwner('');
@@ -120,7 +88,6 @@ const Contracts: React.FC = () => {
             console.error(err);
         }
     };
-
 
     const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
         try {
@@ -178,17 +145,13 @@ const Contracts: React.FC = () => {
                     </div>
                 </IonToolbar>
             </IonHeader>
-
             <IonContent>
                 <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
-
-
                 <ContractList
                     contractList={filteredContracts}
                     getContractList={getContractList}
-                    roommates={roommates}
                     categories={categories}
                 />
                 <NewContractModal
@@ -203,7 +166,6 @@ const Contracts: React.FC = () => {
                     newContractCategory={newContractCategory}
                     setNewContractCategory={setNewContractCategory}
                     onSubmitContract={onSubmitContract}
-                    roommates={roommates}
                     categories={categories}
                 />
             </IonContent>

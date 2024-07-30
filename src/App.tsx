@@ -1,4 +1,4 @@
-import {Redirect, Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 
@@ -27,10 +27,12 @@ import Register from "./pages/Register";
 import TabsLayout from "./components/TabsLayout/Tabs-Layout";
 import CreateWG from "./pages/CreateWG";
 import SelectWG from "./pages/SelectWg";
-import {AuthProvider} from "./AuthContext";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
 import ReloadPrompt from "./ReloadPrompt";
+
+import {WGProvider} from "./Context/WGContext";
+import {UserProvider} from "./Context/UserContext";
 
 setupIonicReact();
 
@@ -39,7 +41,8 @@ const App: React.FC = () => (
         < ReloadPrompt/>
 
         <IonReactRouter>
-                <AuthProvider>
+            <UserProvider>
+                <WGProvider>
                     <IonRouterOutlet>
                         <Route path="/" component={Register} exact/>
                         <Route path="/login" component={Login} exact/>
@@ -48,7 +51,8 @@ const App: React.FC = () => (
                         <Route path="/settings" component={Settings} exact/>
                         <Route path='/app' component={TabsLayout}/>
                     </IonRouterOutlet>
-                </AuthProvider>
+                </WGProvider>
+            </UserProvider>
         </IonReactRouter>
     </IonApp>
 );

@@ -1,11 +1,10 @@
-// Register.tsx
 import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel, IonLoading } from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebaseConfig';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useUser } from '../Context/UserContext';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +12,7 @@ const Register: React.FC = () => {
     const [displayName, setDisplayName] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
-    const { updateUser } = useAuth();
+    const { updateUser } = useUser();
 
     const handleRegister = async () => {
         setLoading(true);
@@ -21,9 +20,8 @@ const Register: React.FC = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Set the display name
             await updateProfile(user, {
-                displayName: displayName,
+                displayName,
             });
 
             const userDocData = {
@@ -33,13 +31,11 @@ const Register: React.FC = () => {
                 wgId: null,
             };
 
-            // Save user info in Firestore
             await setDoc(doc(db, 'users', user.uid), userDocData);
-
-            // Update the user context
             updateUser(userDocData);
 
             history.push('/select-wg');
+            window.location.reload();
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);
         } finally {
@@ -84,12 +80,7 @@ const Register: React.FC = () => {
                 <IonButton expand="block" onClick={handleRegister} disabled={loading}>
                     Registrieren
                 </IonButton>
-
-                <IonButton expand="block" fill="clear">
-                    Login
-                </IonButton>
-
-                <IonLoading isOpen={loading} message={'Bitte warten...'} />
+                <IonLoading isOpen={loading} message='Momentchen...' spinner="bubbles"/>
             </IonContent>
         </IonPage>
     );

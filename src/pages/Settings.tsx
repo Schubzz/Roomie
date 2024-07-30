@@ -1,45 +1,35 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  IonAlert,
-  IonBackButton,
-  IonButton,
-  IonButtons,
   IonContent,
   IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
   IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonLoading,
-  IonPage,
-  IonTitle,
-  IonToolbar,
+  IonAlert,
+  IonBackButton,
+  IonButtons,
 } from '@ionic/react';
-import {deleteUser, updateProfile} from 'firebase/auth';
-import {arrayRemove, collection, deleteDoc, doc, getDocs, updateDoc} from 'firebase/firestore';
-import {useHistory} from 'react-router-dom';
-import {useAuth} from '../AuthContext';
-import {auth, db} from '../config/firebaseConfig';
+import { updateProfile, deleteUser } from 'firebase/auth';
+import { doc, updateDoc, deleteDoc, collection, getDocs, arrayRemove } from 'firebase/firestore';
+import { useHistory } from 'react-router-dom';
+import { auth, db } from '../config/firebaseConfig';
+import { useUser } from '../Context/UserContext';
+import { useWG } from '../Context/WGContext';
 
 const Settings: React.FC = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, refreshUserData } = useUser();
+  const { wg } = useWG();
   const [userName, setUserName] = useState(user?.displayName || '');
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const history = useHistory();
-
-  const getRoommates = async () => {
-    if (user?.wgId) {
-      const usersCollectionRef = collection(db, `wgs/${user.wgId}/users`);
-      const data = await getDocs(usersCollectionRef);
-      return data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-    }
-    return [];
-  };
 
   const handleUpdateProfile = async () => {
     if (!user) return;
@@ -66,9 +56,7 @@ const Settings: React.FC = () => {
       }
 
       updateUser({ displayName: userName });
-
-      // Reload roommates data to reflect the updated displayName
-      await getRoommates();
+      refreshUserData();
 
       setAlertMessage('Profil aktualisiert!');
       setShowAlert(true);

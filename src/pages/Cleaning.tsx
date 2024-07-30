@@ -7,11 +7,13 @@ import {
     IonContent,
     IonButton,
     IonIcon,
-    IonInput,
-    IonText
+    IonInput, IonButtons
 } from '@ionic/react';
-import {addCircleSharp} from 'ionicons/icons';
+import {cog} from 'ionicons/icons';
 import Modal from '../components/Modal';
+import UserInfo from "../components/UserInfo";
+import WGInfo from "../components/WGInfo";
+import {Link} from "react-router-dom";
 
 const Cleaning = () => {
     const [showModal, setShowModal] = useState(false);
@@ -24,18 +26,29 @@ const Cleaning = () => {
 
     return (
         <IonPage>
-            <IonHeader>
+            <IonHeader className="contract-header">
                 <IonToolbar>
+                    <IonButtons slot="start">
+                        <IonButton>
+                            <Link to="/settings">
+                                <IonIcon icon={cog} size="large" color="dark" />
+                            </Link>
+                        </IonButton>
+                    </IonButtons>
                     <IonTitle>Putzen</IonTitle>
-                    <IonButton slot="end" onClick={() => setShowModal(true)}>
-                        <IonIcon icon={addCircleSharp}/>
-                    </IonButton>
+                </IonToolbar>
+
+                <IonToolbar>
+                    <div className="relative-container">
+                            Hier funktion einbauen
+                    </div>
                 </IonToolbar>
             </IonHeader>
 
             <IonContent className="ion-padding">
 
-                <IonText>Hallo</IonText>
+               <UserInfo/>
+                <WGInfo />
 
                 <Modal isOpen={showModal}
                        title="Neue Aufgabe"

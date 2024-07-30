@@ -6,10 +6,9 @@ import {
     IonTitle,
     IonContent,
     IonButton,
-    IonButtons,
-    IonInput,
     IonSelect,
-    IonSelectOption
+    IonSelectOption,
+    IonInput, IonButtons
 } from '@ionic/react';
 
 const ContractModal: React.FC<{
@@ -26,8 +25,8 @@ const ContractModal: React.FC<{
     updateContract: () => void,
     deleteContract: (id: string) => void,
     selectedContract: any,
-    roommates: any[],
-    categories: { name: string, icon: string }[]
+    categories: { name: string, icon: string }[],
+    roommates: any[]
 }> = ({
           isOpen,
           onClose,
@@ -42,8 +41,8 @@ const ContractModal: React.FC<{
           updateContract,
           deleteContract,
           selectedContract,
-          roommates,
-          categories
+          categories,
+          roommates
       }) => {
     return (
         <IonModal
@@ -67,7 +66,6 @@ const ContractModal: React.FC<{
 
                     <div className="contract-input">
                         <IonInput
-                            label="Titel:"
                             value={updatedContractTitle}
                             onIonInput={(e) => setUpdatedContractTitle(e.detail.value!)}
                         />
@@ -76,7 +74,6 @@ const ContractModal: React.FC<{
                     <div className="price-container">
                         <div className="price-input">
                             <IonInput
-
                                 value={updatedContractCost}
                                 onIonInput={(e) => setUpdatedContractCost(e.detail.value!)}
                             />
@@ -90,7 +87,7 @@ const ContractModal: React.FC<{
                             onIonChange={(e) => setUpdatedContractOwner(e.detail.value)}
                         >
                             {roommates.map((roommate) => (
-                                <IonSelectOption key={roommate.id} value={roommate.id}>
+                                <IonSelectOption key={roommate.uid} value={roommate.uid}>
                                     {roommate.displayName}
                                 </IonSelectOption>
                             ))}

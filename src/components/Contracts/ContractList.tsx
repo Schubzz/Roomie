@@ -10,21 +10,20 @@ import { chevronForward, trashBinOutline, documentText } from 'ionicons/icons';
 import ContractModal from './ContractModal';
 import { deleteDoc, doc, updateDoc, getDocs, collection } from 'firebase/firestore';
 import { db } from "../../config/firebaseConfig";
-import { useAuth } from "../../AuthContext";
+import { useUser } from "../../Context/UserContext";
+import { useWG } from "../../Context/WGContext";
 
 const ContractList: React.FC<{
     contractList: any[],
     getContractList: () => void,
-    roommates: any[],
     categories: { name: string, icon: string, color: string }[],
 }> = ({
           contractList,
           getContractList,
-          roommates,
           categories,
       }) => {
-
-    const { user } = useAuth();
+    const { user } = useUser();
+    const { wg, refreshWGData } = useWG();
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedContract, setSelectedContract] = useState<any>(null);
     const [updatedContractTitle, setUpdatedContractTitle] = useState("");
@@ -32,27 +31,11 @@ const ContractList: React.FC<{
     const [updatedContractOwner, setUpdatedContractOwner] = useState("");
     const [updatedContractCategory, setUpdatedContractCategory] = useState("");
 
-    const [updatedRoommates, setUpdatedRoommates] = useState(roommates);
-
     useEffect(() => {
-        getRoommates();
-    }, [user]);
-
-    const getRoommates = async () => {
-        try {
-            if (user?.wgId) {
-                const usersCollectionRef = collection(db, `wgs/${user.wgId}/users`);
-                const data = await getDocs(usersCollectionRef);
-                const roommatesData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id,
-                }));
-                setUpdatedRoommates(roommatesData);
-            }
-        } catch (err) {
-            console.error('Fehler beim Laden der Mitbewohner: ', err);
+        if (user?.wgId) {
+            refreshWGData();
         }
-    };
+    }, [user?.wgId]);
 
     const deleteContract = async (id: string) => {
         try {
@@ -86,7 +69,7 @@ const ContractList: React.FC<{
     };
 
     const getOwnerDisplayName = (ownerId: string) => {
-        const owner = updatedRoommates.find(roommate => roommate.id === ownerId);
+        const owner = wg?.members.find(member => member.uid === ownerId);
         return owner ? owner.displayName : "Unbekannt";
     };
 
@@ -155,8 +138,8 @@ const ContractList: React.FC<{
                         updateContract={updateContract}
                         deleteContract={deleteContract}
                         selectedContract={selectedContract}
-                        roommates={updatedRoommates}
                         categories={categories}
+                        roommates={wg?.members || []}
                     />
                 </div>
             ))}

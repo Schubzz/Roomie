@@ -8,17 +8,38 @@ import {
     IonButton,
     IonList,
     IonItem,
-    IonLabel
+    IonLabel,
+    IonLoading,
 } from '@ionic/react';
-import { getDocs, collection, updateDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getDocs, collection, updateDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
+import { useUser } from '../Context/UserContext';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
 
 const SelectWG: React.FC = () => {
+    const { user, refreshUserData } = useUser();
     const [wgs, setWgs] = useState([]);
-    const { user, setWgId } = useAuth();
+    const [userData, setUserData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (user) {
+                await fetchUserData(user.uid);
+                await getWgs();
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, [user]);
+
+    const fetchUserData = async (uid: string) => {
+        const userDoc = await getDoc(doc(db, 'users', uid));
+        if (userDoc.exists()) {
+            setUserData(userDoc.data());
+        }
+    };
 
     const getWgs = async () => {
         try {
@@ -35,55 +56,47 @@ const SelectWG: React.FC = () => {
 
     const joinWG = async (wgId: string) => {
         try {
-            if (!user) {
-                console.error('Kein Benutzer eingeloggt');
-                return;
-            }
-
             const wgRef = doc(db, `wgs/${wgId}`);
             const wgSnap = await getDoc(wgRef);
             const wgData = wgSnap.data();
 
             if (wgData) {
-                const updatedMembers = [...wgData.members, user.uid];
+                const updatedMembers = [...wgData.members, user?.uid];
                 await updateDoc(wgRef, {
                     members: updatedMembers,
                 });
 
-                const userRefInWG = doc(db, `wgs/${wgId}/users/${user.uid}`);
-                const userSnapInWG = await getDoc(userRefInWG);
+                const userRefInWG = doc(db, `wgs/${wgId}/users/${user?.uid}`);
+                await setDoc(userRefInWG, {
+                    wgId,
+                    displayName: userData?.displayName,
+                    email: userData?.email,
+                    uid: user?.uid,
+                });
 
-                if (!userSnapInWG.exists()) {
-                    await setDoc(userRefInWG, {
-                        wgId,
-                        displayName: user.displayName || "Unbekannt"
-                    });
-                } else {
-                    await updateDoc(userRefInWG, {
-                        wgId,
-                        displayName: user.displayName || "Unbekannt"
-                    });
-                }
-
-                const userRef = doc(db, `users/${user.uid}`);
+                const userRef = doc(db, `users/${user?.uid}`);
                 await updateDoc(userRef, {
                     wgId,
                 });
 
-                setWgId(wgId);
-
                 history.push('/app');
+                window.location.reload();
             } else {
                 console.error("WG not found");
             }
         } catch (err) {
-            console.error('Fehler beim Beitreten der WG:', err);
+            console.error(err);
         }
     };
 
-    useEffect(() => {
-        getWgs();
-    }, []);
+
+    if (loading || !user || !userData) {
+        return (
+            <IonContent>
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+            </IonContent>
+        );
+    }
 
     return (
         <IonPage>

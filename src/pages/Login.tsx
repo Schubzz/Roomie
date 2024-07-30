@@ -14,20 +14,20 @@ import {
 import { useHistory } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
-import { useAuth } from '../AuthContext';
+import {useUser} from "../Context/UserContext";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
-    const { user } = useAuth();
+    const { user } = useUser();
 
     const handleLogin = async () => {
         setLoading(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            history.push('/app'); // Leite zu deiner App-Seite weiter
+            history.push('/app');
         } catch (error) {
             console.error('Fehler beim Anmelden:', error);
         } finally {
