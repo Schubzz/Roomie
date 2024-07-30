@@ -94,15 +94,23 @@ const Contracts: React.FC = () => {
 
     const onSubmitContract = async () => {
         try {
-            const wgCollectionRef = collection(db, `wgs/${wgId}/contracts`);
-            await addDoc(wgCollectionRef, {
+            const newContract = {
                 title: newContractTitle,
                 cost: newContractCost,
                 owner: newContractOwner,
                 category: newContractCategory,
                 createdAt: new Date(),
-            });
-            getContractList();
+            };
+
+            const wgCollectionRef = collection(db, `wgs/${wgId}/contracts`);
+            const docRef = await addDoc(wgCollectionRef, newContract);
+
+            // Lokale Liste sofort aktualisieren
+            setContractList((prevList) => [
+                ...prevList,
+                { ...newContract, id: docRef.id }
+            ]);
+
             setNewContractTitle('');
             setNewContractCost('');
             setNewContractOwner('');
@@ -112,6 +120,7 @@ const Contracts: React.FC = () => {
             console.error(err);
         }
     };
+
 
     const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
         try {
