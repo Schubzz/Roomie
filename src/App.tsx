@@ -33,6 +33,7 @@ import ReloadPrompt from "./ReloadPrompt";
 
 import {WGProvider} from "./Context/WGContext";
 import {UserProvider} from "./Context/UserContext";
+import Welcome from "./pages/Welcome";
 
 setupIonicReact();
 
@@ -44,7 +45,8 @@ const App: React.FC = () => (
             <UserProvider>
                 <WGProvider>
                     <IonRouterOutlet>
-                        <Route path="/" component={Register} exact/>
+                        <Route path="/" component={Welcome} exact/>
+                        <Route path="/register" component={Register} exact/>
                         <Route path="/login" component={Login} exact/>
                         <Route path="/select-wg" component={SelectWG} exact/>
                         <Route path="/create-wg" component={CreateWG} exact/>

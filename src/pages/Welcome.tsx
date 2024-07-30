@@ -1,5 +1,5 @@
 import React from "react";
-import {IonButton, IonPage, IonText} from '@ionic/react';
+import {IonButton, IonText} from '@ionic/react';
 import {Swiper, SwiperSlide, useSwiper} from "swiper/react";
 import 'swiper/css'
 
@@ -9,6 +9,7 @@ import Contract from '/img/Contract.png'
 import Finance from "/img/Finance.png";
 import Device from "/img/Device.png";
 import Logo from '/icons/roomie-icon-512x512.png'
+import {Link} from "react-router-dom";
 
 interface ContainerProps {
     onFinish: () => void;
@@ -80,14 +81,12 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <p>Auf dem Smartphone oder auf dem PC. Nutze Roomie wo du möchtest!</p>
                     </IonText>
-                    <IonButton
-                        onClick={() => onFinish()}
-                        color="success"
-                        expand="block"
-                        shape="round"
-                    >
-                        Neue WG
-                    </IonButton>
+                    <Link to="/register">
+                        <IonButton expand="block">
+                            Loslegen!
+                        </IonButton>
+                    </Link>
+
                 </SwiperSlide>
             </Swiper>
         </div>

@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonItem, IonLabel, IonLoading } from '@ionic/react';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebaseConfig';
-import { useHistory } from 'react-router-dom';
-import { useUser } from '../Context/UserContext';
+import React, {useState} from 'react';
+import {
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonLoading, IonCard
+} from '@ionic/react';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import {doc, setDoc} from 'firebase/firestore';
+import {auth, db} from '../config/firebaseConfig';
+import {Link, useHistory} from 'react-router-dom';
+import {useUser} from '../Context/UserContext';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +23,7 @@ const Register: React.FC = () => {
     const [displayName, setDisplayName] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
-    const { updateUser } = useUser();
+    const {updateUser} = useUser();
 
     const handleRegister = async () => {
         setLoading(true);
@@ -50,7 +61,9 @@ const Register: React.FC = () => {
                     <IonTitle>Registrieren</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding">
+
+            <IonContent>
+            <IonCard className="ion-padding">
                 <IonItem>
                     <IonLabel position="stacked">Name</IonLabel>
                     <IonInput
@@ -80,7 +93,15 @@ const Register: React.FC = () => {
                 <IonButton expand="block" onClick={handleRegister} disabled={loading}>
                     Registrieren
                 </IonButton>
+
+                <Link to="/login">
+                    <IonButton expand="block" fill="clear">
+                        Login
+                    </IonButton>
+                </Link>
+
                 <IonLoading isOpen={loading} message='Momentchen...' spinner="bubbles"/>
+            </IonCard>
             </IonContent>
         </IonPage>
     );

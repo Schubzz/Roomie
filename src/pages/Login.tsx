@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     IonContent,
     IonHeader,
@@ -9,11 +9,11 @@ import {
     IonInput,
     IonItem,
     IonLabel,
-    IonLoading,
+    IonLoading, IonCard,
 } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebaseConfig';
+import {Link, useHistory} from 'react-router-dom';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../config/firebaseConfig';
 import {useUser} from "../Context/UserContext";
 
 const Login: React.FC = () => {
@@ -21,7 +21,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
-    const { user } = useUser();
+    const {user} = useUser();
 
     const handleLogin = async () => {
         setLoading(true);
@@ -42,29 +42,38 @@ const Login: React.FC = () => {
                     <IonTitle>Anmelden</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="ion-padding">
-                <IonItem>
-                    <IonLabel position="stacked">E-Mail</IonLabel>
-                    <IonInput
-                        type="email"
-                        value={email}
-                        onIonInput={(e: any) => setEmail(e.target.value)}
-                        required
-                    />
-                </IonItem>
-                <IonItem>
-                    <IonLabel position="stacked">Passwort</IonLabel>
-                    <IonInput
-                        type="password"
-                        value={password}
-                        onIonInput={(e: any) => setPassword(e.target.value)}
-                        required
-                    />
-                </IonItem>
-                <IonButton expand="block" onClick={handleLogin} disabled={loading}>
-                    Anmelden
-                </IonButton>
-                <IonLoading isOpen={loading} message={'Bitte warten...'} />
+
+            <IonContent>
+                <IonCard className="ion-padding">
+                    <IonItem>
+                        <IonLabel position="stacked">E-Mail</IonLabel>
+                        <IonInput
+                            type="email"
+                            value={email}
+                            onIonInput={(e: any) => setEmail(e.target.value)}
+                            required
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Passwort</IonLabel>
+                        <IonInput
+                            type="password"
+                            value={password}
+                            onIonInput={(e: any) => setPassword(e.target.value)}
+                            required
+                        />
+                    </IonItem>
+                    <IonButton expand="block" onClick={handleLogin} disabled={loading}>
+                        Anmelden
+                    </IonButton>
+                    <Link to="/register">
+                        <IonButton expand="block" fill="clear">
+                            Registrieren
+                        </IonButton>
+                    </Link>
+
+                    <IonLoading isOpen={loading} message={'Bitte warten...'}/>
+                </IonCard>
             </IonContent>
         </IonPage>
     );
