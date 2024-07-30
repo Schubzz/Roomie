@@ -2,8 +2,7 @@
     width: 100vw;
     height: auto;
     z-index: 20;
-    padding-bottom: .1rem;
-    box-shadow: 2px 2px 2px #ececec;
+
 
     .shopping-input {
         z-index: 20;
@@ -11,7 +10,7 @@
         justify-content: center;
         background-color: #f3f3f3;
         max-width: 90vw;
-        margin: .5rem auto;
+        margin: .5rem auto 0 auto;
         padding-inline: 1rem;
         border-radius: 1rem;
     }

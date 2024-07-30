@@ -2,7 +2,7 @@ import React from 'react';
 import { IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { chevronForward, trashBinOutline } from 'ionicons/icons';
 
-const ShoppingItem = ({ product, deleteProduct, openModal }) => {
+const ShoppingItem: React.FC<{ product: any; deleteProduct: any; openModal: any }> = ({ product, deleteProduct, openModal }) => {
     return (
         <div key={product.id} className="shopping-item">
             <div className="item-label" style={{ borderLeft: product.alert ? '4px solid red' : 'none' }}>

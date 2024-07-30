@@ -1,32 +1,42 @@
 import React from 'react';
-import {IonInput, IonButton, IonToggle} from '@ionic/react';
+import { IonInput, IonButton, IonToggle } from '@ionic/react';
 
-const ShoppingModalContent = ({
-                                  updatedProductTitle,
-                                  setUpdatedProductTitle,
-                                  updatedProductInfo,
-                                  setUpdatedProductInfo,
-                                  updatedProductAlert,
-                                  setUpdatedProductAlert,
-                                  updateProduct,
-                                  deleteProduct,
-                                  selectedProduct,
-                              }) => {
+const ShoppingModalContent: React.FC<{
+    updatedProductTitle: string;
+    setUpdatedProductTitle: React.Dispatch<React.SetStateAction<string>>;
+    updatedProductInfo: string;
+    setUpdatedProductInfo: React.Dispatch<React.SetStateAction<string>>;
+    updatedProductAlert: boolean;
+    setUpdatedProductAlert: React.Dispatch<React.SetStateAction<boolean>>;
+    updateProduct: () => void;
+    deleteProduct: (id: string) => void;
+    selectedProduct: any;
+}> = ({
+          updatedProductTitle,
+          setUpdatedProductTitle,
+          updatedProductInfo,
+          setUpdatedProductInfo,
+          updatedProductAlert,
+          setUpdatedProductAlert,
+          updateProduct,
+          deleteProduct,
+          selectedProduct,
+      }) => {
     return (
         <div className="update-container">
             <div className="update-input">
                 <IonInput
-                    label="Produkt:"
+
                     value={updatedProductTitle}
-                    onIonInput={(e) => setUpdatedProductTitle(e.target.value)}
+                    onIonInput={(e: any) => setUpdatedProductTitle(e.target.value)}
                 />
             </div>
 
             <div className="update-input">
                 <IonInput
-                    label="Info: "
+
                     value={updatedProductInfo}
-                    onIonInput={(e) => setUpdatedProductInfo(e.target.value)}
+                    onIonInput={(e: any) => setUpdatedProductInfo(e.target.value)}
                 />
             </div>
             <div className="alert-container">

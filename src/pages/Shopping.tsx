@@ -10,14 +10,16 @@ import {
     IonIcon,
     IonButtons,
     IonTitle, IonButton, RefresherEventDetail, IonRefresher, IonRefresherContent,
+    IonLoading,
 } from '@ionic/react';
 import { cog } from "ionicons/icons";
 import ShoppingModal from "../components/Shopping/ShoppingModal";
 import ShoppingInput from '../components/Shopping/ShoppingInput';
 import ShoppingItem from '../components/Shopping/ShoppingItem';
 import ShoppingModalContent from '../components/Shopping/ShoppingModalContent';
-import {useParams} from "react-router";
-
+import { useWG } from "../Context/WGContext";
+import { useUser } from "../Context/UserContext";
+import { Link } from "react-router-dom";
 
 interface ShoppingItem {
     id: string;
@@ -27,9 +29,9 @@ interface ShoppingItem {
     createdAt: Date;
 }
 
-function Shopping() {
-
-    const { wgId } = useParams<{ wgId: string }>();
+const Shopping: React.FC = () => {
+    const { user } = useUser();
+    const { wg } = useWG();
     const [showModal, setShowModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ShoppingItem | null>(null);
     const [updatedProductTitle, setUpdatedProductTitle] = useState("");
@@ -38,46 +40,56 @@ function Shopping() {
     const [newProductTitle, setNewProductTitle] = useState("");
     const [newInfo, setNewInfo] = useState("");
     const [newAlert, setNewAlert] = useState(false);
-    const [shoppingList, setShoppingList] = useState([]);
+    const [shoppingList, setShoppingList] = useState<ShoppingItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const shoppingCollectionRef = collection(db, `wgs/${wgId}/shopping`);
+    useEffect(() => {
+        if (wg) {
+            getShoppingList();
+        }
+    }, [wg]);
 
     const getShoppingList = async () => {
         try {
-            const data = await getDocs(shoppingCollectionRef);
-            const filteredData: ShoppingItem[] = data.docs.map((doc) => ({
-                ...doc.data(),
-                id: doc.id,
-            })) as ShoppingItem[];
+            if (wg) {
+                const shoppingCollectionRef = collection(db, `wgs/${wg.id}/shopping`);
+                const data = await getDocs(shoppingCollectionRef);
+                const filteredData: ShoppingItem[] = data.docs.map((doc) => ({
+                    ...doc.data(),
+                    id: doc.id,
+                })) as ShoppingItem[];
 
-            // Sortieren der Liste nach `alert`
-            const sortedData = filteredData.sort((a, b) => {
-                if (a.alert === b.alert) {
-                    return a.createdAt > b.createdAt ? -1 : 1;
-                }
-                return b.alert ? 1 : -1;
-            });
+                const sortedData = filteredData.sort((a, b) => {
+                    if (a.alert === b.alert) {
+                        return a.createdAt > b.createdAt ? -1 : 1;
+                    }
+                    return b.alert ? 1 : -1;
+                });
 
-            setShoppingList(sortedData);
+                setShoppingList(sortedData);
+            }
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false);
         }
     };
 
-
     const onSubmitProduct = async () => {
         try {
-            // @ts-ignore
-            await addDoc(shoppingCollectionRef, {
-                title: newProductTitle,
-                info: newInfo,
-                alert: newAlert,
-                createdAt: new Date()
-            });
-            getShoppingList();
-            setNewProductTitle("");
-            setNewInfo("");
-            setNewAlert(false);
+            if (wg) {
+                const shoppingCollectionRef = collection(db, `wgs/${wg.id}/shopping`);
+                await addDoc(shoppingCollectionRef, {
+                    title: newProductTitle,
+                    info: newInfo,
+                    alert: newAlert,
+                    createdAt: new Date()
+                });
+                getShoppingList();
+                setNewProductTitle("");
+                setNewInfo("");
+                setNewAlert(false);
+            }
         } catch (err) {
             console.error(err);
         }
@@ -85,10 +97,8 @@ function Shopping() {
 
     const updateProduct = async () => {
         try {
-            if (selectedProduct) {
-
-                const productDoc = doc(db, `wgs/${wgId}/shopping`, selectedProduct.id);
-                // @ts-ignore
+            if (wg && selectedProduct) {
+                const productDoc = doc(db, `wgs/${wg.id}/shopping`, selectedProduct.id);
                 await updateDoc(productDoc, {
                     title: updatedProductTitle,
                     info: updatedProductInfo,
@@ -102,12 +112,14 @@ function Shopping() {
         }
     };
 
-    const deleteProduct = async (id) => {
+    const deleteProduct = async (id: string) => {
         try {
-            const productDoc = doc(db, `wgs/${wgId}/shopping`, id);
-            await deleteDoc(productDoc);
-            setShoppingList(prevList => prevList.filter(item => item.id !== id));
-            setShowModal(false);
+            if (wg) {
+                const productDoc = doc(db, `wgs/${wg.id}/shopping`, id);
+                await deleteDoc(productDoc);
+                setShoppingList(prevList => prevList.filter(item => item.id !== id));
+                setShowModal(false);
+            }
         } catch (err) {
             console.error(err);
         }
@@ -131,22 +143,33 @@ function Shopping() {
         }
     };
 
-    useEffect(() => {
-        getShoppingList();
-    }, []);
+    const totalItems = shoppingList.length;
+    const urgentItems = shoppingList.filter(item => item.alert).length;
 
-    // @ts-ignore
+    if (loading) {
+        return (
+            <IonContent>
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+            </IonContent>
+        );
+    }
+
     return (
         <IonPage>
-            <IonHeader>
+            <IonHeader className="contract-header">
+
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonButton>
-                            <IonIcon icon={cog} size="large" color="dark"/>
+                            <Link to="/settings">
+                                <IonIcon icon={cog} size="large" color="dark" />
+                            </Link>
                         </IonButton>
                     </IonButtons>
                     <IonTitle>Einkäufe</IonTitle>
                 </IonToolbar>
+
+
                 <IonToolbar>
                     <ShoppingInput
                         newProductTitle={newProductTitle}
@@ -156,7 +179,17 @@ function Shopping() {
                         onSubmitProduct={onSubmitProduct}
                     />
                 </IonToolbar>
+
+
+                <IonToolbar>
+                    <div className="relative-container">
+                        <div className="counter">
+                            <span>{totalItems}</span> Produkte <span>|</span> <span>{urgentItems}</span> dringend
+                        </div>
+                    </div>
+                </IonToolbar>
             </IonHeader>
+
 
             <IonContent>
 
@@ -174,7 +207,6 @@ function Shopping() {
                         />
                     ))}
                 </div>
-
                 <ShoppingModal
                     isOpen={showModal}
                     title="Produkt bearbeiten"

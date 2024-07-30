@@ -13,7 +13,7 @@ import {
     IonSegmentButton,
     IonRefresher,
     IonRefresherContent,
-    RefresherEventDetail
+    RefresherEventDetail, IonLoading
 } from '@ionic/react';
 import {add, cog, documentTextOutline, flame, flash, home, musicalNotes, tv, waterOutline, wifi} from 'ionicons/icons';
 import '../theme/Contracts.css';
@@ -46,6 +46,7 @@ const Contracts: React.FC = () => {
     const [newContractOwner, setNewContractOwner] = useState('');
     const [newContractCategory, setNewContractCategory] = useState('');
     const [filter, setFilter] = useState<string>('all');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (user?.wgId) {
@@ -65,6 +66,8 @@ const Contracts: React.FC = () => {
             setContractList(filteredData);
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -109,9 +112,18 @@ const Contracts: React.FC = () => {
         return !isNaN(cost) ? sum + cost : sum;
     }, 0);
 
+    if (loading) {
+        return (
+            <IonContent>
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+            </IonContent>
+        );
+    }
+
     return (
         <IonPage>
             <IonHeader className="contract-header">
+
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonButton>
@@ -122,6 +134,8 @@ const Contracts: React.FC = () => {
                     </IonButtons>
                     <IonTitle>Verträge</IonTitle>
                 </IonToolbar>
+
+
                 <IonToolbar>
                     <IonSegment value={filter} onIonChange={(e) => setFilter(e.detail.value as string)}>
                         <IonSegmentButton value="all">
@@ -132,6 +146,8 @@ const Contracts: React.FC = () => {
                         </IonSegmentButton>
                     </IonSegment>
                 </IonToolbar>
+
+
                 <IonToolbar>
                     <div className="relative-container">
                         <div className="counter">
@@ -144,16 +160,22 @@ const Contracts: React.FC = () => {
                         </div>
                     </div>
                 </IonToolbar>
+
             </IonHeader>
+
+
             <IonContent>
+
                 <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
+
                 <ContractList
                     contractList={filteredContracts}
                     getContractList={getContractList}
                     categories={categories}
                 />
+
                 <NewContractModal
                     isOpen={showNewModal}
                     onClose={() => setShowNewModal(false)}
@@ -168,7 +190,9 @@ const Contracts: React.FC = () => {
                     onSubmitContract={onSubmitContract}
                     categories={categories}
                 />
+
             </IonContent>
+
         </IonPage>
     );
 };
