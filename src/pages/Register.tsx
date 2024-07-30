@@ -84,6 +84,11 @@ const Register: React.FC = () => {
                 <IonButton expand="block" onClick={handleRegister} disabled={loading}>
                     Registrieren
                 </IonButton>
+
+                <IonButton expand="block" fill="clear">
+                    Login
+                </IonButton>
+
                 <IonLoading isOpen={loading} message={'Bitte warten...'} />
             </IonContent>
         </IonPage>
