@@ -1,6 +1,7 @@
+// AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from './config/firebaseConfig';
 
 interface User {
@@ -25,48 +26,41 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
-    const setWgId = (wgId: string) => {
-        if (user) {
-            setUser({ ...user, wgId });
-        }
-    };
-
-    const updateUser = (updates: Partial<User>) => {
-        if (user) {
-            setUser({ ...user, ...updates });
-        }
-    };
-
     useEffect(() => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                const userRef = doc(db, 'users', firebaseUser.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (userSnap.exists()) {
-                    const userData = userSnap.data() as User;
+                const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data() as User;
                     setUser({
                         uid: firebaseUser.uid,
                         email: firebaseUser.email,
                         displayName: firebaseUser.displayName || userData.displayName,
                         wgId: userData.wgId,
                     });
-                } else {
-                    setUser({
-                        uid: firebaseUser.uid,
-                        email: firebaseUser.email,
-                        displayName: firebaseUser.displayName,
-                        wgId: null,
-                    });
                 }
             } else {
                 setUser(null);
             }
         });
-
         return () => unsubscribe();
     }, []);
+
+    const setWgId = (wgId: string) => {
+        if (user) {
+            setUser({ ...user, wgId });
+            setDoc(doc(db, 'users', user.uid), { wgId }, { merge: true });
+        }
+    };
+
+    const updateUser = (updates: Partial<User>) => {
+        if (user) {
+            const updatedUser = { ...user, ...updates };
+            setUser(updatedUser);
+            setDoc(doc(db, 'users', user.uid), updates, { merge: true });
+        }
+    };
 
     return (
         <AuthContext.Provider value={{ user, setWgId, updateUser }}>

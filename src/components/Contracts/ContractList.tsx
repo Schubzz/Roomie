@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     IonIcon,
     IonButtons,
     IonButton,
-    IonAvatar,
     IonChip,
     IonLabel, IonRow
 } from '@ionic/react';
 import { chevronForward, trashBinOutline, documentText } from 'ionicons/icons';
 import ContractModal from './ContractModal';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc, getDocs, collection } from 'firebase/firestore';
 import { db } from "../../config/firebaseConfig";
 import { useAuth } from "../../AuthContext";
 
@@ -17,8 +16,13 @@ const ContractList: React.FC<{
     contractList: any[],
     getContractList: () => void,
     roommates: any[],
-    categories: { name: string, icon: string, color: string }[]
-}> = ({ contractList, getContractList, roommates, categories }) => {
+    categories: { name: string, icon: string, color: string }[],
+}> = ({
+          contractList,
+          getContractList,
+          roommates,
+          categories,
+      }) => {
 
     const { user } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
@@ -28,9 +32,31 @@ const ContractList: React.FC<{
     const [updatedContractOwner, setUpdatedContractOwner] = useState("");
     const [updatedContractCategory, setUpdatedContractCategory] = useState("");
 
+    const [updatedRoommates, setUpdatedRoommates] = useState(roommates);
+
+    useEffect(() => {
+        getRoommates();
+    }, [user]);
+
+    const getRoommates = async () => {
+        try {
+            if (user?.wgId) {
+                const usersCollectionRef = collection(db, `wgs/${user.wgId}/users`);
+                const data = await getDocs(usersCollectionRef);
+                const roommatesData = data.docs.map((doc) => ({
+                    ...doc.data(),
+                    id: doc.id,
+                }));
+                setUpdatedRoommates(roommatesData);
+            }
+        } catch (err) {
+            console.error('Fehler beim Laden der Mitbewohner: ', err);
+        }
+    };
+
     const deleteContract = async (id: string) => {
         try {
-            if (user.wgId) {
+            if (user?.wgId) {
                 const contractDoc = doc(db, `wgs/${user.wgId}/contracts`, id);
                 await deleteDoc(contractDoc);
                 getContractList();
@@ -43,7 +69,7 @@ const ContractList: React.FC<{
 
     const updateContract = async () => {
         try {
-            if (selectedContract && user.wgId) {
+            if (selectedContract && user?.wgId) {
                 const contractDoc = doc(db, `wgs/${user.wgId}/contracts`, selectedContract.id);
                 await updateDoc(contractDoc, {
                     title: updatedContractTitle,
@@ -59,9 +85,9 @@ const ContractList: React.FC<{
         }
     };
 
-    const getOwnerName = (ownerId: string) => {
-        const owner = roommates.find(roommate => roommate.id === ownerId);
-        return owner ? owner.name : "Unbekannt";
+    const getOwnerDisplayName = (ownerId: string) => {
+        const owner = updatedRoommates.find(roommate => roommate.id === ownerId);
+        return owner ? owner.displayName : "Unbekannt";
     };
 
     const getCategoryIcon = (categoryName: string) => {
@@ -94,7 +120,7 @@ const ContractList: React.FC<{
                                      size="large"
                             />
                             <IonChip outline={true}>
-                                <IonLabel>{getOwnerName(contract.owner)}</IonLabel>
+                                <IonLabel>{getOwnerDisplayName(contract.owner)}</IonLabel>
                             </IonChip>
                         </IonRow>
                     </div>
@@ -129,7 +155,7 @@ const ContractList: React.FC<{
                         updateContract={updateContract}
                         deleteContract={deleteContract}
                         selectedContract={selectedContract}
-                        roommates={roommates}
+                        roommates={updatedRoommates}
                         categories={categories}
                     />
                 </div>

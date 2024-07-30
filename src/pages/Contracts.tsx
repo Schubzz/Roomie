@@ -105,7 +105,7 @@ const Contracts: React.FC = () => {
             const wgCollectionRef = collection(db, `wgs/${wgId}/contracts`);
             const docRef = await addDoc(wgCollectionRef, newContract);
 
-            // Lokale Liste sofort aktualisieren
+
             setContractList((prevList) => [
                 ...prevList,
                 { ...newContract, id: docRef.id }
@@ -178,10 +178,13 @@ const Contracts: React.FC = () => {
                     </div>
                 </IonToolbar>
             </IonHeader>
+
             <IonContent>
                 <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
+
+
                 <ContractList
                     contractList={filteredContracts}
                     getContractList={getContractList}

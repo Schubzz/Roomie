@@ -91,7 +91,7 @@ const ContractModal: React.FC<{
                         >
                             {roommates.map((roommate) => (
                                 <IonSelectOption key={roommate.id} value={roommate.id}>
-                                    {roommate.name}
+                                    {roommate.displayName}
                                 </IonSelectOption>
                             ))}
                         </IonSelect>

@@ -17,7 +17,7 @@ import { useAuth } from '../AuthContext';
 
 const SelectWG: React.FC = () => {
     const [wgs, setWgs] = useState([]);
-    const { user, setWgId, updateUser } = useAuth();
+    const { user, setWgId } = useAuth();
     const history = useHistory();
 
     const getWgs = async () => {
@@ -33,44 +33,51 @@ const SelectWG: React.FC = () => {
         }
     };
 
-    const joinWG = async (wgId) => {
+    const joinWG = async (wgId: string) => {
         try {
+            if (!user) {
+                console.error('Kein Benutzer eingeloggt');
+                return;
+            }
+
             const wgRef = doc(db, `wgs/${wgId}`);
             const wgSnap = await getDoc(wgRef);
             const wgData = wgSnap.data();
 
             if (wgData) {
-                const updatedMembers = [...wgData.members, user?.uid];
+                const updatedMembers = [...wgData.members, user.uid];
                 await updateDoc(wgRef, {
                     members: updatedMembers,
                 });
 
-                const userRefInWG = doc(db, `wgs/${wgId}/users/${user?.uid}`);
+                const userRefInWG = doc(db, `wgs/${wgId}/users/${user.uid}`);
                 const userSnapInWG = await getDoc(userRefInWG);
 
                 if (!userSnapInWG.exists()) {
                     await setDoc(userRefInWG, {
                         wgId,
-                        displayName: user?.displayName,
-                        email: user?.email,
-                        uid: user?.uid,
+                        displayName: user.displayName || "Unbekannt"
+                    });
+                } else {
+                    await updateDoc(userRefInWG, {
+                        wgId,
+                        displayName: user.displayName || "Unbekannt"
                     });
                 }
 
-                const userRef = doc(db, `users/${user?.uid}`);
+                const userRef = doc(db, `users/${user.uid}`);
                 await updateDoc(userRef, {
                     wgId,
                 });
 
                 setWgId(wgId);
-                updateUser({ wgId });
 
                 history.push('/app');
             } else {
                 console.error("WG not found");
             }
         } catch (err) {
-            console.error(err);
+            console.error('Fehler beim Beitreten der WG:', err);
         }
     };
 
