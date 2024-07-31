@@ -60,14 +60,17 @@ const FinanceModalContent: React.FC<FinanceModalContentProps> = ({
                 <IonLabel position="stacked">Titel</IonLabel>
                 <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
             </IonItem>
+
             <IonItem>
                 <IonLabel position="stacked">Info</IonLabel>
                 <IonInput value={info} onIonInput={(e) => setInfo(e.detail.value!)} />
             </IonItem>
+
             <IonItem>
                 <IonLabel position="stacked">Betrag</IonLabel>
                 <IonInput type="number" value={amount} onIonInput={(e) => setAmount(parseFloat(e.detail.value!))} />
             </IonItem>
+
             <IonItem>
                 <IonLabel position="stacked">Bezahlt von</IonLabel>
                 <IonSelect value={paidBy} onIonChange={(e) => setPaidBy(e.detail.value)}>
@@ -78,6 +81,7 @@ const FinanceModalContent: React.FC<FinanceModalContentProps> = ({
                     ))}
                 </IonSelect>
             </IonItem>
+
             <IonItem>
                 <IonLabel position="stacked">Geteilt mit</IonLabel>
                 <IonSelect

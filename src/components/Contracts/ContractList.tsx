@@ -102,8 +102,8 @@ const ContractList: React.FC<{
                                      className="item-icon"
                                      size="large"
                             />
-                            <IonChip outline={true}>
-                                <IonLabel>{getOwnerDisplayName(contract.owner)}</IonLabel>
+                            <IonChip outline={true} className="contract-owner">
+                                <p>{getOwnerDisplayName(contract.owner)}</p>
                             </IonChip>
                         </IonRow>
                     </div>

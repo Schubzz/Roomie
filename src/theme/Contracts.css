@@ -31,12 +31,13 @@
                 justify-content: flex-start;
 
                 .item-title {
-                    font-size: 1.5rem;
+                    font-size: 1rem;
                     margin: 0 1rem 0 .5rem;
+                    font-weight: bold;
                 }
 
                 .item-cost {
-                    font-size: 1.5rem;
+                    font-size: 1rem;
                     font-weight: bold;
                     color: #adadad;
                     margin: .1rem 0 .3rem 0;
@@ -66,22 +67,6 @@
             }
 
         }
-    }
-}
-
-.counter {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: .2rem;
-    color: #5f5f5f;
-    font-size: .9rem;
-
-    span {
-        font-weight: bold;
-        color: #5f5f5f;
-        font-size: .9rem;
     }
 }
 
@@ -119,17 +104,6 @@
 }
 
 
-.relative-container {
-    position: relative;
-
-    .fab-button {
-        position: absolute;
-        top: -1rem;
-        right: 1rem;
-    }
-
-}
-
 .contract-input-container {
     display: flex;
     flex-direction: column;
@@ -164,3 +138,58 @@
         color: #6f6f6f;
     }
 }
+
+.contract-owner {
+
+    p {
+        font-size: .7rem;
+        margin: 0;
+    }
+}
+
+
+.relative-container {
+    position: relative;
+
+    .counter {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: .2rem;
+        color: #5f5f5f;
+        font-size: .9rem;
+
+        .flex-counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            gap: .3rem;
+            margin: .5rem 0;
+
+            :first-child {
+                color: #b0b0b0;
+                font-size: .7rem;
+                font-weight: bold;
+            }
+
+            :last-child {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .fab-button {
+        position: absolute;
+        top: 20%;
+        right: 1rem;
+    }
+
+}
+
+
+
+

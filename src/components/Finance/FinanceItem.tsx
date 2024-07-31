@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { chevronForward, trashBinOutline } from 'ionicons/icons';
+import {chevronForward, trashBinOutline, walletOutline} from 'ionicons/icons';
 import { useWG } from '../../Context/WGContext';
 
 const FinanceItem = ({ item, deleteItem, openModal }) => {
@@ -12,28 +12,16 @@ const FinanceItem = ({ item, deleteItem, openModal }) => {
     };
 
     return (
-        <div key={item.id} className="finance-item">
+        <div key={item.id} className="finance-item" onClick={() => openModal(item)}>
+            <div>
+                <IonIcon icon={walletOutline}/>
+            </div>
             <div className="item-label">
                 <p className="item-title">{item.title}</p>
-                <p className="item-info">{item.info}</p>
-                <p className="item-paid-by">Bezahlt von: {getDisplayName(item.paidBy)}</p>
-                <p className="item-shared-with">
-                    Geteilt mit: {item.sharedWith.map((uid) => getDisplayName(uid)).join(", ")}
-                </p>
-                <p className="item-amount">Betrag: {item.amount} €</p>
+                <p className="item-paid-by">Bezahlt von {getDisplayName(item.paidBy)}</p>
             </div>
-            <div className="item-options">
-        <span className="item-option-span">
-          <IonButtons>
-            <IonButton onClick={() => deleteItem(item.id)}>
-              <IonIcon icon={trashBinOutline} color="danger" />
-            </IonButton>
-          </IonButtons>
-        </span>
-                <div className="separator" />
-                <span className="item-option-span">
-          <IonIcon icon={chevronForward} size="large" onClick={() => openModal(item)} />
-        </span>
+            <div>
+                <p className="item-amount">{item.amount} €</p>
             </div>
         </div>
     );

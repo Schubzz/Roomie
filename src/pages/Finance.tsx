@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { db } from "../config/firebaseConfig";
-import { getDocs, collection, doc, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import React, {useEffect, useState} from 'react';
+import {db} from "../config/firebaseConfig";
+import {getDocs, collection, doc, addDoc, deleteDoc, updateDoc} from "firebase/firestore";
 import {
     IonHeader,
     IonContent,
@@ -13,19 +13,18 @@ import {
     IonRefresher,
     IonRefresherContent,
     IonLoading,
-    IonFab,
-    IonFabButton,
-   RefresherEventDetail,
+    RefresherEventDetail,
 } from '@ionic/react';
-import { add, cog } from "ionicons/icons";
+import {add, cog} from "ionicons/icons";
 import FinanceModal from "../components/Finance/FinanceModal";
 import FinanceItem from '../components/Finance/FinanceItem';
 import FinanceModalContent from '../components/Finance/FinanceModalContent';
 import FinanceFilter from '../components/Finance/FinanceFilter';
 import FinanceBalance from '../components/Finance/FinanceBalance';
-import { useWG } from "../Context/WGContext";
-import { Link } from "react-router-dom";
+import {useWG} from "../Context/WGContext";
+import {Link} from "react-router-dom";
 import '../theme/Finance.css';
+import {useUser} from "../Context/UserContext";
 
 interface FinanceItem {
     id: string;
@@ -37,8 +36,17 @@ interface FinanceItem {
     amount: number;
 }
 
+interface SettlementItem {
+    id: string;
+    amount: number;
+    creditor: string;
+    debtor: string;
+    settledAt: Date;
+}
+
 const Finance: React.FC = () => {
-    const { wg } = useWG();
+    const {wg} = useWG();
+    const {user} = useUser();
     const [showModal, setShowModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState<FinanceItem | null>(null);
     const [title, setTitle] = useState("");
@@ -49,8 +57,12 @@ const Finance: React.FC = () => {
     const [financeList, setFinanceList] = useState<FinanceItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<string>("expenses");
-    const [balances, setBalances] = useState<{ [key: string]: { amount: number; creditor: string; debtor: string }[] }>({});
-
+    const [balances, setBalances] = useState<{
+        [key: string]: { amount: number; creditor: string; debtor: string }[]
+    }>({})
+    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [userExpenses, setUserExpenses] = useState(0);
+    const [settlements, setSettlements] = useState<SettlementItem[]>([]);
 
     useEffect(() => {
         if (wg) {
@@ -75,6 +87,7 @@ const Finance: React.FC = () => {
                 const sortedData = financeData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
                 setFinanceList(sortedData);
                 calculateBalances(sortedData);
+                calculateExpenses(sortedData);
             }
         } catch (err) {
             console.log(err);
@@ -84,22 +97,56 @@ const Finance: React.FC = () => {
     };
 
     const calculateBalances = (financeData: FinanceItem[]) => {
-        const balanceMap: { [key: string]: { amount: number; creditor: string; debtor: string }[] } = {};
+        const balanceMap: { [key: string]: { [key: string]: number } } = {};
 
         financeData.forEach(item => {
+            const share = item.amount / item.sharedWith.length;
+
             item.sharedWith.forEach(member => {
                 if (member !== item.paidBy) {
-                    const share = item.amount / item.sharedWith.length;
-                    if (!balanceMap[member]) balanceMap[member] = [];
+                    if (!balanceMap[item.paidBy]) balanceMap[item.paidBy] = {};
+                    if (!balanceMap[member]) balanceMap[member] = {};
 
-                    balanceMap[member].push({ amount: share, creditor: item.paidBy, debtor: member });
+                    if (!balanceMap[item.paidBy][member]) balanceMap[item.paidBy][member] = 0;
+                    if (!balanceMap[member][item.paidBy]) balanceMap[member][item.paidBy] = 0;
+
+                    balanceMap[item.paidBy][member] += share;
+                    balanceMap[member][item.paidBy] -= share;
+
+                    balanceMap[item.paidBy][member] = parseFloat(balanceMap[item.paidBy][member].toFixed(2));
+                    balanceMap[member][item.paidBy] = parseFloat(balanceMap[member][item.paidBy].toFixed(2));
                 }
             });
         });
 
-        setBalances(balanceMap);
+        const finalBalances: { [key: string]: { amount: number; creditor: string; debtor: string }[] } = {};
+
+        for (const creditor in balanceMap) {
+            for (const debtor in balanceMap[creditor]) {
+                const amount = balanceMap[creditor][debtor];
+
+                if (amount > 0) {
+                    if (!finalBalances[creditor]) finalBalances[creditor] = [];
+                    finalBalances[creditor].push({
+                        amount,
+                        creditor,
+                        debtor,
+                    });
+                }
+            }
+        }
+
+        setBalances(finalBalances);
     };
 
+    const resetForm = () => {
+        setTitle("");
+        setInfo("");
+        setAmount(0);
+        setPaidBy("");
+        setSharedWith([]);
+        setSelectedItem(null);
+    };
 
     const onSubmitItem = async () => {
         try {
@@ -114,11 +161,7 @@ const Finance: React.FC = () => {
                     createdAt: new Date(),
                 });
                 getFinanceList();
-                setTitle("");
-                setInfo("");
-                setAmount(0);
-                setPaidBy("");
-                setSharedWith([]);
+                resetForm();
                 setShowModal(false);
             }
         } catch (err) {
@@ -137,8 +180,9 @@ const Finance: React.FC = () => {
                     paidBy,
                     sharedWith,
                 });
-                setShowModal(false);
                 getFinanceList();
+                resetForm();
+                setShowModal(false);
             }
         } catch (err) {
             console.error(err);
@@ -150,7 +194,10 @@ const Finance: React.FC = () => {
             if (wg) {
                 const itemDoc = doc(db, `wgs/${wg.id}/finances`, id);
                 await deleteDoc(itemDoc);
-                setFinanceList(prevList => prevList.filter(item => item.id !== id));
+                const updatedFinanceList = financeList.filter(item => item.id !== id);
+                setFinanceList(updatedFinanceList);
+                calculateBalances(updatedFinanceList);
+                calculateExpenses(updatedFinanceList);
                 setShowModal(false);
             }
         } catch (err) {
@@ -168,6 +215,63 @@ const Finance: React.FC = () => {
         setShowModal(true);
     };
 
+    const calculateExpenses = (financeData: FinanceItem[]) => {
+        let total = 0;
+        let userTotal = 0;
+
+        financeData.forEach(item => {
+            total += item.amount;
+            if (item.paidBy === user?.uid) {
+                userTotal += item.amount;
+            }
+        });
+
+        setTotalExpenses(total);
+        setUserExpenses(userTotal);
+    };
+
+    const getSettlementList = async () => {
+        try {
+            if (wg) {
+                const settlementCollectionRef = collection(db, `wgs/${wg.id}/settlements`);
+                const data = await getDocs(settlementCollectionRef);
+                const settlementData: SettlementItem[] = data.docs.map((doc) => {
+                    const settlementItem = doc.data();
+                    return {
+                        ...settlementItem,
+                        id: doc.id,
+                        settledAt: settlementItem.settledAt.toDate ? settlementItem.settledAt.toDate() : new Date(settlementItem.settledAt)
+                    };
+                }) as SettlementItem[];
+
+                const sortedData = settlementData.sort((a, b) => b.settledAt.getTime() - a.settledAt.getTime());
+                setSettlements(sortedData);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const settleBalance = async (amount: number, creditor: string, debtor: string) => {
+        try {
+            if (wg) {
+                const settlementCollectionRef = collection(db, `wgs/${wg.id}/settlements`);
+                await addDoc(settlementCollectionRef, {
+                    amount,
+                    creditor,
+                    debtor,
+                    settledAt: new Date(),
+                });
+                getSettlementList();
+                const updatedBalances = {...balances};
+                updatedBalances[debtor] = updatedBalances[debtor].filter(transaction => !(transaction.creditor === creditor && transaction.amount === amount));
+                setBalances(updatedBalances);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
         try {
             await getFinanceList();
@@ -178,10 +282,23 @@ const Finance: React.FC = () => {
         }
     };
 
+    const groupByDate = (financeList: FinanceItem[]) => {
+        return financeList.reduce((acc, item) => {
+            const date = new Date(item.createdAt).toLocaleDateString('de-DE');
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(item);
+            return acc;
+        }, {} as { [key: string]: FinanceItem[] });
+    };
+
+    const groupedFinanceList = groupByDate(financeList);
+
     if (loading) {
         return (
             <IonContent className="ion-justify-content-center ion-align-items-center">
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles"/>
             </IonContent>
         );
     }
@@ -189,19 +306,49 @@ const Finance: React.FC = () => {
     return (
         <IonPage>
             <IonHeader className="finance-header">
+
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonButton>
                             <Link to="/settings">
-                                <IonIcon icon={cog} size="large" color="dark" />
+                                <IonIcon icon={cog} size="large" color="dark"/>
                             </Link>
                         </IonButton>
                     </IonButtons>
                     <IonTitle>Finanzen</IonTitle>
                 </IonToolbar>
+
                 <IonToolbar>
-                    <FinanceFilter filter={filter} setFilter={setFilter} />
+                    <FinanceFilter filter={filter} setFilter={setFilter}/>
                 </IonToolbar>
+
+                <IonToolbar>
+                    <div className="relative-container">
+                        <div className="counter">
+                            <div className="flex-counter">
+                                <span>Meine Ausgaben</span>
+                                <span> {userExpenses.toFixed(2)} €</span>
+                            </div>
+
+                            <span>|</span>
+
+                            <div className="flex-counter">
+                                <span>Gesamtausgaben</span>
+                                <span> {totalExpenses.toFixed(2)} €</span>
+                            </div>
+                        </div>
+
+                        <div className="fab-button">
+                            <IonButton onClick={() => {
+                                resetForm();
+                                setShowModal(true);
+                            }} color="primary" size="small" shape="round">
+                                <IonIcon icon={add} slot="icon-only" size="large"/>
+                            </IonButton>
+                        </div>
+                    </div>
+                </IonToolbar>
+
             </IonHeader>
 
             <IonContent>
@@ -211,29 +358,33 @@ const Finance: React.FC = () => {
 
                 {filter === "expenses" ? (
                     <div className="finance-item-container">
-                        {financeList.map((item) => (
-                            <FinanceItem
-                                key={item.id}
-                                item={item}
-                                deleteItem={deleteItem}
-                                openModal={openModal}
-                            />
+                        {Object.keys(groupedFinanceList).map(date => (
+                            <div key={date}>
+                                <p>{date}</p>
+                                {groupedFinanceList[date].map(item => (
+                                    <FinanceItem
+                                        key={item.id}
+                                        item={item}
+                                        deleteItem={deleteItem}
+                                        openModal={openModal}
+                                    />
+                                ))}
+                            </div>
                         ))}
                     </div>
                 ) : (
-                    <FinanceBalance balances={balances} />
+                    <>
+                        <FinanceBalance balances={balances} settleBalance={settleBalance}/>
+                    </>
                 )}
-
-                <IonFab vertical="bottom" horizontal="end" slot="fixed">
-                    <IonFabButton onClick={() => setShowModal(true)}>
-                        <IonIcon icon={add} />
-                    </IonFabButton>
-                </IonFab>
 
                 <FinanceModal
                     isOpen={showModal}
-                    title="Ausgabe hinzufügen"
-                    onClose={() => setShowModal(false)}
+                    title={selectedItem ? "Eintrag bearbeiten" : "Ausgabe hinzufügen"} // Anpassen des Titels je nach Zustand
+                    onClose={() => {
+                        resetForm();
+                        setShowModal(false);
+                    }}
                 >
                     <FinanceModalContent
                         title={title}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     IonContent,
     IonHeader,
@@ -17,28 +17,28 @@ import {
 } from '@ionic/react';
 import {add, cog, documentTextOutline, flame, flash, home, musicalNotes, tv, waterOutline, wifi} from 'ionicons/icons';
 import '../theme/Contracts.css';
-import { getDocs, collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import {getDocs, collection, addDoc} from 'firebase/firestore';
+import {db} from '../config/firebaseConfig';
 import ContractList from '../components/Contracts/ContractList';
 import NewContractModal from '../components/Contracts/NewContractModal';
-import { useUser } from '../Context/UserContext';
-import { useWG } from '../Context/WGContext';
-import { Link } from 'react-router-dom';
+import {useUser} from '../Context/UserContext';
+import {useWG} from '../Context/WGContext';
+import {Link} from 'react-router-dom';
 
 const categories = [
-    { name: 'Strom', icon: flash, color: '#ecce01', size: 'large' },
-    { name: 'Gas', icon: flame, color: '#F57D0D' },
-    { name: 'Internet', icon: wifi, color: '#2069cb' },
-    { name: 'Miete', icon: home, color: 'gray' },
-    { name: 'Musik', icon: musicalNotes, color: '#1DB954' },
-    { name: 'Streaming', icon: tv, color: '#d20a14' },
-    { name: 'Wasser', icon: waterOutline, color: '#4d93f5' },
-    { name: 'Sonstige Kategorie', icon: documentTextOutline, color: '#bbbbbb' },
+    {name: 'Strom', icon: flash, color: '#ecce01', size: 'large'},
+    {name: 'Gas', icon: flame, color: '#F57D0D'},
+    {name: 'Internet', icon: wifi, color: '#2069cb'},
+    {name: 'Miete', icon: home, color: 'gray'},
+    {name: 'Musik', icon: musicalNotes, color: '#1DB954'},
+    {name: 'Streaming', icon: tv, color: '#d20a14'},
+    {name: 'Wasser', icon: waterOutline, color: '#4d93f5'},
+    {name: 'Sonstige Kategorie', icon: documentTextOutline, color: '#bbbbbb'},
 ];
 
 const Contracts: React.FC = () => {
-    const { user } = useUser();
-    const { wg, refreshWGData } = useWG();
+    const {user} = useUser();
+    const {wg, refreshWGData} = useWG();
     const [showNewModal, setShowNewModal] = useState(false);
     const [contractList, setContractList] = useState<any[]>([]);
     const [newContractTitle, setNewContractTitle] = useState('');
@@ -115,7 +115,7 @@ const Contracts: React.FC = () => {
     if (loading) {
         return (
             <IonContent>
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles"/>
             </IonContent>
         );
     }
@@ -128,7 +128,7 @@ const Contracts: React.FC = () => {
                     <IonButtons slot="start">
                         <IonButton>
                             <Link to="/settings">
-                                <IonIcon icon={cog} size="large" color="dark" />
+                                <IonIcon icon={cog} size="large" color="dark"/>
                             </Link>
                         </IonButton>
                     </IonButtons>
@@ -151,14 +151,27 @@ const Contracts: React.FC = () => {
                 <IonToolbar>
                     <div className="relative-container">
                         <div className="counter">
-                            <span>{totalContracts}</span> Verträge <span>|</span> <span>{totalCost}</span> € gesamt
+                            <div className="flex-counter">
+                                <span>Verträge</span>
+                                <span>{totalContracts}</span>
+                            </div>
+
+                            <span>|</span>
+
+                            <div className="flex-counter">
+                                <span>Gesamtkosten</span>
+                                <span> {totalCost} €</span>
+                            </div>
                         </div>
+
                         <div className="fab-button">
                             <IonButton onClick={() => setShowNewModal(true)} color="primary" size="small" shape="round">
-                                <IonIcon icon={add} slot="icon-only" size="large" />
+                                <IonIcon icon={add} slot="icon-only" size="large"/>
                             </IonButton>
                         </div>
                     </div>
+
+
                 </IonToolbar>
 
             </IonHeader>
