@@ -10,18 +10,17 @@ import {
     IonIcon,
     IonButtons,
     IonTitle, IonButton, RefresherEventDetail, IonRefresher, IonRefresherContent,
-    IonLoading,
+    IonLoading, IonSegment, IonSegmentButton, IonLabel,
 } from '@ionic/react';
-import { cog } from "ionicons/icons";
+import { cog, add } from "ionicons/icons";
 import ShoppingModal from "../components/Shopping/ShoppingModal";
-import ShoppingInput from '../components/Shopping/ShoppingInput';
 import ShoppingItem from '../components/Shopping/ShoppingItem';
 import ShoppingModalContent from '../components/Shopping/ShoppingModalContent';
 import { useWG } from "../Context/WGContext";
 import { useUser } from "../Context/UserContext";
 import { Link } from "react-router-dom";
 
-interface ShoppingItem {
+interface ShoppingItemProps {
     id: string;
     title: string;
     info: string;
@@ -33,15 +32,16 @@ const Shopping: React.FC = () => {
     const { user } = useUser();
     const { wg } = useWG();
     const [showModal, setShowModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<ShoppingItem | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<ShoppingItemProps | null>(null);
     const [updatedProductTitle, setUpdatedProductTitle] = useState("");
     const [updatedProductInfo, setUpdatedProductInfo] = useState("");
     const [updatedProductAlert, setUpdatedProductAlert] = useState(false);
     const [newProductTitle, setNewProductTitle] = useState("");
     const [newInfo, setNewInfo] = useState("");
     const [newAlert, setNewAlert] = useState(false);
-    const [shoppingList, setShoppingList] = useState<ShoppingItem[]>([]);
+    const [shoppingList, setShoppingList] = useState<ShoppingItemProps[]>([]);
     const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState<string>('all');
 
     useEffect(() => {
         if (wg) {
@@ -54,10 +54,10 @@ const Shopping: React.FC = () => {
             if (wg) {
                 const shoppingCollectionRef = collection(db, `wgs/${wg.id}/shopping`);
                 const data = await getDocs(shoppingCollectionRef);
-                const filteredData: ShoppingItem[] = data.docs.map((doc) => ({
+                const filteredData: ShoppingItemProps[] = data.docs.map((doc) => ({
                     ...doc.data(),
                     id: doc.id,
-                })) as ShoppingItem[];
+                })) as ShoppingItemProps[];
 
                 const sortedData = filteredData.sort((a, b) => {
                     if (a.alert === b.alert) {
@@ -75,6 +75,13 @@ const Shopping: React.FC = () => {
         }
     };
 
+    const resetForm = () => {
+        setNewProductTitle("");
+        setNewInfo("");
+        setNewAlert(false);
+        setSelectedProduct(null);
+    };
+
     const onSubmitProduct = async () => {
         try {
             if (wg) {
@@ -86,9 +93,8 @@ const Shopping: React.FC = () => {
                     createdAt: new Date()
                 });
                 getShoppingList();
-                setNewProductTitle("");
-                setNewInfo("");
-                setNewAlert(false);
+                resetForm();
+                setShowModal(false);
             }
         } catch (err) {
             console.error(err);
@@ -125,7 +131,7 @@ const Shopping: React.FC = () => {
         }
     };
 
-    const openModal = (product: ShoppingItem) => {
+    const openModal = (product: ShoppingItemProps) => {
         setSelectedProduct(product);
         setUpdatedProductTitle(product.title);
         setUpdatedProductInfo(product.info);
@@ -143,8 +149,12 @@ const Shopping: React.FC = () => {
         }
     };
 
-    const totalItems = shoppingList.length;
-    const urgentItems = shoppingList.filter(item => item.alert).length;
+    const filteredShoppingList = filter === 'alert'
+        ? shoppingList.filter(product => product.alert)
+        : shoppingList;
+
+    const totalItems = filteredShoppingList.length;
+    const urgentItems = filteredShoppingList.filter(item => item.alert).length;
 
     if (loading) {
         return (
@@ -169,36 +179,53 @@ const Shopping: React.FC = () => {
                     <IonTitle>Einkäufe</IonTitle>
                 </IonToolbar>
 
-
                 <IonToolbar>
-                    <ShoppingInput
-                        newProductTitle={newProductTitle}
-                        setNewProductTitle={setNewProductTitle}
-                        newInfo={newInfo}
-                        setNewInfo={setNewInfo}
-                        onSubmitProduct={onSubmitProduct}
-                    />
+                    <IonSegment value={filter} onIonChange={(e) => setFilter(e.detail.value as string)}>
+                        <IonSegmentButton value="all">
+                            <IonLabel>Alle Artikel</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="alert">
+                            <IonLabel>dringende Artikel</IonLabel>
+                        </IonSegmentButton>
+                    </IonSegment>
                 </IonToolbar>
-
 
                 <IonToolbar>
                     <div className="relative-container">
                         <div className="counter">
-                            <span>{totalItems}</span> Produkte <span>|</span> <span>{urgentItems}</span> dringend
+                            <div className="flex-counter">
+                                <span>Produkte</span>
+                                <span>{totalItems}</span>
+                            </div>
+
+                            <span>|</span>
+
+                            <div className="flex-counter">
+                                <span>dringend</span>
+                                <span>{urgentItems}</span>
+                            </div>
+                        </div>
+
+                        <div className="fab-button">
+                            <IonButton onClick={() => {
+                                resetForm();
+                                setShowModal(true);
+                            }} color="primary" size="small" shape="round">
+                                <IonIcon icon={add} slot="icon-only" size="large"/>
+                            </IonButton>
                         </div>
                     </div>
                 </IonToolbar>
+
             </IonHeader>
 
 
             <IonContent>
-
                 <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
-
                 <div className="shopping-item-container">
-                    {shoppingList.map((product) => (
+                    {filteredShoppingList.map((product) => (
                         <ShoppingItem
                             key={product.id}
                             product={product}
@@ -209,17 +236,17 @@ const Shopping: React.FC = () => {
                 </div>
                 <ShoppingModal
                     isOpen={showModal}
-                    title="Produkt bearbeiten"
+                    title={selectedProduct ? "Produkt bearbeiten" : "Neues Produkt hinzufügen"}
                     onClose={() => setShowModal(false)}
                 >
                     <ShoppingModalContent
-                        updatedProductTitle={updatedProductTitle}
-                        setUpdatedProductTitle={setUpdatedProductTitle}
-                        updatedProductInfo={updatedProductInfo}
-                        setUpdatedProductInfo={setUpdatedProductInfo}
-                        updatedProductAlert={updatedProductAlert}
-                        setUpdatedProductAlert={setUpdatedProductAlert}
-                        updateProduct={updateProduct}
+                        title={selectedProduct ? updatedProductTitle : newProductTitle}
+                        setTitle={selectedProduct ? setUpdatedProductTitle : setNewProductTitle}
+                        info={selectedProduct ? updatedProductInfo : newInfo}
+                        setInfo={selectedProduct ? setUpdatedProductInfo : setNewInfo}
+                        alert={selectedProduct ? updatedProductAlert : newAlert}
+                        setAlert={selectedProduct ? setUpdatedProductAlert : setNewAlert}
+                        onSubmit={selectedProduct ? updateProduct : onSubmitProduct}
                         deleteProduct={deleteProduct}
                         selectedProduct={selectedProduct}
                     />

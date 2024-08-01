@@ -189,6 +189,7 @@ const Contracts: React.FC = () => {
     return (
         <IonPage>
             <IonHeader className="contract-header">
+
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonButton>
@@ -207,11 +208,14 @@ const Contracts: React.FC = () => {
                 <IonToolbar>
                     <div className="relative-container">
                         <div className="counter">
+
                             <div className="flex-counter">
                                 <span>Verträge</span>
                                 <span>{totalContracts}</span>
                             </div>
+
                             <span>|</span>
+
                             <div className="flex-counter">
                                 <span>Gesamtkosten</span>
                                 <span>{totalCost} €</span>
@@ -228,6 +232,7 @@ const Contracts: React.FC = () => {
                         </div>
                     </div>
                 </IonToolbar>
+
             </IonHeader>
 
             <IonContent>

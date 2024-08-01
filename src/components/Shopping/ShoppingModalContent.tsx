@@ -1,71 +1,55 @@
 import React from 'react';
-import { IonInput, IonButton, IonToggle } from '@ionic/react';
+import { IonInput, IonButton, IonToggle, IonItem, IonLabel } from '@ionic/react';
 
 const ShoppingModalContent: React.FC<{
-    updatedProductTitle: string;
-    setUpdatedProductTitle: React.Dispatch<React.SetStateAction<string>>;
-    updatedProductInfo: string;
-    setUpdatedProductInfo: React.Dispatch<React.SetStateAction<string>>;
-    updatedProductAlert: boolean;
-    setUpdatedProductAlert: React.Dispatch<React.SetStateAction<boolean>>;
-    updateProduct: () => void;
+    title: string;
+    setTitle: React.Dispatch<React.SetStateAction<string>>;
+    info: string;
+    setInfo: React.Dispatch<React.SetStateAction<string>>;
+    alert: boolean;
+    setAlert: React.Dispatch<React.SetStateAction<boolean>>;
+    onSubmit: () => void;
     deleteProduct: (id: string) => void;
     selectedProduct: any;
 }> = ({
-          updatedProductTitle,
-          setUpdatedProductTitle,
-          updatedProductInfo,
-          setUpdatedProductInfo,
-          updatedProductAlert,
-          setUpdatedProductAlert,
-          updateProduct,
+          title,
+          setTitle,
+          info,
+          setInfo,
+          alert,
+          setAlert,
+          onSubmit,
           deleteProduct,
           selectedProduct,
       }) => {
     return (
         <div className="update-container">
-            <div className="update-input">
-                <IonInput
+            <IonItem>
+                <IonLabel position="stacked">Produkt</IonLabel>
+                <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
+            </IonItem>
 
-                    value={updatedProductTitle}
-                    onIonInput={(e: any) => setUpdatedProductTitle(e.target.value)}
-                />
-            </div>
+            <IonItem>
+                <IonLabel position="stacked">Info</IonLabel>
+                <IonInput value={info} onIonInput={(e) => setInfo(e.detail.value!)} />
+            </IonItem>
 
-            <div className="update-input">
-                <IonInput
-
-                    value={updatedProductInfo}
-                    onIonInput={(e: any) => setUpdatedProductInfo(e.target.value)}
-                />
-            </div>
-            <div className="alert-container">
-                <p>dringend!</p>
+            <IonItem>
+                <IonLabel>Dringend</IonLabel>
                 <IonToggle
-                    aria-label="Warning toggle"
-                    color="warning"
-                    checked={updatedProductAlert}
-                    onIonChange={(e) => setUpdatedProductAlert(e.detail.checked)}
+                    checked={alert}
+                    onIonChange={(e) => setAlert(e.detail.checked)}
                 />
-            </div>
-            <div className="update-button-container">
-                <IonButton
-                    expand="block"
-                    onClick={updateProduct}
-                    color="success"
-                >
-                    Aktualisieren
+            </IonItem>
+
+            <IonButton expand="block" onClick={onSubmit} color="success">
+                {selectedProduct ? 'Aktualisieren' : 'Hinzufügen'}
+            </IonButton>
+            {selectedProduct && (
+                <IonButton expand="block" onClick={() => deleteProduct(selectedProduct.id)} color="danger">
+                    Löschen
                 </IonButton>
-                <div className="delete-button">
-                    <IonButton
-                        onClick={() => deleteProduct(selectedProduct.id)}
-                        color="danger"
-                        fill="clear"
-                    >
-                        Produkt löschen
-                    </IonButton>
-                </div>
-            </div>
+            )}
         </div>
     );
 };

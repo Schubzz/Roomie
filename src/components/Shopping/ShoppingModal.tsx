@@ -5,10 +5,16 @@ import {
     IonToolbar,
     IonTitle,
     IonContent,
-    IonButton, IonButtons
+    IonButton,
+    IonButtons
 } from '@ionic/react';
 
-const ShoppingModal: React.FC<{ isOpen: boolean; title: string; onClose: () => void; children: React.ReactNode }> = ({ isOpen, title, onClose, children }) => {
+const ShoppingModal: React.FC<{
+    isOpen: boolean,
+    title: string,
+    onClose: () => void,
+    children: React.ReactNode
+}> = ({ isOpen, title, onClose, children }) => {
     return (
         <IonModal
             isOpen={isOpen}
@@ -20,7 +26,7 @@ const ShoppingModal: React.FC<{ isOpen: boolean; title: string; onClose: () => v
                 <IonToolbar>
                     <IonTitle>{title}</IonTitle>
                     <IonButtons slot="end">
-                        <IonButton onClick={onClose}>schließen</IonButton>
+                        <IonButton onClick={onClose}>Schließen</IonButton>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
