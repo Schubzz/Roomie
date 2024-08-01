@@ -1,0 +1,40 @@
+import React from 'react';
+import {
+    IonModal,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonButton
+} from '@ionic/react';
+
+const ContractsModal: React.FC<{
+    isOpen: boolean,
+    title: string,
+    onClose: () => void,
+    children: React.ReactNode
+}> = ({ isOpen, title, onClose, children }) => {
+    return (
+        <IonModal
+            isOpen={isOpen}
+            onDidDismiss={onClose}
+            initialBreakpoint={0.75}
+            breakpoints={[0, 0.5, 0.75, 1]}
+        >
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>{title}</IonTitle>
+                    <IonButtons slot="end">
+                        <IonButton onClick={onClose}>Schließen</IonButton>
+                    </IonButtons>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+                {children}
+            </IonContent>
+        </IonModal>
+    );
+};
+
+export default ContractsModal;

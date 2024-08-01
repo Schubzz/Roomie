@@ -15,7 +15,7 @@ import {
     IonLoading,
     RefresherEventDetail,
 } from '@ionic/react';
-import { add, cog, repeatOutline, calendarOutline } from "ionicons/icons";
+import { add, cog} from "ionicons/icons";
 import TasksModal from "../components/Tasks/TaskModal";
 import TasksFilter from '../components/Tasks/TaskFilter';
 import { useWG } from "../Context/WGContext";
