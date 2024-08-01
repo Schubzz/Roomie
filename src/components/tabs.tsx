@@ -10,7 +10,7 @@ import {
 } from "ionicons/icons";
 import Contracts from "../pages/Contracts";
 import Finance from "../pages/Finance";
-import Cleaning from "../pages/Cleaning";
+import Cleaning from "../pages/Tasks";
 
 export const tabs = [
     {

@@ -1,8 +1,8 @@
-.finance-header {
+.tasks-header {
     box-shadow: 2px 2px 2px #ececec;
 }
 
-.finance-item-container, .balance-container {
+.task-item-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,48 +16,86 @@
     }
 }
 
-.balance-container {
-    gap: 0.5rem;
-}
-
-
-.finance-item, .balance-item {
+.task-item {
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 1rem;
     border-radius: 1rem;
     padding: 0.5rem 1rem;
-    margin: .5rem 0;
+
     background-color: #f1efef;
 
-    .item-label {
-
+    .item-content {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        width: 100%;
         margin-right: auto;
         color: #5f5f5f;
         max-width: 40rem;
 
+        .task-infos {
+            display: flex;
+            gap: .5rem;
+            margin-top: .2rem;
+        }
+
+        .task-item-header {
+            display: flex;
+            flex-direction: column;
+
+        }
+
         .item-title {
-            margin: .5rem 0;
+            margin: .5rem auto .5rem 0;
             font-weight: bold;
             font-size: 1rem;
         }
 
-        .item-paid-by {
-            margin: 0;
+        .item-rotation, .item-due-date {
+            display: flex;
+            align-items: center;
+            gap: .2rem;
             font-size: .7rem;
+        }
+        .contract-owner {
+            margin: 0 ;
+            padding: 0.5rem;
+
+            p {
+                font-size: .7rem;
+                margin: 0;
+            }
+        }
+
+        .user-divider {
+            margin: .2rem;
+        }
+
+        .item-assigned-to {
+            display: flex;
+            align-items: center;
+            font-size: .7rem;
+        }
+
+        .item-status.done {
+            color: green;
         }
     }
 
-    .item-amount {
-        color: #424242;
-        font-weight: bold;
-        font-size: 1rem;
-    }
-}
+    .item-actions {
+        display: flex;
+        gap: 1rem;
 
-.balance-item {
-    margin: 0;
+        .checkmark-icon {
+            color: #5f5f5f;
+        }
+
+        .checkmark-icon.done {
+            color: #2dd55b;
+        }
+    }
 }
 
 .update-container {
@@ -65,11 +103,6 @@
     flex-direction: column;
     justify-content: center;
 }
-
-.update-button-container {
-    margin-top: 1rem;
-}
-
 
 .relative-container {
     position: relative;
@@ -110,6 +143,4 @@
         top: 20%;
         right: 1rem;
     }
-
 }
-

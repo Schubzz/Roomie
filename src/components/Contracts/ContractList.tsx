@@ -87,42 +87,27 @@ const ContractList: React.FC<{
         setShowEditModal(true);
     };
 
+
+
     return (
         <div className="contract-item-container">
             {contractList.map((contract) => (
-                <div key={contract.id} className="contract-item">
-                    <div className="item-label">
-                        <div className="item-info">
-                            <p className="item-title">{contract.title}</p>
-                            <p className="item-cost">{contract.cost} €</p>
-                        </div>
-                        <IonRow className="ion-align-items-center">
-                            <IonIcon icon={getCategoryIcon(contract.category).icon}
-                                     style={{ color: getCategoryIcon(contract.category).color }}
-                                     className="item-icon"
-                                     size="large"
-                            />
-                            <IonChip outline={true} className="contract-owner">
-                                <p>{getOwnerDisplayName(contract.owner)}</p>
-                            </IonChip>
-                        </IonRow>
+                <div key={contract.id} className="contract-item" onClick={() => openEditModal(contract)}>
+                    <div>
+                        <IonIcon icon={getCategoryIcon(contract.category).icon}
+                                 style={{ color: getCategoryIcon(contract.category).color }}
+                                 className="item-icon"
+                                 size="large"
+                        />
                     </div>
-                    <div className="item-options">
-                        <span className="item-option-span">
-                            <IonButtons>
-                                <IonButton onClick={() => deleteContract(contract.id)}>
-                                    <IonIcon icon={trashBinOutline} color="danger" />
-                                </IonButton>
-                            </IonButtons>
-                        </span>
-                        <div className="separator" />
-                        <span className="item-option-span">
-                            <IonIcon
-                                icon={chevronForward}
-                                size="large"
-                                onClick={() => openEditModal(contract)}
-                            />
-                        </span>
+                    <div className="item-label">
+                        <p className="item-title">{contract.title}</p>
+                        <IonChip outline={true} className="contract-owner">
+                            <IonLabel>{getOwnerDisplayName(contract.owner)}</IonLabel>
+                        </IonChip>
+                    </div>
+                    <div>
+                        <p className="item-amount">{contract.cost} €</p>
                     </div>
                     <ContractModal
                         isOpen={showEditModal}
