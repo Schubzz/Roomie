@@ -1,69 +1,86 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    IonContent,
     IonHeader,
+    IonContent,
     IonToolbar,
     IonPage,
-    IonTitle,
-    IonButton,
     IonIcon,
     IonButtons,
-    IonLabel,
-    IonSegment,
-    IonSegmentButton,
+    IonTitle,
+    IonButton,
     IonRefresher,
     IonRefresherContent,
-    RefresherEventDetail, IonLoading
+    IonLoading,
+    RefresherEventDetail,
 } from '@ionic/react';
 import {add, cog, documentTextOutline, flame, flash, home, musicalNotes, tv, waterOutline, wifi} from 'ionicons/icons';
-import '../theme/Contracts.css';
-import {getDocs, collection, addDoc} from 'firebase/firestore';
-import {db} from '../config/firebaseConfig';
+import ContractsModal from '../components/Contracts/ContractsModal';
 import ContractList from '../components/Contracts/ContractList';
-import NewContractModal from '../components/Contracts/NewContractModal';
-import {useUser} from '../Context/UserContext';
-import {useWG} from '../Context/WGContext';
-import {Link} from 'react-router-dom';
+import ContractsFilter from '../components/Contracts/ContractsFilter';
+import { useWG } from '../Context/WGContext';
+import { Link } from 'react-router-dom';
+import '../theme/Contracts.css';
+import { useUser } from '../Context/UserContext';
+import { getDocs, collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
+import ContractsModalContent from "../components/Contracts/ContractModalContent";
+
+interface ContractItemProps {
+    id: string;
+    title: string;
+    cost: string;
+    owner: string;
+    category: string;
+    createdAt: Date;
+}
 
 const categories = [
-    {name: 'Strom', icon: flash, color: '#ecce01', size: 'large'},
-    {name: 'Gas', icon: flame, color: '#F57D0D'},
-    {name: 'Internet', icon: wifi, color: '#2069cb'},
-    {name: 'Miete', icon: home, color: 'gray'},
-    {name: 'Musik', icon: musicalNotes, color: '#1DB954'},
-    {name: 'Streaming', icon: tv, color: '#d20a14'},
-    {name: 'Wasser', icon: waterOutline, color: '#4d93f5'},
-    {name: 'Sonstige Kategorie', icon: documentTextOutline, color: '#bbbbbb'},
+    { name: 'Strom', icon: flash, color: '#ecce01' },
+    { name: 'Gas', icon: flame, color: '#F57D0D' },
+    { name: 'Internet', icon: wifi, color: '#2069cb' },
+    { name: 'Miete', icon: home, color: 'gray' },
+    { name: 'Musik', icon: musicalNotes, color: '#1DB954' },
+    { name: 'Streaming', icon: tv, color: '#d20a14' },
+    { name: 'Wasser', icon: waterOutline, color: '#4d93f5' },
+    { name: 'Sonstige Kategorie', icon: documentTextOutline, color: '#bbbbbb' },
 ];
 
 const Contracts: React.FC = () => {
-    const {user} = useUser();
-    const {wg, refreshWGData} = useWG();
-    const [showNewModal, setShowNewModal] = useState(false);
-    const [contractList, setContractList] = useState<any[]>([]);
-    const [newContractTitle, setNewContractTitle] = useState('');
-    const [newContractCost, setNewContractCost] = useState('');
-    const [newContractOwner, setNewContractOwner] = useState('');
-    const [newContractCategory, setNewContractCategory] = useState('');
-    const [filter, setFilter] = useState<string>('all');
+    const { wg } = useWG();
+    const { user } = useUser();
+    const [showModal, setShowModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<ContractItemProps | null>(null);
+    const [title, setTitle] = useState('');
+    const [cost, setCost] = useState('');
+    const [owner, setOwner] = useState('');
+    const [category, setCategory] = useState('');
+    const [contractList, setContractList] = useState<ContractItemProps[]>([]);
     const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState<string>('all');
 
     useEffect(() => {
-        if (user?.wgId) {
-            refreshWGData();
+        if (wg) {
             getContractList();
         }
-    }, [user?.wgId]);
+    }, [wg]);
 
     const getContractList = async () => {
         try {
-            const wgCollectionRef = collection(db, `wgs/${user?.wgId}/contracts`);
-            const data = await getDocs(wgCollectionRef);
-            const filteredData = data.docs.map((doc) => ({
-                ...doc.data(),
-                id: doc.id,
-            }));
-            setContractList(filteredData);
+            if (wg) {
+                const contractCollectionRef = collection(db, `wgs/${wg.id}/contracts`);
+                const data = await getDocs(contractCollectionRef);
+                const contractData: ContractItemProps[] = data.docs.map((doc) => {
+                    const contractItem = doc.data();
+                    return {
+                        ...contractItem,
+                        id: doc.id,
+                        createdAt: contractItem.createdAt.toDate ? contractItem.createdAt.toDate() : new Date(contractItem.createdAt)
+                    };
+                }) as ContractItemProps[];
+
+                const sortedData = contractData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+                setContractList(sortedData);
+            }
         } catch (err) {
             console.log(err);
         } finally {
@@ -71,25 +88,74 @@ const Contracts: React.FC = () => {
         }
     };
 
-    const onSubmitContract = async () => {
+    const resetForm = () => {
+        setTitle('');
+        setCost('');
+        setOwner('');
+        setCategory('');
+        setSelectedItem(null);
+    };
+
+    const onSubmitItem = async () => {
         try {
-            const wgCollectionRef = collection(db, `wgs/${user?.wgId}/contracts`);
-            await addDoc(wgCollectionRef, {
-                title: newContractTitle,
-                cost: newContractCost,
-                owner: newContractOwner,
-                category: newContractCategory,
-                createdAt: new Date(),
-            });
-            getContractList();
-            setNewContractTitle('');
-            setNewContractCost('');
-            setNewContractOwner('');
-            setNewContractCategory('');
-            setShowNewModal(false);
+            if (wg) {
+                const contractCollectionRef = collection(db, `wgs/${wg.id}/contracts`);
+                await addDoc(contractCollectionRef, {
+                    title,
+                    cost,
+                    owner,
+                    category,
+                    createdAt: new Date()
+                });
+                getContractList();
+                resetForm();
+                setShowModal(false);
+            }
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const updateItem = async () => {
+        try {
+            if (wg && selectedItem) {
+                const itemDoc = doc(db, `wgs/${wg.id}/contracts`, selectedItem.id);
+                await updateDoc(itemDoc, {
+                    title,
+                    cost,
+                    owner,
+                    category
+                });
+                getContractList();
+                resetForm();
+                setShowModal(false);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const deleteItem = async (id: string) => {
+        try {
+            if (wg) {
+                const itemDoc = doc(db, `wgs/${wg.id}/contracts`, id);
+                await deleteDoc(itemDoc);
+                const updatedContractList = contractList.filter(item => item.id !== id);
+                setContractList(updatedContractList);
+                setShowModal(false);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const openModal = (item: ContractItemProps) => {
+        setSelectedItem(item);
+        setTitle(item.title);
+        setCost(item.cost);
+        setOwner(item.owner);
+        setCategory(item.category);
+        setShowModal(true);
     };
 
     const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
@@ -102,9 +168,9 @@ const Contracts: React.FC = () => {
         }
     };
 
-    const filteredContracts = contractList.filter(contract =>
-        filter === 'all' || (filter === 'mine' && contract.owner === user?.uid)
-    );
+    const filteredContracts = filter === 'mine'
+        ? contractList.filter(contract => contract.owner === user?.uid)
+        : contractList;
 
     const totalContracts = filteredContracts.length;
     const totalCost = filteredContracts.reduce((sum, contract) => {
@@ -115,7 +181,7 @@ const Contracts: React.FC = () => {
     if (loading) {
         return (
             <IonContent>
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles"/>
+                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
             </IonContent>
         );
     }
@@ -123,30 +189,20 @@ const Contracts: React.FC = () => {
     return (
         <IonPage>
             <IonHeader className="contract-header">
-
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonButton>
                             <Link to="/settings">
-                                <IonIcon icon={cog} size="large" color="dark"/>
+                                <IonIcon icon={cog} size="large" color="dark" />
                             </Link>
                         </IonButton>
                     </IonButtons>
                     <IonTitle>Verträge</IonTitle>
                 </IonToolbar>
 
-
                 <IonToolbar>
-                    <IonSegment value={filter} onIonChange={(e) => setFilter(e.detail.value as string)}>
-                        <IonSegmentButton value="all">
-                            <IonLabel>Alle Verträge</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="mine">
-                            <IonLabel>Meine Verträge</IonLabel>
-                        </IonSegmentButton>
-                    </IonSegment>
+                    <ContractsFilter filter={filter} setFilter={setFilter} />
                 </IonToolbar>
-
 
                 <IonToolbar>
                     <div className="relative-container">
@@ -155,57 +211,63 @@ const Contracts: React.FC = () => {
                                 <span>Verträge</span>
                                 <span>{totalContracts}</span>
                             </div>
-
                             <span>|</span>
-
                             <div className="flex-counter">
                                 <span>Gesamtkosten</span>
-                                <span> {totalCost} €</span>
+                                <span>{totalCost} €</span>
                             </div>
                         </div>
 
                         <div className="fab-button">
-                            <IonButton onClick={() => setShowNewModal(true)} color="primary" size="small" shape="round">
-                                <IonIcon icon={add} slot="icon-only" size="large"/>
+                            <IonButton onClick={() => {
+                                resetForm();
+                                setShowModal(true);
+                            }} color="primary" size="small" shape="round">
+                                <IonIcon icon={add} slot="icon-only" size="large" />
                             </IonButton>
                         </div>
                     </div>
-
-
                 </IonToolbar>
-
             </IonHeader>
 
-
             <IonContent>
-
                 <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
 
                 <ContractList
-                    contractList={filteredContracts}
-                    getContractList={getContractList}
-                    categories={categories}
+                    contracts={filteredContracts}
+                    deleteItem={deleteItem}
+                    openModal={openModal}
+                    categories={categories} // Ensure categories is passed down to ContractList
                 />
 
-                <NewContractModal
-                    isOpen={showNewModal}
-                    onClose={() => setShowNewModal(false)}
-                    newContractTitle={newContractTitle}
-                    setNewContractTitle={setNewContractTitle}
-                    newContractCost={newContractCost}
-                    setNewContractCost={setNewContractCost}
-                    newContractOwner={newContractOwner}
-                    setNewContractOwner={setNewContractOwner}
-                    newContractCategory={newContractCategory}
-                    setNewContractCategory={setNewContractCategory}
-                    onSubmitContract={onSubmitContract}
-                    categories={categories}
-                />
-
+                <ContractsModal
+                    isOpen={showModal}
+                    title={selectedItem ? 'Vertrag bearbeiten' : 'Vertrag hinzufügen'}
+                    onClose={() => {
+                        resetForm();
+                        setShowModal(false);
+                    }}
+                >
+                    <ContractsModalContent
+                        title={title}
+                        setTitle={setTitle}
+                        cost={cost}
+                        setCost={setCost}
+                        owner={owner}
+                        setOwner={setOwner}
+                        category={category}
+                        setCategory={setCategory}
+                        updateItem={updateItem}
+                        deleteItem={deleteItem}
+                        selectedItem={selectedItem}
+                        onSubmitItem={onSubmitItem}
+                        categories={categories} // Ensure categories is passed down to ContractsModalContent
+                        roommates={wg?.members || []}
+                    />
+                </ContractsModal>
             </IonContent>
-
         </IonPage>
     );
 };
