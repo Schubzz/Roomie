@@ -58,8 +58,8 @@ const CreateWG: React.FC = () => {
                     wgId: wgRef.id,
                 }, { merge: true });
 
-                history.push('/app');
-                window.location.reload(); // Ensure a full reload to get updated context data
+                history.replace('/app');
+                window.location.reload();
             }
         } catch (error) {
             console.error('Fehler beim Erstellen der WG:', error);

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 
@@ -50,14 +50,20 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-            if (firebaseUser) {
-                fetchUserData(firebaseUser.uid);
-            } else {
-                setUser(null);
-            }
-        });
-        return () => unsubscribe();
+        setPersistence(auth, browserLocalPersistence)
+            .then(() => {
+                const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+                    if (firebaseUser) {
+                        fetchUserData(firebaseUser.uid);
+                    } else {
+                        setUser(null);
+                    }
+                });
+                return () => unsubscribe();
+            })
+            .catch((error) => {
+                console.error("Fehler beim Einstellen der Auth-Persistenz:", error);
+            });
     }, [auth]);
 
     return (

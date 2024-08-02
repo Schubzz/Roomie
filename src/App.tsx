@@ -33,18 +33,21 @@ import ReloadPrompt from "./ReloadPrompt";
 
 import {WGProvider} from "./Context/WGContext";
 import {UserProvider} from "./Context/UserContext";
+import IntroCheck from "./components/IntroCheck";
 import Welcome from "./pages/Welcome";
 
 setupIonicReact();
 
 const App: React.FC = () => (
     <IonApp>
-        < ReloadPrompt/>
-
+        <ReloadPrompt/>
         <IonReactRouter>
             <UserProvider>
                 <WGProvider>
                     <IonRouterOutlet>
+                        <IntroCheck>
+                            <Welcome onFinish={() => {}} />
+                        </IntroCheck>
                         <Route path="/" component={Welcome} exact/>
                         <Route path="/register" component={Register} exact/>
                         <Route path="/login" component={Login} exact/>

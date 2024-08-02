@@ -20,7 +20,7 @@ export const tabs = [
             default: calendarOutline,
             active: calendar,
         },
-        label: 'Putzen'
+        label: 'Aufgaben'
     },
     {
         id: 'finance',

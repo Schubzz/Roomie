@@ -79,7 +79,7 @@ const SelectWG: React.FC = () => {
                     wgId,
                 });
 
-                history.push('/app');
+                history.replace('/app');
                 window.location.reload();
             } else {
                 console.error("WG not found");

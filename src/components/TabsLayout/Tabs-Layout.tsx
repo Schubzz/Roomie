@@ -37,6 +37,7 @@ const TabsLayout: React.FC = () => {
                     </IonTabButton>
                 ))}
             </IonTabBar>
+
         </IonTabs>
     )
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     IonContent,
     IonHeader,
@@ -9,27 +9,39 @@ import {
     IonInput,
     IonItem,
     IonLabel,
-    IonLoading, IonCard,
+    IonLoading,
+    IonCard,
+    IonNote,
 } from '@ionic/react';
-import {Link, useHistory} from 'react-router-dom';
-import {signInWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../config/firebaseConfig';
-import {useUser} from "../Context/UserContext";
+import { Link, useHistory } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config/firebaseConfig';
+import { useUser } from "../Context/UserContext";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const history = useHistory();
-    const {user} = useUser();
+    const { user } = useUser();
 
     const handleLogin = async () => {
         setLoading(true);
+        setError(null);
+
+        if (!email || !password) {
+            setError("Bitte füllen Sie alle Felder aus.");
+            setLoading(false);
+            return;
+        }
+
         try {
             await signInWithEmailAndPassword(auth, email, password);
             history.push('/app');
         } catch (error) {
             console.error('Fehler beim Anmelden:', error);
+            setError("Ungültige Anmeldeinformationen.");
         } finally {
             setLoading(false);
         }
@@ -63,6 +75,11 @@ const Login: React.FC = () => {
                             required
                         />
                     </IonItem>
+                    {error && (
+                        <IonNote color="danger">
+                            {error}
+                        </IonNote>
+                    )}
                     <IonButton expand="block" onClick={handleLogin} disabled={loading}>
                         Anmelden
                     </IonButton>
@@ -72,7 +89,7 @@ const Login: React.FC = () => {
                         </IonButton>
                     </Link>
 
-                    <IonLoading isOpen={loading} message={'Bitte warten...'}/>
+                    <IonLoading isOpen={loading} message={'Bitte warten...'} />
                 </IonCard>
             </IonContent>
         </IonPage>

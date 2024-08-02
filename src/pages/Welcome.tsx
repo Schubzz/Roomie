@@ -1,33 +1,39 @@
 import React from "react";
-import {IonButton, IonText} from '@ionic/react';
-import {Swiper, SwiperSlide, useSwiper} from "swiper/react";
-import 'swiper/css'
-
-// Img
+import { IonButton, IonText } from '@ionic/react';
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import 'swiper/css';
 import Sponge from '/img/Cleaning.png';
-import Contract from '/img/Contract.png'
+import Contract from '/img/Contract.png';
 import Finance from "/img/Finance.png";
 import Device from "/img/Device.png";
-import Logo from '/icons/roomie-icon-512x512.png'
-import {Link} from "react-router-dom";
+import Logo from '/icons/roomie-icon-512x512.png';
+import { Link, useHistory } from "react-router-dom";
 
 interface ContainerProps {
     onFinish: () => void;
 }
 
-const SwiperButtonNext = ({children}: any) => {
+const SwiperButtonNext = ({ children }: any) => {
     const swiper = useSwiper();
-    return <IonButton
-        onClick={() => swiper.slideNext()}
-        color="tertiary"
-        expand="block"
-        shape="round"
-    >
-        {children}
-    </IonButton>
-}
+    return (
+        <IonButton
+            onClick={() => swiper.slideNext()}
+            color="tertiary"
+            expand="block"
+            shape="round"
+        >
+            {children}
+        </IonButton>
+    );
+};
 
-const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
+const Welcome: React.FC<ContainerProps> = ({ onFinish }: ContainerProps) => {
+    const history = useHistory();
+
+    const handleFinish = () => {
+        localStorage.setItem('hasSeenIntro', 'true');
+        history.push('/register');
+    };
 
     return (
         <div>
@@ -36,7 +42,7 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <h2>Willkommen bei Roomie!</h2>
                     </IonText>
-                    <img src={Logo} alt="Putzen"/>
+                    <img src={Logo} alt="Logo" />
                     <IonText color="dark">
                         <p>Deiner allrounder WG-App</p>
                     </IonText>
@@ -46,7 +52,7 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <h2>Putzpläne</h2>
                     </IonText>
-                    <img src={Sponge} alt="Putzen"/>
+                    <img src={Sponge} alt="Putzen" />
                     <IonText color="dark">
                         <p>Legt automatisch rotierende Putzpläne an, damit jeder weiß wer welche Aufgabe hat.</p>
                     </IonText>
@@ -56,10 +62,9 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <h2>Verträge</h2>
                     </IonText>
-                    <img src={Contract} alt="Verträge"/>
+                    <img src={Contract} alt="Verträge" />
                     <IonText color="dark">
-                        <p>Ganz einfaches zuordnen von Verträgen. So entstehen keine Konflikte, wer welchen Vertrag
-                            hält</p>
+                        <p>Ganz einfaches zuordnen von Verträgen. So entstehen keine Konflikte, wer welchen Vertrag hält</p>
                     </IonText>
                     <SwiperButtonNext>weiter</SwiperButtonNext>
                 </SwiperSlide>
@@ -67,7 +72,7 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <h2>Finanzen</h2>
                     </IonText>
-                    <img src={Finance} alt="Finanzen"/>
+                    <img src={Finance} alt="Finanzen" />
                     <IonText color="dark">
                         <p>Erstellt ganz einfach Ausgaben, damit jeder sieht wer wem wieviel schuldet.</p>
                     </IonText>
@@ -77,16 +82,13 @@ const Welcome: React.FC<ContainerProps> = ({onFinish}: ContainerProps) => {
                     <IonText color="dark">
                         <h2>Auf allen Geräten!</h2>
                     </IonText>
-                    <img src={Device} alt="Gerät"/>
+                    <img src={Device} alt="Gerät" />
                     <IonText color="dark">
                         <p>Auf dem Smartphone oder auf dem PC. Nutze Roomie wo du möchtest!</p>
                     </IonText>
-                    <Link to="/register">
-                        <IonButton expand="block">
-                            Loslegen!
-                        </IonButton>
-                    </Link>
-
+                    <IonButton expand="block" onClick={handleFinish}>
+                        Loslegen!
+                    </IonButton>
                 </SwiperSlide>
             </Swiper>
         </div>
