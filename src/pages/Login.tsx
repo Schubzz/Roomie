@@ -19,7 +19,7 @@ import {auth} from '../config/firebaseConfig';
 import {useUser} from "../Context/UserContext";
 import Welcome from "./Welcome";
 import {Preferences} from "@capacitor/preferences";
-import {arrowRedo, arrowUndo} from "ionicons/icons";
+import {arrowUndo} from "ionicons/icons";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -28,18 +28,22 @@ const Login: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const history = useHistory();
     const {user} = useUser();
-    const [introSeen, setIntroSeen] = useState(true)
-    const INTRO_KEY = "intro-seen"
-
+    const [introSeen, setIntroSeen] = useState(true);
+    const INTRO_KEY = "intro-seen";
 
     useEffect(() => {
         const checkStorage = async() => {
             const seen = await Preferences.get({ key: INTRO_KEY});
-            console.log("checkStorage", seen)
-            setIntroSeen(seen.value === "true")
+            setIntroSeen(seen.value === "true");
         }
         checkStorage();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            history.push('/app');
+        }
+    }, [user, history]);
 
     const handleLogin = async() => {
         setLoading(true);
@@ -63,13 +67,13 @@ const Login: React.FC = () => {
     };
 
     const finishIntro = async() => {
-        setIntroSeen(true)
+        setIntroSeen(true);
         Preferences.set({ key: INTRO_KEY, value: "true"});
     }
 
     const seeIntroAgain = () => {
-        setIntroSeen(false)
-        Preferences.remove({ key: INTRO_KEY })
+        setIntroSeen(false);
+        Preferences.remove({ key: INTRO_KEY });
     }
 
     return (
@@ -77,58 +81,56 @@ const Login: React.FC = () => {
             {!introSeen ? (
                 <Welcome onFinish={finishIntro}/>
             ) : (
-            <IonPage>
-                <IonHeader>
-                    <IonToolbar>
-                        <IonTitle>Anmelden</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
+                <IonPage>
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>Anmelden</IonTitle>
+                        </IonToolbar>
+                    </IonHeader>
 
-                <IonContent>
-                    <IonCard className="ion-padding">
-                        <IonItem>
-                            <IonLabel position="stacked">E-Mail</IonLabel>
-                            <IonInput
-                                type="email"
-                                value={email}
-                                onIonInput={(e: any) => setEmail(e.target.value)}
-                                required
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Passwort</IonLabel>
-                            <IonInput
-                                type="password"
-                                value={password}
-                                onIonInput={(e: any) => setPassword(e.target.value)}
-                                required
-                            />
-                        </IonItem>
-                        {error && (
-                            <IonNote color="danger">
-                                {error}
-                            </IonNote>
-                        )}
-                        <IonButton expand="block" onClick={handleLogin} disabled={loading}>
-                            Anmelden
-                        </IonButton>
-
-
-                        <Link to="/register">
-                            <IonButton expand="block" fill="clear">
-                                Registrieren
+                    <IonContent>
+                        <IonCard className="ion-padding">
+                            <IonItem>
+                                <IonLabel position="stacked">E-Mail</IonLabel>
+                                <IonInput
+                                    type="email"
+                                    value={email}
+                                    onIonInput={(e: any) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </IonItem>
+                            <IonItem>
+                                <IonLabel position="stacked">Passwort</IonLabel>
+                                <IonInput
+                                    type="password"
+                                    value={password}
+                                    onIonInput={(e: any) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </IonItem>
+                            {error && (
+                                <IonNote color="danger">
+                                    {error}
+                                </IonNote>
+                            )}
+                            <IonButton expand="block" onClick={handleLogin} disabled={loading}>
+                                Anmelden
                             </IonButton>
-                        </Link>
 
+                            <Link to="/register">
+                                <IonButton expand="block" fill="clear">
+                                    Registrieren
+                                </IonButton>
+                            </Link>
 
-                        <IonButton expand="block" fill="clear" onClick={seeIntroAgain} disabled={loading}>
-                           <IonIcon icon={arrowUndo}/>   Intro
-                        </IonButton>
+                            <IonButton expand="block" fill="clear" onClick={seeIntroAgain} disabled={loading}>
+                                <IonIcon icon={arrowUndo}/>   Intro
+                            </IonButton>
 
-                        <IonLoading isOpen={loading} message={'Bitte warten...'}/>
-                    </IonCard>
-                </IonContent>
-            </IonPage>
+                            <IonLoading isOpen={loading} message={'Bitte warten...'}/>
+                        </IonCard>
+                    </IonContent>
+                </IonPage>
             )}
         </>
     );

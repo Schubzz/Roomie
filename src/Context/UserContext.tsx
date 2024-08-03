@@ -14,12 +14,14 @@ interface UserContextType {
     user: User | null;
     updateUser: (updates: Partial<User>) => void;
     refreshUserData: () => void;
+    loading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
     const auth = getAuth();
 
     const fetchUserData = async (uid: string) => {
@@ -52,22 +54,24 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     useEffect(() => {
         setPersistence(auth, browserLocalPersistence)
             .then(() => {
-                const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+                const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
                     if (firebaseUser) {
-                        fetchUserData(firebaseUser.uid);
+                        await fetchUserData(firebaseUser.uid);
                     } else {
                         setUser(null);
                     }
+                    setLoading(false);
                 });
                 return () => unsubscribe();
             })
             .catch((error) => {
                 console.error("Fehler beim Einstellen der Auth-Persistenz:", error);
+                setLoading(false);
             });
     }, [auth]);
 
     return (
-        <UserContext.Provider value={{ user, updateUser, refreshUserData }}>
+        <UserContext.Provider value={{ user, updateUser, refreshUserData, loading }}>
             {children}
         </UserContext.Provider>
     );

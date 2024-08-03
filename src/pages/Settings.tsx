@@ -120,7 +120,7 @@ const Settings: React.FC = () => {
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      history.push('/login');
+      history.push('/');
     } catch (error) {
       console.error('Fehler beim Abmelden:', error);
     }

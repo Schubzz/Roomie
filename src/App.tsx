@@ -1,6 +1,7 @@
-import {Route} from 'react-router-dom';
-import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
+import {Route, Redirect} from 'react-router-dom';
+import {IonApp, IonRouterOutlet, setupIonicReact, IonLoading} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
+import React from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,9 +33,24 @@ import Settings from "./pages/Settings";
 import ReloadPrompt from "./ReloadPrompt";
 
 import {WGProvider} from "./Context/WGContext";
-import {UserProvider} from "./Context/UserContext";
+import {UserProvider, useUser} from "./Context/UserContext";
 
 setupIonicReact();
+
+const AuthRoute: React.FC<{ component: React.ComponentType<any>, exact?: boolean, path: string }> = ({ component: Component, ...rest }) => {
+    const { user, loading } = useUser();
+    if (loading) {
+        return <IonLoading isOpen={loading} message={'Bitte warten...'} />;
+    }
+    return (
+        <Route
+            {...rest}
+            render={props =>
+                user ? <Component {...props} /> : <Redirect to="/" />
+            }
+        />
+    );
+};
 
 const App: React.FC = () => (
     <IonApp>
@@ -43,13 +59,14 @@ const App: React.FC = () => (
             <UserProvider>
                 <WGProvider>
                     <IonRouterOutlet>
+                        {/* Open Routes */}
                         <Route path="/" component={Login} exact/>
                         <Route path="/register" component={Register} exact/>
-                        {/*<Route path="/login" component={Login} exact/>*/}
                         <Route path="/select-wg" component={SelectWG} exact/>
                         <Route path="/create-wg" component={CreateWG} exact/>
-                        <Route path="/settings" component={Settings} exact/>
-                        <Route path='/app' component={TabsLayout}/>
+                        {/* Protected Routes */}
+                        <AuthRoute path='/app' component={TabsLayout}/>
+                        <AuthRoute path="/settings" component={Settings} exact/>
                     </IonRouterOutlet>
                 </WGProvider>
             </UserProvider>
