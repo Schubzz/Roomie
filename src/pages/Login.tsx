@@ -76,6 +76,7 @@ const Login: React.FC = () => {
         Preferences.remove({ key: INTRO_KEY });
     }
 
+
     return (
         <>
             {!introSeen ? (
