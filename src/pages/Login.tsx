@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     IonContent,
     IonHeader,
@@ -11,12 +11,15 @@ import {
     IonLabel,
     IonLoading,
     IonCard,
-    IonNote,
+    IonNote, IonIcon,
 } from '@ionic/react';
-import { Link, useHistory } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebaseConfig';
-import { useUser } from "../Context/UserContext";
+import {Link, useHistory} from 'react-router-dom';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../config/firebaseConfig';
+import {useUser} from "../Context/UserContext";
+import Welcome from "./Welcome";
+import {Preferences} from "@capacitor/preferences";
+import {arrowRedo, arrowUndo} from "ionicons/icons";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -24,9 +27,21 @@ const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const history = useHistory();
-    const { user } = useUser();
+    const {user} = useUser();
+    const [introSeen, setIntroSeen] = useState(true)
+    const INTRO_KEY = "intro-seen"
 
-    const handleLogin = async () => {
+
+    useEffect(() => {
+        const checkStorage = async() => {
+            const seen = await Preferences.get({ key: INTRO_KEY});
+            console.log("checkStorage", seen)
+            setIntroSeen(seen.value === "true")
+        }
+        checkStorage();
+    }, [])
+
+    const handleLogin = async() => {
         setLoading(true);
         setError(null);
 
@@ -47,52 +62,75 @@ const Login: React.FC = () => {
         }
     };
 
+    const finishIntro = async() => {
+        setIntroSeen(true)
+        Preferences.set({ key: INTRO_KEY, value: "true"});
+    }
+
+    const seeIntroAgain = () => {
+        setIntroSeen(false)
+        Preferences.remove({ key: INTRO_KEY })
+    }
+
     return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Anmelden</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+        <>
+            {!introSeen ? (
+                <Welcome onFinish={finishIntro}/>
+            ) : (
+            <IonPage>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Anmelden</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
 
-            <IonContent>
-                <IonCard className="ion-padding">
-                    <IonItem>
-                        <IonLabel position="stacked">E-Mail</IonLabel>
-                        <IonInput
-                            type="email"
-                            value={email}
-                            onIonInput={(e: any) => setEmail(e.target.value)}
-                            required
-                        />
-                    </IonItem>
-                    <IonItem>
-                        <IonLabel position="stacked">Passwort</IonLabel>
-                        <IonInput
-                            type="password"
-                            value={password}
-                            onIonInput={(e: any) => setPassword(e.target.value)}
-                            required
-                        />
-                    </IonItem>
-                    {error && (
-                        <IonNote color="danger">
-                            {error}
-                        </IonNote>
-                    )}
-                    <IonButton expand="block" onClick={handleLogin} disabled={loading}>
-                        Anmelden
-                    </IonButton>
-                    <Link to="/register">
-                        <IonButton expand="block" fill="clear">
-                            Registrieren
+                <IonContent>
+                    <IonCard className="ion-padding">
+                        <IonItem>
+                            <IonLabel position="stacked">E-Mail</IonLabel>
+                            <IonInput
+                                type="email"
+                                value={email}
+                                onIonInput={(e: any) => setEmail(e.target.value)}
+                                required
+                            />
+                        </IonItem>
+                        <IonItem>
+                            <IonLabel position="stacked">Passwort</IonLabel>
+                            <IonInput
+                                type="password"
+                                value={password}
+                                onIonInput={(e: any) => setPassword(e.target.value)}
+                                required
+                            />
+                        </IonItem>
+                        {error && (
+                            <IonNote color="danger">
+                                {error}
+                            </IonNote>
+                        )}
+                        <IonButton expand="block" onClick={handleLogin} disabled={loading}>
+                            Anmelden
                         </IonButton>
-                    </Link>
 
-                    <IonLoading isOpen={loading} message={'Bitte warten...'} />
-                </IonCard>
-            </IonContent>
-        </IonPage>
+
+                        <Link to="/register">
+                            <IonButton expand="block" fill="clear">
+                                Registrieren
+                            </IonButton>
+                        </Link>
+
+
+                        <IonButton expand="block" fill="clear" onClick={seeIntroAgain} disabled={loading}>
+                           <IonIcon icon={arrowUndo}/>   Intro
+                        </IonButton>
+
+                        <IonLoading isOpen={loading} message={'Bitte warten...'}/>
+                    </IonCard>
+                </IonContent>
+            </IonPage>
+            )}
+        </>
     );
 };
 

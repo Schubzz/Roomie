@@ -7,11 +7,11 @@ import Contract from '/img/Contract.png';
 import Finance from "/img/Finance.png";
 import Device from "/img/Device.png";
 import Logo from '/icons/roomie-icon-512x512.png';
-import { Link, useHistory } from "react-router-dom";
 
 interface ContainerProps {
     onFinish: () => void;
 }
+
 
 const SwiperButtonNext = ({ children }: any) => {
     const swiper = useSwiper();
@@ -27,13 +27,7 @@ const SwiperButtonNext = ({ children }: any) => {
     );
 };
 
-const Welcome: React.FC<ContainerProps> = ({ onFinish }: ContainerProps) => {
-    const history = useHistory();
-
-    const handleFinish = () => {
-        localStorage.setItem('hasSeenIntro', 'true');
-        history.push('/register');
-    };
+const Welcome: React.FC<ContainerProps> = ({ onFinish }) => {
 
     return (
         <div>
@@ -86,7 +80,7 @@ const Welcome: React.FC<ContainerProps> = ({ onFinish }: ContainerProps) => {
                     <IonText color="dark">
                         <p>Auf dem Smartphone oder auf dem PC. Nutze Roomie wo du möchtest!</p>
                     </IonText>
-                    <IonButton expand="block" onClick={handleFinish}>
+                    <IonButton expand="block" onClick={() => onFinish()}>
                         Loslegen!
                     </IonButton>
                 </SwiperSlide>

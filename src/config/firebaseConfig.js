@@ -30,4 +30,5 @@ enableIndexedDbPersistence(db)
         }
     });
 
+
 export { auth, db };
