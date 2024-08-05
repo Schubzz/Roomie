@@ -27,6 +27,7 @@ initializeFirestore(app,
     {
         localCache:
             persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()}),
+
     });
 
 
@@ -38,13 +39,13 @@ setPersistence(auth, browserLocalPersistence)
         console.error("Fehler beim Einstellen der Auth-Persistenz:", error);
     });
 
-enableIndexedDbPersistence(db)
-    .catch((err) => {
-        if (err.code === 'failed-precondition') {
-            console.error("Mehrere Tabs geöffnet, Persistenz kann nur in einem Tab aktiviert werden:", err);
-        } else if (err.code === 'unimplemented') {
-            console.error("Persistenz ist in diesem Browser nicht verfügbar:", err);
-        }
-    });
+// enableIndexedDbPersistence(db)
+//     .catch((err) => {
+//         if (err.code === 'failed-precondition') {
+//             console.error("Mehrere Tabs geöffnet, Persistenz kann nur in einem Tab aktiviert werden:", err);
+//         } else if (err.code === 'unimplemented') {
+//             console.error("Persistenz ist in diesem Browser nicht verfügbar:", err);
+//         }
+//     });
 
 export {auth, db};
