@@ -27,7 +27,6 @@ initializeFirestore(app,
     {
         localCache:
             persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()}),
-        cacheSizeBytes: CACHE_SIZE_UNLIMITED
     });
 
 
@@ -47,7 +46,5 @@ enableIndexedDbPersistence(db)
             console.error("Persistenz ist in diesem Browser nicht verfügbar:", err);
         }
     });
-
-disableNetwork(db)
 
 export {auth, db};
