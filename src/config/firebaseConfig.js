@@ -1,6 +1,15 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+import {initializeApp} from "firebase/app";
+import {getAuth, setPersistence, browserLocalPersistence} from "firebase/auth";
+import {
+    getFirestore,
+    enableIndexedDbPersistence,
+    disableNetwork,
+    initializeFirestore,
+    persistentLocalCache,
+    persistentMultipleTabManager,
+    CACHE_SIZE_UNLIMITED
+} from "firebase/firestore";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDJWSALbpixqM3spGgN3PeFOVUudGvNr9I",
@@ -13,6 +22,15 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+initializeFirestore(app,
+    {
+        localCache:
+            persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()}),
+        cacheSizeBytes: CACHE_SIZE_UNLIMITED
+    });
+
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 
@@ -30,5 +48,6 @@ enableIndexedDbPersistence(db)
         }
     });
 
+disableNetwork(db)
 
-export { auth, db };
+export {auth, db};
