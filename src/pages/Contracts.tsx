@@ -55,7 +55,7 @@ const Contracts: React.FC = () => {
     const [owner, setOwner] = useState('');
     const [category, setCategory] = useState('');
     const [contractList, setContractList] = useState<ContractItemProps[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingContracts, setLoadingContracts] = useState(true);
     const [filter, setFilter] = useState<string>('all');
 
     useEffect(() => {
@@ -94,8 +94,8 @@ const Contracts: React.FC = () => {
         } catch (err) {
             console.error('[DEBUG] Could not retrieve contract collection data', err)
         } finally {
-            console.log('[DEBUG] setting loading to false')
-            setLoading(false);
+            console.log('[DEBUG] setting loadingContracts to false')
+            setLoadingContracts(false);
         }
     };
 
@@ -189,10 +189,10 @@ const Contracts: React.FC = () => {
         return !isNaN(cost) ? sum + cost : sum;
     }, 0);
 
-    if (loading) {
+    if (loadingContracts) {
         return (
             <IonContent>
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+                <IonLoading isOpen={loadingContracts} message="Momentchen..." spinner="bubbles" />
             </IonContent>
         );
     }
