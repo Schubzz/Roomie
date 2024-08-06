@@ -69,9 +69,11 @@ const Contracts: React.FC = () => {
 
         if (!navigator.onLine) {
             setLoading(false)
+            console.log("I AM OFFLINE")
             return;
         }
 
+        console.log("TRYING FETCHING DATA")
         try {
             if (wg) {
                 const contractCollectionRef = collection(db, `wgs/${wg.id}/contracts`);
