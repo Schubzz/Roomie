@@ -66,14 +66,15 @@ const Contracts: React.FC = () => {
 
     const getContractList = async () => {
 
+        //
+        // if (!navigator.onLine) {
+        //     setLoading(false)
+        //     console.log("I AM OFFLINE")
+        //     return;
+        // }
+        //
+        // console.log("TRYING FETCHING DATA")
 
-        if (!navigator.onLine) {
-            setLoading(false)
-            console.log("I AM OFFLINE")
-            return;
-        }
-
-        console.log("TRYING FETCHING DATA")
         try {
             if (wg) {
                 const contractCollectionRef = collection(db, `wgs/${wg.id}/contracts`);
