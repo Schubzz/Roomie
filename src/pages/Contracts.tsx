@@ -65,6 +65,13 @@ const Contracts: React.FC = () => {
     }, [wg]);
 
     const getContractList = async () => {
+
+
+        if (!navigator.onLine) {
+            setLoading(false)
+            return;
+        }
+
         try {
             if (wg) {
                 const contractCollectionRef = collection(db, `wgs/${wg.id}/contracts`);

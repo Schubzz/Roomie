@@ -26,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 initializeFirestore(app,
     {
         localCache:
-            persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()}),
+            persistentLocalCache({tabManager: persistentMultipleTabManager()}),
 
     });
 
