@@ -92,8 +92,9 @@ const Contracts: React.FC = () => {
                 setContractList(sortedData);
             }
         } catch (err) {
-            console.log(err);
+            console.error('[DEBUG] Could not retrieve contract collection data', err)
         } finally {
+            console.log('[DEBUG] setting loading to false')
             setLoading(false);
         }
     };
