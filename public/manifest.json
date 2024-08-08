@@ -27,6 +27,22 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screenshots/roomie-screenshot-v1.png",
+      "sizes": "512x289",
+      "type": "image/gif",
+      "form_factor": "wide",
+      "label": "Roomie"
+    },
+    {
+      "src": "screenshots/roomie-screenshot-v1.png",
+      "sizes": "512x289",
+      "type": "image/gif",
+      "label": "Roomie"
+    }
+  ],
+
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#fafafa",
