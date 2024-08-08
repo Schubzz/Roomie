@@ -55,7 +55,7 @@ const Finance: React.FC = () => {
     const [paidBy, setPaidBy] = useState("");
     const [sharedWith, setSharedWith] = useState<string[]>([]);
     const [financeList, setFinanceList] = useState<FinanceItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingFinance, setLoadingFinance] = useState(true);
     const [filter, setFilter] = useState<string>("expenses");
     const [balances, setBalances] = useState<{
         [key: string]: { amount: number; creditor: string; debtor: string }[]
@@ -92,7 +92,7 @@ const Finance: React.FC = () => {
         } catch (err) {
             console.log(err);
         } finally {
-            setLoading(false);
+            setLoadingFinance(false);
         }
     };
 
@@ -295,10 +295,10 @@ const Finance: React.FC = () => {
 
     const groupedFinanceList = groupByDate(financeList);
 
-    if (loading) {
+    if (loadingFinance) {
         return (
             <IonContent className="ion-justify-content-center ion-align-items-center">
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles"/>
+                <IonLoading isOpen={loadingFinance} message="Momentchen..." spinner="bubbles"/>
             </IonContent>
         );
     }

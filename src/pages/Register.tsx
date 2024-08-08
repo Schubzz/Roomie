@@ -23,7 +23,7 @@ const Register: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loadingRegister, setLoadingRegister] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const history = useHistory();
     const { updateUser } = useUser();
@@ -34,27 +34,27 @@ const Register: React.FC = () => {
     };
 
     const handleRegister = async () => {
-        setLoading(true);
+        setLoadingRegister(true);
         setError(null);
 
         if (!email || !password || !displayName) {
             setError("Bitte füllen Sie alle Felder aus.");
-            setLoading(false);
+            setLoadingRegister(false);
             return;
         }
         if (displayName.length < 2 || displayName.length > 16) {
             setError("Der Name muss zwischen 2 und 16 Zeichen lang sein.");
-            setLoading(false);
+            setLoadingRegister(false);
             return;
         }
         if (!validateEmail(email)) {
             setError("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
-            setLoading(false);
+            setLoadingRegister(false);
             return;
         }
         if (password.length < 8) {
             setError("Das Passwort muss mindestens 8 Zeichen lang sein.");
-            setLoading(false);
+            setLoadingRegister(false);
             return;
         }
 
@@ -82,7 +82,7 @@ const Register: React.FC = () => {
             console.error('Fehler bei der Registrierung:', error);
             setError("Fehler bei der Registrierung. Bitte versuchen Sie es erneut.");
         } finally {
-            setLoading(false);
+            setLoadingRegister(false);
         }
     };
 
@@ -127,7 +127,7 @@ const Register: React.FC = () => {
                             {error}
                         </IonNote>
                     )}
-                    <IonButton expand="block" onClick={handleRegister} disabled={loading}>
+                    <IonButton expand="block" onClick={handleRegister} disabled={loadingRegister}>
                         Registrieren
                     </IonButton>
 
@@ -137,7 +137,7 @@ const Register: React.FC = () => {
                         </IonButton>
                     </Link>
 
-                    <IonLoading isOpen={loading} message='Momentchen...' spinner="bubbles" />
+                    <IonLoading isOpen={loadingRegister} message='Momentchen...' spinner="bubbles" />
                 </IonCard>
             </IonContent>
         </IonPage>

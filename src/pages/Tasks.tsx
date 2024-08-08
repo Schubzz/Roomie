@@ -48,7 +48,7 @@ const Tasks: React.FC = () => {
     const [startDay, setStartDay] = useState("sunday");
     const [status, setStatus] = useState("pending");
     const [taskList, setTaskList] = useState<TaskItemProps[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingTasks, setLoadingTasks] = useState(true);
     const [filter, setFilter] = useState<string>("all");
     const [userTasksCount, setUserTasksCount] = useState(0);
     const [totalTasksCount, setTotalTasksCount] = useState(0);
@@ -94,7 +94,7 @@ const Tasks: React.FC = () => {
         } catch (err) {
             console.log(err);
         } finally {
-            setLoading(false);
+            setLoadingTasks(false);
         }
     };
 
@@ -258,10 +258,10 @@ const Tasks: React.FC = () => {
         )
         : taskList;
 
-    if (loading) {
+    if (loadingTasks) {
         return (
-            <IonContent className="ion-justify-content-center ion-align-items-center">
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles"/>
+            <IonContent>
+                <IonLoading isOpen={loadingTasks} message="Momentchen..." spinner="bubbles"/>
             </IonContent>
         );
     }

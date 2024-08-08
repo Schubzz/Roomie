@@ -20,7 +20,7 @@ const SelectWG: React.FC = () => {
     const { user, refreshUserData } = useUser();
     const [wgs, setWgs] = useState([]);
     const [userData, setUserData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const [loadingSelectWG, setLoadingSelectWG] = useState(true);
     const history = useHistory();
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const SelectWG: React.FC = () => {
             if (user) {
                 await fetchUserData(user.uid);
                 await getWgs();
-                setLoading(false);
+                setLoadingSelectWG(false);
             }
         };
         loadData();
@@ -90,10 +90,10 @@ const SelectWG: React.FC = () => {
     };
 
 
-    if (loading || !user || !userData) {
+    if (loadingSelectWG || !user || !userData) {
         return (
             <IonContent>
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+                <IonLoading isOpen={loadingSelectWG} message="Momentchen..." spinner="bubbles" />
             </IonContent>
         );
     }

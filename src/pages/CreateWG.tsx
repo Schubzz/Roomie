@@ -19,14 +19,14 @@ const CreateWG: React.FC = () => {
     const [wgName, setWgName] = useState('');
     const { user, refreshUserData } = useUser();
     const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loadingCreateWG, setLoadingCreateWG] = useState(true);
     const history = useHistory();
 
     useEffect(() => {
         const loadData = async () => {
             if (user) {
                 await fetchUserData(user.uid);
-                setLoading(false);
+                setLoadingCreateWG(false);
             }
         };
         loadData();
@@ -67,10 +67,10 @@ const CreateWG: React.FC = () => {
     };
 
 
-    if (loading || !user || !userData) {
+    if (loadingCreateWG || !user || !userData) {
         return (
             <IonContent>
-                <IonLoading isOpen={loading} message="Momentchen..." spinner="bubbles" />
+                <IonLoading isOpen={loadingCreateWG} message="Momentchen..." spinner="bubbles" />
             </IonContent>
         );
     }
