@@ -30,14 +30,14 @@
   "screenshots": [
     {
       "src": "screenshots/roomie-screenshot-v1.png",
-      "sizes": "512x289",
+      "sizes": "512x512",
       "type": "image/gif",
       "form_factor": "wide",
       "label": "Roomie"
     },
     {
       "src": "screenshots/roomie-screenshot-v1.png",
-      "sizes": "512x289",
+      "sizes": "512x512",
       "type": "image/gif",
       "label": "Roomie"
     }
