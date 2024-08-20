@@ -1,7 +1,7 @@
 import {Route, Redirect} from 'react-router-dom';
 import {IonApp, IonRouterOutlet, setupIonicReact, IonLoading} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -52,26 +52,33 @@ const AuthRoute: React.FC<{ component: React.ComponentType<any>, exact?: boolean
     );
 };
 
-const App: React.FC = () => (
-    <IonApp>
-        <ReloadPrompt/>
-        <IonReactRouter>
-            <UserProvider>
-                <WGProvider>
-                    <IonRouterOutlet>
-                        {/* Open Routes */}
-                        <Route path="/" component={Login} exact/>
-                        <Route path="/register" component={Register} exact/>
-                        <Route path="/select-wg" component={SelectWG} exact/>
-                        <Route path="/create-wg" component={CreateWG} exact/>
-                        {/* Protected Routes */}
-                        <AuthRoute path='/app' component={TabsLayout}/>
-                        <AuthRoute path="/settings" component={Settings} exact/>
-                    </IonRouterOutlet>
-                </WGProvider>
-            </UserProvider>
-        </IonReactRouter>
-    </IonApp>
-);
+const App: React.FC = () => {
+    useEffect(() => {
+        const splash = document.querySelector('.splash-screen');
+        if (splash) {
+            splash.classList.add('hidden');
+        }
+    }, []);
+
+    return (
+        <IonApp>
+            <ReloadPrompt />
+            <IonReactRouter>
+                <UserProvider>
+                    <WGProvider>
+                        <IonRouterOutlet>
+                            <Route path="/" component={Login} exact />
+                            <Route path="/register" component={Register} exact />
+                            <Route path="/select-wg" component={SelectWG} exact />
+                            <Route path="/create-wg" component={CreateWG} exact />
+                            <AuthRoute path='/app' component={TabsLayout} />
+                            <AuthRoute path="/settings" component={Settings} exact />
+                        </IonRouterOutlet>
+                    </WGProvider>
+                </UserProvider>
+            </IonReactRouter>
+        </IonApp>
+    );
+};
 
 export default App;

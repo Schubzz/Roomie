@@ -1,55 +1,56 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <meta charset="utf-8"/>
-        <title>Roomie</title>
+<head>
+    <meta charset="utf-8"/>
+    <title>Roomie</title>
 
-        <base href="/"/>
+    <base href="/"/>
 
-        <meta name="theme-color" content="#fafafa"/>
-        <meta name="color-scheme" content="light"/>
-        <meta name="viewport"
-              content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-        <meta name="format-detection" content="telephone=no"/>
-        <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="theme-color" content="#fafafa"/>
+    <meta name="color-scheme" content="light"/>
+    <meta name="viewport"
+          content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
 
-        <!-- manifest -->
-        <link rel="manifest" href="/manifest.json"/>
+    <!-- manifest -->
+    <link rel="manifest" href="/manifest.json"/>
 
-        <!-- favicon -->
-        <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 
-        <!-- add to home screen for ios -->
-        <meta name="apple-mobile-web-app-capable" content="yes"/>
-        <meta name="apple-mobile-web-app-title" content="Roomie"/>
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-        <link rel="apple-touch-icon" href="/icons/roomie-icon-192x192.png?v=2">
+    <!-- add to home screen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-title" content="Roomie"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link rel="apple-touch-icon" href="/icons/roomie-icon-192x192.png?v=2">
 
-        <!-- ios Startup Images -->
-        <link rel="apple-touch-startup-image"
-              href="/splash/roomie-splash-1125x2436.png"
-              media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
-              sizes="1125x2436">
-        <link rel="apple-touch-startup-image"
-              href="/splash/roomie-splash-750x1334.png"
-              media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
-              sizes="750x1334">
-        <link rel="apple-touch-startup-image"
-              href="/splash/roomie-splash-1242x2208.png"
-              media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
-              sizes="1242x2208">
-        <link rel="apple-touch-startup-image"
-              href="/splash/roomie-splash-1668x2224.png"
-              media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
-              sizes="1668x2224">
-        <link rel="apple-touch-startup-image"
-              href="/splash/roomie-splash-2048x2732.png"
-              media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
-              sizes="2048x2732">
+    <!-- ios Startup Images -->
+    <link rel="apple-touch-startup-image"
+          href="/splash/roomie-splash-1125x2436.png"
+          media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+          sizes="1125x2436">
+    <link rel="apple-touch-startup-image"
+          href="/splash/roomie-splash-750x1334.png"
+          media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+          sizes="750x1334">
+    <link rel="apple-touch-startup-image"
+          href="/splash/roomie-splash-1242x2208.png"
+          media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
+          sizes="1242x2208">
+    <link rel="apple-touch-startup-image"
+          href="/splash/roomie-splash-1668x2224.png"
+          media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+          sizes="1668x2224">
+    <link rel="apple-touch-startup-image"
+          href="/splash/roomie-splash-2048x2732.png"
+          media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+          sizes="2048x2732">
 
-    </head>
-    <body>
-        <div id="root"></div>
-        <script type="module" src="/src/main.tsx"></script>
-    </body>
+</head>
+<body>
+<div class="splash-screen"></div>
+<div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
+</body>
 </html>
