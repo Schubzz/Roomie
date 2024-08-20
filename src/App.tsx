@@ -40,7 +40,7 @@ setupIonicReact();
 const AuthRoute: React.FC<{ component: React.ComponentType<any>, exact?: boolean, path: string }> = ({ component: Component, ...rest }) => {
     const { user, loading } = useUser();
     if (loading) {
-        return <IonLoading isOpen={loading} message={'Bitte warten...'} />;
+        return <IonLoading isOpen={loading} message={'Momentchen...'} />;
     }
     return (
         <Route

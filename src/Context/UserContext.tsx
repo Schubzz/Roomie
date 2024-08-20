@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
+import {IonLoading} from "@ionic/react";
 
 export interface User {
     uid: string;
@@ -72,7 +73,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return (
         <UserContext.Provider value={{ user, updateUser, refreshUserData, loading }}>
-            {children}
+            {loading ? <IonLoading isOpen={true} message={'Momentchen...'} /> : children}
         </UserContext.Provider>
     );
 };

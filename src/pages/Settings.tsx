@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -14,9 +14,10 @@ import {
   IonAlert,
   IonBackButton,
   IonButtons,
+  IonListHeader,
 } from '@ionic/react';
 import { updateProfile, deleteUser } from 'firebase/auth';
-import { doc, updateDoc, deleteDoc, collection, getDocs, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, getDocs, arrayRemove, getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import { auth, db } from '../config/firebaseConfig';
 import { useUser } from '../Context/UserContext';
@@ -24,12 +25,27 @@ import { useWG } from '../Context/WGContext';
 
 const Settings: React.FC = () => {
   const { user, updateUser, refreshUserData } = useUser();
-  const { wg } = useWG();
+  const { wg, updateWG } = useWG();
   const [userName, setUserName] = useState(user?.displayName || '');
+  const [wgName, setWGName] = useState(wg?.name || '');
+  const [wgMembers, setWGMembers] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const history = useHistory();
+
+  useEffect(() => {
+    const fetchWGMembers = async () => {
+      if (wg?.id) {
+        const membersCollection = collection(db, `wgs/${wg.id}/users`);
+        const membersSnapshot = await getDocs(membersCollection);
+        const membersList = membersSnapshot.docs.map(doc => doc.data().displayName);
+        setWGMembers(membersList);
+      }
+    };
+
+    fetchWGMembers();
+  }, [wg]);
 
   const handleUpdateProfile = async () => {
     if (!user) return;
@@ -63,6 +79,29 @@ const Settings: React.FC = () => {
     } catch (error) {
       console.error('Fehler beim Aktualisieren des Profils:', error);
       setAlertMessage('Fehler beim Aktualisieren des Profils.');
+      setShowAlert(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateWGName = async () => {
+    if (!wg?.id) return;
+
+    setLoading(true);
+    try {
+      const wgRef = doc(db, 'wgs', wg.id);
+      await updateDoc(wgRef, {
+        name: wgName,
+      });
+
+      updateWG(wgName);
+
+      setAlertMessage('WG-Name aktualisiert!');
+      setShowAlert(true);
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren des WG-Namens:', error);
+      setAlertMessage('Fehler beim Aktualisieren des WG-Namens.');
       setShowAlert(true);
     } finally {
       setLoading(false);
@@ -145,10 +184,30 @@ const Settings: React.FC = () => {
                   onIonInput={(e: any) => setUserName(e.target.value)}
               />
             </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">WG-Name</IonLabel>
+              <IonInput
+                  value={wgName}
+                  onIonInput={(e: any) => setWGName(e.target.value)}
+              />
+            </IonItem>
           </IonList>
           <IonButton expand="block" onClick={handleUpdateProfile} disabled={loading}>
             Profil aktualisieren
           </IonButton>
+          <IonButton expand="block" onClick={handleUpdateWGName} disabled={loading}>
+            WG-Name aktualisieren
+          </IonButton>
+          <IonList>
+            <IonListHeader>
+              Mitbewohner
+            </IonListHeader>
+            {wgMembers.map((member, index) => (
+                <IonItem key={index}>
+                  <IonLabel>{member}</IonLabel>
+                </IonItem>
+            ))}
+          </IonList>
           <IonButton expand="block" color="danger" onClick={handleDeleteProfile} disabled={loading}>
             Profil löschen
           </IonButton>

@@ -13,6 +13,7 @@ interface WGContextType {
     wg: WG | null;
     setWg: (wgId: string) => void;
     refreshWGData: () => void;
+    updateWG: (wgName: string) => void;
 }
 
 const WGContext = createContext<WGContextType | undefined>(undefined);
@@ -42,6 +43,13 @@ export const WGProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const updateWG = async (wgName: string) => { // Neue Funktion zum Aktualisieren des WG-Namens
+        if (wg && wg.id) {
+            await updateDoc(doc(db, 'wgs', wg.id), { name: wgName });
+            setWGState((prevWG) => prevWG ? { ...prevWG, name: wgName } : null);
+        }
+    };
+
     const refreshWGData = () => {
         if (user?.wgId) {
             fetchWGData(user.wgId);
@@ -58,7 +66,7 @@ export const WGProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }, [user]);
 
     return (
-        <WGContext.Provider value={{ wg, setWg, refreshWGData }}>
+        <WGContext.Provider value={{ wg, setWg, refreshWGData, updateWG }}>
             {children}
         </WGContext.Provider>
     );
