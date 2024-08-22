@@ -1,0 +1,64 @@
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 90vw;
+    margin: 1rem auto;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    background-color: #f1efef;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    border-radius: 1rem;
+    gap: 1rem;
+}
+
+.settings-label {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-right: auto;
+}
+
+.settings-input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.settings-button {
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    gap: .1rem;
+}
+
+.relative-container {
+    position: relative;
+    margin-top: .1rem;
+}
+
+.settings-members-list {
+    margin: 1rem 0;
+}
+
+.settings-members-list .settings-label {
+    font-size: 0.9rem;
+    color: #1ec54d;
+}
+

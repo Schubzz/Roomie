@@ -14,14 +14,16 @@ import {
   IonAlert,
   IonBackButton,
   IonButtons,
-  IonListHeader,
+  IonListHeader, IonIcon,
 } from '@ionic/react';
+import '../theme/Settings.css';
 import { updateProfile, deleteUser } from 'firebase/auth';
 import { doc, updateDoc, deleteDoc, collection, getDocs, arrayRemove, getDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import { auth, db } from '../config/firebaseConfig';
 import { useUser } from '../Context/UserContext';
 import { useWG } from '../Context/WGContext';
+import {checkmarkCircleOutline, logOutOutline, trashOutline} from "ionicons/icons";
 
 const Settings: React.FC = () => {
   const { user, updateUser, refreshUserData } = useUser();
@@ -175,45 +177,54 @@ const Settings: React.FC = () => {
             <IonTitle>Einstellungen</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent className="ion-padding">
-          <IonList>
-            <IonItem>
-              <IonLabel position="stacked">Benutzername</IonLabel>
+        <IonContent>
+
+          <div className="settings-container">
+
+            <div className="settings-item">
               <IonInput
+                  className="settings-input"
                   value={userName}
                   onIonInput={(e: any) => setUserName(e.target.value)}
               />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked">WG-Name</IonLabel>
+              <IonButton onClick={handleUpdateProfile} disabled={loading}>
+                <IonIcon icon={checkmarkCircleOutline} />
+              </IonButton>
+            </div>
+
+            <IonList className="settings-members-list">
+              <IonListHeader className="settings-list-header">
+                Mitbewohner
+              </IonListHeader>
+              {wgMembers.map((member, index) => (
+                  <IonItem key={index}>
+                    <IonLabel>{member}</IonLabel>
+                  </IonItem>
+              ))}
+            </IonList>
+
+            <div className="settings-item">
               <IonInput
+                  className="settings-input"
                   value={wgName}
                   onIonInput={(e: any) => setWGName(e.target.value)}
               />
-            </IonItem>
-          </IonList>
-          <IonButton expand="block" onClick={handleUpdateProfile} disabled={loading}>
-            Profil aktualisieren
-          </IonButton>
-          <IonButton expand="block" onClick={handleUpdateWGName} disabled={loading}>
-            WG-Name aktualisieren
-          </IonButton>
-          <IonList>
-            <IonListHeader>
-              Mitbewohner
-            </IonListHeader>
-            {wgMembers.map((member, index) => (
-                <IonItem key={index}>
-                  <IonLabel>{member}</IonLabel>
-                </IonItem>
-            ))}
-          </IonList>
-          <IonButton expand="block" color="danger" onClick={handleDeleteProfile} disabled={loading}>
-            Profil löschen
-          </IonButton>
-          <IonButton expand="block" color="medium" onClick={handleLogout}>
-            Abmelden
-          </IonButton>
+              <IonButton onClick={handleUpdateWGName} disabled={loading}>
+                <IonIcon icon={checkmarkCircleOutline} />
+              </IonButton>
+            </div>
+
+            <IonButton expand="block" color="tertiary" onClick={handleLogout} className="settings-button logout">
+              <p>Logout</p>
+              <IonIcon icon={logOutOutline}/>
+            </IonButton>
+
+            <IonButton expand="block" color="danger" onClick={handleDeleteProfile} className="settings-button danger">
+              <p>Profil löschen</p>
+              <IonIcon icon={trashOutline} />
+            </IonButton>
+          </div>
+
           <IonLoading isOpen={loading} message={'Bitte warten...'} />
           <IonAlert
               isOpen={showAlert}
@@ -224,6 +235,7 @@ const Settings: React.FC = () => {
         </IonContent>
       </IonPage>
   );
+
 };
 
 export default Settings;

@@ -188,3 +188,27 @@
         right: 1rem;
     }
 }
+
+.update-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.input-item {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+}
+
+.toggle-item IonLabel {
+    margin-right: 1rem;
+}

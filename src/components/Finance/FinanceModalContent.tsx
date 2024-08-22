@@ -56,46 +56,60 @@ const FinanceModalContent: React.FC<FinanceModalContentProps> = ({
 
     return (
         <div className="update-container">
-            <IonItem>
-                <IonLabel position="stacked">Titel</IonLabel>
-                <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Einkauf"
+                    value={title}
+                    onIonInput={(e) => setTitle(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Info</IonLabel>
-                <IonInput value={info} onIonInput={(e) => setInfo(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Bierpong Turnier"
+                    value={info}
+                    onIonInput={(e) => setInfo(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Betrag</IonLabel>
-                <IonInput type="number" value={amount} onIonInput={(e) => setAmount(parseFloat(e.detail.value!))} />
+            <IonItem className="input-item">
+                <IonInput
+                    type="number"
+                    placeholder="z.B. 50"
+                    value={amount}
+                    onIonInput={(e) => setAmount(parseFloat(e.detail.value!))}
+                />
+                <span className="currency-symbol">€</span>
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Bezahlt von</IonLabel>
-                <IonSelect value={paidBy} onIonChange={(e) => setPaidBy(e.detail.value)}>
-                    {wg?.members.map((member) => (
-                        <IonSelectOption key={member.uid} value={member.uid}>
-                            {member.displayName}
-                        </IonSelectOption>
-                    ))}
-                </IonSelect>
-            </IonItem>
+            <div className="flex-container">
+                <IonItem className="select-item">
+                    <IonLabel>von</IonLabel>
+                    <IonSelect placeholder="Bezahlt von" value={paidBy} onIonChange={(e) => setPaidBy(e.detail.value)}>
+                        {wg?.members.map((member) => (
+                            <IonSelectOption key={member.uid} value={member.uid}>
+                                {member.displayName}
+                            </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Geteilt mit</IonLabel>
-                <IonSelect
-                    multiple={true}
-                    value={sharedWith}
-                    onIonChange={(e) => setSharedWith(e.detail.value)}
-                >
-                    {wg?.members.map((member) => (
-                        <IonSelectOption key={member.uid} value={member.uid}>
-                            {member.displayName}
-                        </IonSelectOption>
-                    ))}
-                </IonSelect>
-            </IonItem>
+                <IonItem className="select-item">
+                    <IonLabel>für</IonLabel>
+                    <IonSelect
+                        placeholder="Geteilt mit"
+                        multiple={true}
+                        value={sharedWith}
+                        onIonChange={(e) => setSharedWith(e.detail.value)}
+                    >
+                        {wg?.members.map((member) => (
+                            <IonSelectOption key={member.uid} value={member.uid}>
+                                {member.displayName}
+                            </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                </IonItem>
+            </div>
 
             <IonButton expand="block" onClick={selectedItem ? updateItem : onSubmitItem} color="success">
                 {selectedItem ? "Aktualisieren" : "Hinzufügen"}
@@ -107,6 +121,7 @@ const FinanceModalContent: React.FC<FinanceModalContentProps> = ({
             )}
         </div>
     );
+
 };
 
 export default FinanceModalContent;

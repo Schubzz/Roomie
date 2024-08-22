@@ -144,3 +144,36 @@
         right: 1rem;
     }
 }
+
+.update-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.input-item {
+    width: 100%;
+}
+
+.flex-container {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.flex-container .input-item {
+    flex: 1;
+}
+
+.reorder-list {
+    margin-top: 1rem;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+}

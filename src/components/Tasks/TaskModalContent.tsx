@@ -81,46 +81,60 @@ const TasksModalContent: React.FC<TasksModalContentProps> = ({
 
     return (
         <div className="update-container">
-            <IonItem>
-                <IonLabel position="stacked">Titel</IonLabel>
-                <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Müll rausbringen"
+                    value={title}
+                    onIonInput={(e) => setTitle(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Beschreibung</IonLabel>
-                <IonTextarea value={description} onIonInput={(e) => setDescription(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Biotonne"
+                    value={description}
+                    onIonInput={(e) => setDescription(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Turnus</IonLabel>
-                <IonSelect value={rotation} onIonChange={(e) => setRotation(e.detail.value)}>
-                    <IonSelectOption value="none">Keiner</IonSelectOption>
-                    <IonSelectOption value="daily">Täglich</IonSelectOption>
-                    <IonSelectOption value="weekly">Wöchentlich</IonSelectOption>
-                    <IonSelectOption value="monthly">Monatlich</IonSelectOption>
-                </IonSelect>
-            </IonItem>
-
-            {(rotation === 'weekly' || rotation === 'monthly') && (
-                <IonItem>
-                    <IonLabel position="stacked">Starttag</IonLabel>
-                    <IonSelect value={startDay} onIonChange={(e) => setStartDay(e.detail.value)}>
-                        <IonSelectOption value="sunday">Sonntag</IonSelectOption>
-                        <IonSelectOption value="monday">Montag</IonSelectOption>
-                        <IonSelectOption value="tuesday">Dienstag</IonSelectOption>
-                        <IonSelectOption value="wednesday">Mittwoch</IonSelectOption>
-                        <IonSelectOption value="thursday">Donnerstag</IonSelectOption>
-                        <IonSelectOption value="friday">Freitag</IonSelectOption>
-                        <IonSelectOption value="saturday">Samstag</IonSelectOption>
+            <div className="flex-container">
+                <IonItem className="input-item">
+                    <IonSelect
+                        placeholder="Turnus"
+                        value={rotation || undefined}
+                        onIonChange={(e) => setRotation(e.detail.value)}
+                    >
+                        <IonSelectOption value="none">Kein Turnus</IonSelectOption>
+                        <IonSelectOption value="daily">Täglich</IonSelectOption>
+                        <IonSelectOption value="weekly">Wöchentlich</IonSelectOption>
+                        <IonSelectOption value="monthly">Monatlich</IonSelectOption>
                     </IonSelect>
                 </IonItem>
-            )}
 
-            <IonItem>
-                <IonLabel position="stacked">Zugewiesen an</IonLabel>
+                {(rotation === 'weekly' || rotation === 'monthly') && (
+                    <IonItem className="input-item">
+                        <IonSelect
+                            placeholder="Starttag"
+                            value={startDay || undefined}
+                            onIonChange={(e) => setStartDay(e.detail.value)}
+                        >
+                            <IonSelectOption value="sunday">Sonntag</IonSelectOption>
+                            <IonSelectOption value="monday">Montag</IonSelectOption>
+                            <IonSelectOption value="tuesday">Dienstag</IonSelectOption>
+                            <IonSelectOption value="wednesday">Mittwoch</IonSelectOption>
+                            <IonSelectOption value="thursday">Donnerstag</IonSelectOption>
+                            <IonSelectOption value="friday">Freitag</IonSelectOption>
+                            <IonSelectOption value="saturday">Samstag</IonSelectOption>
+                        </IonSelect>
+                    </IonItem>
+                )}
+            </div>
+
+            <IonItem className="input-item">
                 <IonSelect
                     multiple={true}
-                    value={assignedTo}
+                    placeholder="Zugewiesen an"
+                    value={assignedTo || undefined}
                     onIonChange={(e) => setAssignedTo(e.detail.value as string[])}
                 >
                     {wg?.members.map((member) => (
@@ -131,7 +145,7 @@ const TasksModalContent: React.FC<TasksModalContentProps> = ({
                 </IonSelect>
             </IonItem>
 
-            <IonList>
+            <IonList className="reorder-list">
                 <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
                     {assignedTo.map((uid, index) => {
                         const member = wg?.members.find(member => member.uid === uid);
@@ -145,10 +159,10 @@ const TasksModalContent: React.FC<TasksModalContentProps> = ({
                 </IonReorderGroup>
             </IonList>
 
-            <IonItem>
+            <div className="toggle-item">
                 <IonLabel>Erledigt</IonLabel>
                 <IonToggle checked={status === 'done'} onIonChange={handleStatusToggle} />
-            </IonItem>
+            </div>
 
             <IonButton expand="block" onClick={selectedItem ? updateItem : onSubmitItem} color="success">
                 {selectedItem ? "Aktualisieren" : "Hinzufügen"}
@@ -160,6 +174,7 @@ const TasksModalContent: React.FC<TasksModalContentProps> = ({
             )}
         </div>
     );
+
 };
 
 export default TasksModalContent;

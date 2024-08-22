@@ -24,23 +24,29 @@ const ShoppingModalContent: React.FC<{
       }) => {
     return (
         <div className="update-container">
-            <IonItem>
-                <IonLabel position="stacked">Produkt</IonLabel>
-                <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Milch"
+                    value={title}
+                    onIonInput={(e) => setTitle(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Info</IonLabel>
-                <IonInput value={info} onIonInput={(e) => setInfo(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. 2 Liter"
+                    value={info}
+                    onIonInput={(e) => setInfo(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
+            <div className="toggle-item">
                 <IonLabel>Dringend</IonLabel>
                 <IonToggle
                     checked={alert}
                     onIonChange={(e) => setAlert(e.detail.checked)}
                 />
-            </IonItem>
+            </div>
 
             <IonButton expand="block" onClick={onSubmit} color="success">
                 {selectedProduct ? 'Aktualisieren' : 'Hinzufügen'}
@@ -52,6 +58,7 @@ const ShoppingModalContent: React.FC<{
             )}
         </div>
     );
+
 };
 
 export default ShoppingModalContent;

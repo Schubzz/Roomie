@@ -43,37 +43,44 @@ const ContractsModalContent: React.FC<ContractsModalContentProps> = ({
                                                                      }) => {
     return (
         <div className="update-container">
-            <IonItem>
-                <IonLabel position="stacked">Titel</IonLabel>
-                <IonInput value={title} onIonInput={(e) => setTitle(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. Strom"
+                    value={title}
+                    onIonInput={(e) => setTitle(e.detail.value!)}
+                />
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Kosten</IonLabel>
-                <IonInput value={cost} onIonInput={(e) => setCost(e.detail.value!)} />
+            <IonItem className="input-item">
+                <IonInput
+                    placeholder="z.B. 12"
+                    value={cost}
+                    onIonInput={(e) => setCost(e.detail.value!)}
+                />
+                <span className="currency-symbol">€</span>
             </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Inhaber</IonLabel>
-                <IonSelect value={owner} onIonChange={(e) => setOwner(e.detail.value)}>
-                    {roommates.map((roommate) => (
-                        <IonSelectOption key={roommate.uid} value={roommate.uid}>
-                            {roommate.displayName}
-                        </IonSelectOption>
-                    ))}
-                </IonSelect>
-            </IonItem>
+            <div className="flex-container">
+                <IonItem className="select-item">
+                    <IonSelect placeholder="Inhaber" value={owner} onIonChange={(e) => setOwner(e.detail.value)}>
+                        {roommates.map((roommate) => (
+                            <IonSelectOption key={roommate.uid} value={roommate.uid}>
+                                {roommate.displayName}
+                            </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                </IonItem>
 
-            <IonItem>
-                <IonLabel position="stacked">Kategorie</IonLabel>
-                <IonSelect value={category} onIonChange={(e) => setCategory(e.detail.value)}>
-                    {categories.map((cat) => (
-                        <IonSelectOption key={cat.name} value={cat.name}>
-                            {cat.name}
-                        </IonSelectOption>
-                    ))}
-                </IonSelect>
-            </IonItem>
+                <IonItem className="select-item">
+                    <IonSelect placeholder="Kategorie" value={category} onIonChange={(e) => setCategory(e.detail.value)}>
+                        {categories.map((cat) => (
+                            <IonSelectOption key={cat.name} value={cat.name}>
+                                {cat.name}
+                            </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                </IonItem>
+            </div>
 
             <IonButton expand="block" onClick={selectedItem ? updateItem : onSubmitItem} color="success">
                 {selectedItem ? 'Aktualisieren' : 'Hinzufügen'}
@@ -85,6 +92,7 @@ const ContractsModalContent: React.FC<ContractsModalContentProps> = ({
             )}
         </div>
     );
+
 };
 
 export default ContractsModalContent;
